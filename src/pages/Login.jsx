@@ -1,0 +1,122 @@
+import { useState } from "react";
+import { IoIosArrowBack } from "react-icons/io";
+import { Link } from "react-router-dom";
+
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [usernameFocused, setUsernameFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  //   const [persist, setPersist] = usePersist();
+
+  //   const handleToggle = () => setPersist((prev) => !prev);
+  const handleUsername = (e) => setUsername(e.target.value);
+  const handlePassword = (e) => setPassword(e.target.value);
+  const handleUsernameFocus = () => setUsernameFocused((prev) => !prev);
+  const handlePasswordFocus = () => setPasswordFocused((prev) => !prev);
+
+  return (
+    <section>
+      <div className="container flex min-h-screen flex-col gap-4 md:flex-row">
+        {/* <div className="flex flex-1 p-10 text-6xl text-white items-center justify-center bg-gradient-to-r from-[#3C48FF] via-blue-500 to-[#957AFE]">
+          Bromhead
+        </div> */}
+        <div
+          id="hero"
+          className="relative flex flex-1 flex-col items-center justify-center p-10 "
+        >
+          <Link
+            to="/"
+            className="absolute left-10 top-10 flex items-center gap-2 text-white md:text-xl"
+          >
+            <IoIosArrowBack color="white" />
+            <p>Back to landing page</p>
+          </Link>
+          <p className="text-6xl text-white md:text-7xl lg:text-9xl">
+            Bromhead.
+          </p>
+        </div>
+        <div className="flex flex-1 flex-col items-center justify-center gap-1">
+          <header className="text-3xl font-semibold leading-10 text-text-normal md:text-5xl">
+            Welcome Back 👋
+          </header>
+          <p className="mb-4 text-text-light lg:mb-14 lg:text-xl">
+            Hello there, login to continue
+          </p>
+          <main>
+            <form className="grid gap-4">
+              <div className="relative mt-2 flex flex-col rounded-xl border border-primary p-2">
+                <label
+                  htmlFor="username"
+                  className={`absolute text-primary transition-all ${
+                    usernameFocused || username
+                      ? "-top-5 text-xs"
+                      : "top-2 text-sm"
+                  }`}
+                >
+                  Username
+                </label>
+                <input
+                  className="outline-none"
+                  type="text"
+                  id="username"
+                  value={username}
+                  onChange={handleUsername}
+                  autoComplete="off"
+                  required
+                  onFocus={handleUsernameFocus}
+                  onBlur={handleUsernameFocus}
+                />
+              </div>
+              <div className="relative mt-2 flex flex-col rounded-xl border border-primary p-2">
+                <label
+                  htmlFor="password"
+                  className={`absolute text-primary transition-all ${
+                    passwordFocused || password
+                      ? "-top-5 text-xs"
+                      : "top-2 text-sm"
+                  }`}
+                >
+                  Password
+                </label>
+                <input
+                  className="outline-none"
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={handlePassword}
+                  required
+                  onFocus={handlePasswordFocus}
+                  onBlur={handlePasswordFocus}
+                />
+              </div>
+              <p className="text-primary">Forgot password ?</p>
+              <button className="rounded-xl bg-primary p-2 py-3 text-white outline-text-light">
+                Login
+              </button>
+              <label htmlFor="persist" className="hidden">
+                <input
+                  type="checkbox"
+                  id="persist"
+                  //   onChange={handleToggle}
+                  //   checked={persist}
+                />
+                Trust This Device
+              </label>
+
+              <p className="my-2 text-center text-text-light">
+                Or continue wit social account
+              </p>
+
+              <button className="rounded-xl border border-gray-200 p-3 text-text-normal">
+                Google OAuth
+              </button>
+            </form>
+          </main>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Login;
