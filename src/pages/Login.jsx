@@ -7,6 +7,7 @@ import { useLoginMutation } from "../slices/auth/authApiSlice";
 import { setCredentials } from "../slices/auth/authSlice";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../components/LoadingSpinner";
+import usePersist from "../hooks/usePersist";
 
 const Login = () => {
   useTitle("Employee Login");
@@ -15,6 +16,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [usernameFocused, setUsernameFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
+
+  const [persist, setPersist] = usePersist();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,6 +51,7 @@ const Login = () => {
   const handlePassword = (e) => setPassword(e.target.value);
   const handleUsernameFocus = () => setUsernameFocused((prev) => !prev);
   const handlePasswordFocus = () => setPasswordFocused((prev) => !prev);
+  const handleToggle = () => setPersist((prev) => !prev);
 
   return (
     <section>
@@ -131,18 +135,22 @@ const Login = () => {
               <button className="rounded-xl bg-primary p-2 py-3 text-white outline-text-light">
                 Login
               </button>
-              <label htmlFor="persist" className="hidden">
+              <label
+                htmlFor="persist"
+                className="flex items-center gap-2 text-text-normal"
+              >
                 <input
                   type="checkbox"
                   id="persist"
-                  //   onChange={handleToggle}
-                  //   checked={persist}
+                  onChange={handleToggle}
+                  checked={persist}
+                  className="transition-all hover:scale-110"
                 />
                 Trust This Device
               </label>
 
               <p className="my-2 text-center text-text-light">
-                Or continue wit social account
+                Or continue with social account
               </p>
 
               <button className="rounded-xl border border-gray-200 p-3 text-text-normal">

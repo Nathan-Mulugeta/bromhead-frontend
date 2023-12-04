@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import RequireAuth from "./components/auth/RequireAuth";
 import { ROLES } from "../config/roles";
 import NotFound from "./pages/NotFound";
+import PersistLogin from "./components/auth/PersistLogin";
 
 const App = () => {
   useTitle("Bromhead");
@@ -26,12 +27,14 @@ const App = () => {
           <Route path="login" element={<Login />} />
 
           {/* Protected routes */}
-          <Route
-            element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
-          >
-            <Route path="dash" element={<DashLayout />}>
-              <Route index element={<Home />} />
-              <Route path="profile" element={<Profile />} />
+          <Route element={<PersistLogin />}>
+            <Route
+              element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
+            >
+              <Route path="dash" element={<DashLayout />}>
+                <Route index element={<Home />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
             </Route>
           </Route>
 
