@@ -3,7 +3,7 @@ import ProfilePageHeader from "../components/ProfilePageHeader";
 
 const Profile = () => {
   return (
-    <div className="container mx-auto max-w-md">
+    <div className="container mx-auto max-w-lg flex-1">
       <ProfilePageHeader />
       <ProfileOptions />
     </div>

@@ -5,8 +5,6 @@ import DashLayout from "./components/DashLayout";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import { Flip, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout";
 import Profile from "./pages/Profile";
 import RequireAuth from "./components/auth/RequireAuth";
@@ -19,7 +17,6 @@ const App = () => {
 
   return (
     <>
-      <ToastContainer transition={Flip} />
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Public routes */}

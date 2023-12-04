@@ -1,11 +1,14 @@
-import React from "react";
-import MobileHeader from "../components/MobileHeader";
-
 const Home = () => {
   return (
     <>
-      <div className="container mx-auto h-full">
-        <MobileHeader />
+      <div className="container mx-auto flex-1">
+        <div className="h-80 bg-teal-700">Repeat</div>
+        <div className="h-80 bg-teal-700">Repeat</div>
+        <div className="h-80 bg-teal-700">Repeat</div>
+        <div className="h-80 bg-teal-700">Repeat</div>
+        <div className="h-80 bg-teal-700">Repeat</div>
+        <div className="h-80 bg-teal-700">Repeat</div>
+        <div className="h-80 bg-teal-700">Repeat</div>
       </div>
     </>
   );
