@@ -1,14 +1,17 @@
 const Home = () => {
   return (
     <>
-      <div className="container mx-auto flex-1">
-        <div className="h-80 bg-teal-700">Repeat</div>
-        <div className="h-80 bg-teal-700">Repeat</div>
-        <div className="h-80 bg-teal-700">Repeat</div>
-        <div className="h-80 bg-teal-700">Repeat</div>
-        <div className="h-80 bg-teal-700">Repeat</div>
-        <div className="h-80 bg-teal-700">Repeat</div>
-        <div className="h-80 bg-teal-700">Repeat</div>
+      <div className="container mx-auto">
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
+        <div className="h-96">Home</div>
       </div>
     </>
   );
