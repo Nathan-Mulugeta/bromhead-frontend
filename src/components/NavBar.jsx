@@ -7,7 +7,7 @@ import NavbarProfile from "./NavbarProfile";
 const NavBar = () => {
   return (
     <>
-      <div className="flex justify-evenly px-2 py-4 sm:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 flex justify-evenly bg-white px-2 py-4 sm:top-0 sm:hidden">
         <div>
           <RiHome6Line color="#101317" fontSize={30} />
         </div>
@@ -17,8 +17,8 @@ const NavBar = () => {
         <div>
           <GoPerson color="#101317" fontSize={28} />
         </div>
-      </div>
-      <div className="container mx-auto hidden items-center justify-between p-3 sm:flex">
+      </nav>
+      <nav className="container mx-auto hidden items-center justify-between p-3 sm:flex">
         <div>Search</div>
         <div className="flex items-center gap-4">
           <div>
@@ -28,7 +28,7 @@ const NavBar = () => {
             <NavbarProfile />
           </div>
         </div>
-      </div>
+      </nav>
     </>
   );
 };

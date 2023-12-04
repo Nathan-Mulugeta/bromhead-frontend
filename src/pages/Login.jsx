@@ -57,19 +57,21 @@ const Login = () => {
           Bromhead
         </div> */}
         <div
-          id="hero"
-          className="relative flex flex-1 flex-col items-center justify-center p-10 "
+          id="loginHero"
+          className="flex flex-1 flex-col items-center justify-center p-4"
         >
-          <Link
-            to="/"
-            className="absolute left-10 top-10 flex items-center gap-2 text-white md:text-xl"
-          >
-            <IoIosArrowBack color="white" />
-            <p>Back to landing page</p>
-          </Link>
-          <p className="text-6xl text-white md:text-7xl lg:text-9xl">
-            A.A. Bromhead.
-          </p>
+          <div className="container flex h-full flex-1 flex-col justify-between md:justify-center">
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-white md:text-xl"
+            >
+              <IoIosArrowBack color="white" />
+              <p>Back to landing page</p>
+            </Link>
+            <p className="flex flex-1 items-center justify-center text-5xl text-white md:text-7xl lg:text-9xl">
+              A.A. Bromhead.
+            </p>
+          </div>
         </div>
         <div className="container mx-auto flex flex-1 flex-col items-center justify-center gap-1">
           <header className="text-3xl font-semibold leading-10 text-text-normal lg:text-5xl">

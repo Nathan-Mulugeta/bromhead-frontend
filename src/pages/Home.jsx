@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 const Home = () => {
   return (
     <>
-      <div className="container mx-auto">Home</div>
+      <div className="container mx-auto h-full">Home</div>
     </>
   );
 };
