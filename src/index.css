@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* Blue highlight Reset */
+:focus {
+  outline: none !important;
+}
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Horizontal scroll reset */
+body {
+  overflow-x: hidden;
+}
+
+
 #loginHero {
     background: url("./assets/background.jpg");
     background-repeat: no-repeat;

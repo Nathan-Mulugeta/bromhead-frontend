@@ -1,9 +1,12 @@
 import React from "react";
+import MobileHeader from "../components/MobileHeader";
 
 const Home = () => {
   return (
     <>
-      <div className="container mx-auto h-full">Home</div>
+      <div className="container mx-auto h-full">
+        <MobileHeader />
+      </div>
     </>
   );
 };

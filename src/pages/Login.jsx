@@ -30,7 +30,7 @@ const Login = () => {
       setUsername("");
       setPassword("");
       toast.success("Login successful");
-      navigate("/home", { replace: true });
+      navigate("/dash", { replace: true });
     } catch (err) {
       if (!err.status) {
         toast.error("No Server Response");
