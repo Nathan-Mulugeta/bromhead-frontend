@@ -1,16 +1,19 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import useTitle from './hooks/useTitle';
-import Layout from './components/Layout';
-import LandingPage from './pages/LandingPage';
-import Login from './pages/Login';
-import Home from './pages/Home';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import useTitle from "./hooks/useTitle";
+import Layout from "./components/Layout";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
-  useTitle('Bromhead');
+  useTitle("Bromhead");
 
   return (
     <>
+      <ToastContainer />
       <Routes>
         <Route path="/">
           <Route index element={<LandingPage />} />

@@ -1,15 +1,49 @@
 import { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useTitle from "../hooks/useTitle";
+import { useDispatch } from "react-redux";
+import { useLoginMutation } from "../slices/auth/authApiSlice";
+import { setCredentials } from "../slices/auth/authSlice";
+import { toast } from "react-toastify";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Login = () => {
+  useTitle("Employee Login");
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameFocused, setUsernameFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
-  //   const [persist, setPersist] = usePersist();
 
-  //   const handleToggle = () => setPersist((prev) => !prev);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { accessToken } = await login({ username, password }).unwrap();
+      dispatch(setCredentials({ accessToken }));
+      setUsername("");
+      setPassword("");
+      toast.success("Login successful");
+      navigate("/home", { replace: true });
+    } catch (err) {
+      if (!err.status) {
+        toast.error("No Server Response");
+      } else if (err.status === 400) {
+        toast.error("Missing Username or Password");
+      } else if (err.status === 401) {
+        toast.error("Wrong credentials");
+      } else {
+        toast.error(err.data?.message);
+      }
+    }
+  };
+
   const handleUsername = (e) => setUsername(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
   const handleUsernameFocus = () => setUsernameFocused((prev) => !prev);
@@ -17,7 +51,8 @@ const Login = () => {
 
   return (
     <section>
-      <div className="container flex min-h-screen flex-col gap-4 md:flex-row">
+      {isLoading && <LoadingSpinner />}
+      <div className="flex min-h-screen flex-col gap-4 md:flex-row">
         {/* <div className="flex flex-1 p-10 text-6xl text-white items-center justify-center bg-gradient-to-r from-[#3C48FF] via-blue-500 to-[#957AFE]">
           Bromhead
         </div> */}
@@ -33,18 +68,18 @@ const Login = () => {
             <p>Back to landing page</p>
           </Link>
           <p className="text-6xl text-white md:text-7xl lg:text-9xl">
-            Bromhead.
+            A.A. Bromhead.
           </p>
         </div>
-        <div className="flex flex-1 flex-col items-center justify-center gap-1">
-          <header className="text-3xl font-semibold leading-10 text-text-normal md:text-5xl">
+        <div className="container mx-auto flex flex-1 flex-col items-center justify-center gap-1">
+          <header className="text-3xl font-semibold leading-10 text-text-normal lg:text-5xl">
             Welcome Back 👋
           </header>
           <p className="mb-4 text-text-light lg:mb-14 lg:text-xl">
             Hello there, login to continue
           </p>
           <main>
-            <form className="grid gap-4">
+            <form onSubmit={handleSubmit} className="grid gap-4">
               <div className="relative mt-2 flex flex-col rounded-xl border border-primary p-2">
                 <label
                   htmlFor="username"

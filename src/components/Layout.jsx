@@ -1,6 +1,4 @@
 import { Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./NavBar";
 
 const Layout = () => {
@@ -13,8 +11,6 @@ const Layout = () => {
       <div className="order-1 h-screen bg-gray-100 sm:order-2">
         <Outlet />
       </div>
-
-      <ToastContainer />
     </div>
   );
 };

@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="fixed left-0 right-0 top-0 z-50">
+    <header className="fixed left-0 right-0 top-0 z-10">
       <div className="container mx-auto flex items-center justify-between p-6">
         <span className="text-2xl font-bold text-white md:text-4xl">
-          Bromhead.
+          A.A. Bromhead.
         </span>
         <div>
           <Link
