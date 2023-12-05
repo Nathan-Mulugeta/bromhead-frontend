@@ -11,6 +11,7 @@ import RequireAuth from "./components/auth/RequireAuth";
 import { ROLES } from "../config/roles";
 import NotFound from "./pages/NotFound";
 import PersistLogin from "./components/auth/PersistLogin";
+import Projects from "./pages/Projects";
 
 const App = () => {
   useTitle("Bromhead");
@@ -29,8 +30,9 @@ const App = () => {
               element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
             >
               <Route path="dash" element={<DashLayout />}>
-                <Route index element={<Home />} />
+                <Route path="home" element={<Home />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="projects" element={<Projects />} />
               </Route>
             </Route>
           </Route>
