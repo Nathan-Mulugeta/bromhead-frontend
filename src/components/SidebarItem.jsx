@@ -1,20 +1,24 @@
 import { useContext } from "react";
 import { SidebarContext } from "./DashLayout";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const SidebarItem = ({ icon, title }) => {
+const SidebarItem = ({ icon, title, onClick, active, to }) => {
   const { expanded } = useContext(SidebarContext);
-
   return (
-    <Link className="group relative my-1 flex items-center rounded-md px-3 py-2 text-text-normal hover:bg-primary hover:text-white">
-      <div
-        className={`transition-all duration-150 ${expanded ? "scale-125" : ""}`}
-      >
-        {icon}
-      </div>
+    <NavLink
+      to={to}
+      onClick={onClick}
+      className={({ isActive }) =>
+        [
+          isActive ? "bg-primary text-white" : "",
+          "group relative my-1 flex items-center rounded-md px-3 py-2 text-text-normal hover:bg-primary hover:text-white",
+        ].join(" ")
+      }
+    >
+      <div className={`transition-all duration-150`}>{icon}</div>
       <span
         className={`overflow-hidden transition-all duration-150 ${
-          expanded ? "ml-3 w-52" : "w-0"
+          expanded ? "ml-3 w-20 md:w-32" : "w-0"
         }`}
       >
         {title}
@@ -32,7 +36,7 @@ const SidebarItem = ({ icon, title }) => {
           {title}
         </div>
       )}
-    </Link>
+    </NavLink>
   );
 };
 

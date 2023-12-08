@@ -13,8 +13,8 @@ const NavBar = () => {
   const sidebarToggle = () => setExpanded(!expanded);
 
   return (
-    <div className="sticky left-0 right-0 top-0 z-20 bg-white shadow-sm">
-      <nav className="container mx-auto flex items-center justify-between bg-white p-3">
+    <div className="z-2 sticky left-0 right-0 top-0 flex">
+      <nav className="container mx-auto flex items-center justify-between p-3">
         <div className="flex items-center gap-4">
           <button onClick={sidebarToggle}>
             {expanded ? (

@@ -10,15 +10,11 @@ const DashLayout = () => {
 
   return (
     <SidebarContext.Provider value={{ expanded, setExpanded }}>
-      <div className="flex min-h-screen flex-col bg-slate-100">
-        <NavBar />
-        <div className="flex flex-1">
-          <Sidebar />
-          <div
-            className={`transition-all duration-150 ${
-              expanded ? "ml-52" : "ml-20"
-            }`}
-          >
+      <div className="flex min-h-screen bg-slate-100 pt-1">
+        <Sidebar />
+        <div className="flex flex-1 flex-col">
+          <NavBar />
+          <div className="container mx-auto p-4">
             <Outlet />
           </div>
         </div>
