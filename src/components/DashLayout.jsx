@@ -10,7 +10,7 @@ const DashLayout = () => {
 
   return (
     <SidebarContext.Provider value={{ expanded, setExpanded }}>
-      <div className="flex min-h-screen bg-slate-100 pt-1">
+      <div className="flex min-h-screen bg-slate-100">
         <Sidebar />
         <div className="flex flex-1 flex-col">
           <NavBar />
