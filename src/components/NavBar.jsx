@@ -5,16 +5,16 @@ import NavbarProfile from "./NavbarProfile";
 const NavBar = () => {
   return (
     <div className="z-2 sticky left-0 right-0 top-0 flex">
-      <nav className="container mx-auto ml-9 flex items-center justify-between p-3 ">
+      <nav className="container mx-auto flex items-center justify-between p-3 pl-9 sm:pl-3">
         <div className="flex items-center gap-4">
-          <div>
+          {/* <div>
             <CiSearch color="#101317" fontSize={20} />
-          </div>
+          </div> */}
         </div>
         <div className="flex items-center gap-4">
-          <div>
+          {/* <div>
             <LuBell color="#101317" fontSize={20} />
-          </div>
+          </div> */}
           <div>
             <NavbarProfile />
           </div>

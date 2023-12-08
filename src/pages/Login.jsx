@@ -28,12 +28,15 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const { accessToken } = await login({ username, password }).unwrap();
-      dispatch(setCredentials({ accessToken }));
+      const { accessToken, firstName, lastName } = await login({
+        username,
+        password,
+      }).unwrap();
+      dispatch(setCredentials({ accessToken, firstName, lastName }));
       setUsername("");
       setPassword("");
       toast.success("Login successful");
-      navigate("/dash", { replace: true });
+      navigate("/dash/home  ", { replace: true });
     } catch (err) {
       if (!err.status) {
         toast.error("No Server Response");

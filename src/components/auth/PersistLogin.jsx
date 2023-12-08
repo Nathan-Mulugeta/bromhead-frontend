@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useRefreshMutation } from "../../slices/auth/authApiSlice";
 import usePersist from "../../hooks/usePersist";
 import { useSelector } from "react-redux";
