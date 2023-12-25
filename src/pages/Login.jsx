@@ -46,6 +46,7 @@ const Login = () => {
         toast.error("Wrong credentials");
       } else {
         toast.error(err.data?.message);
+        console.log("Unable to connect to server");
       }
     }
   };
@@ -59,7 +60,7 @@ const Login = () => {
   return (
     <section>
       {isLoading && <LoadingSpinner />}
-      <div className="flex min-h-screen flex-col gap-4 md:flex-row">
+      <div className="flex min-h-screen flex-col md:flex-row">
         {/* <div className="flex flex-1 p-10 text-6xl text-white items-center justify-center bg-gradient-to-r from-[#3C48FF] via-blue-500 to-[#957AFE]">
           Bromhead
         </div> */}
@@ -80,8 +81,8 @@ const Login = () => {
             </p>
           </div>
         </div>
-        <div className="container mx-auto flex flex-1 flex-col items-center justify-center gap-1">
-          <header className="text-3xl font-semibold leading-10 text-text-normal lg:text-5xl">
+        <div className="bg-background container mx-auto flex flex-1 flex-col items-center justify-center gap-1 p-4">
+          <header className="text-3xl font-semibold leading-10 text-text-light lg:text-5xl">
             Welcome Back 👋
           </header>
           <p className="mb-4 text-text-light lg:mb-14 lg:text-xl">
@@ -101,7 +102,7 @@ const Login = () => {
                   Username
                 </label>
                 <input
-                  className="outline-none"
+                  className="bg-transparent text-primary outline-none"
                   type="text"
                   id="username"
                   value={username}
@@ -124,7 +125,7 @@ const Login = () => {
                   Password
                 </label>
                 <input
-                  className="outline-none"
+                  className="bg-transparent text-primary outline-none"
                   type="password"
                   id="password"
                   value={password}
@@ -140,7 +141,7 @@ const Login = () => {
               </button>
               <label
                 htmlFor="persist"
-                className="flex items-center gap-2 text-text-normal"
+                className="flex items-center gap-2 text-primary"
               >
                 <input
                   type="checkbox"
@@ -152,13 +153,13 @@ const Login = () => {
                 Trust This Device
               </label>
 
-              <p className="my-2 text-center text-text-light">
+              {/* <p className="my-2 text-center text-text-light">
                 Or continue with social account
               </p>
 
               <button className="rounded-xl border border-gray-200 p-3 text-text-normal">
                 Google OAuth
-              </button>
+              </button> */}
             </form>
           </main>
         </div>

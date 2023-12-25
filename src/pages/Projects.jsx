@@ -35,22 +35,13 @@ const Projects = () => {
       ids.map((projectId) => {
         const project = entities[projectId];
 
-        let employeeNumberString;
-        if (project.assignedUsers.length === 0) {
-          employeeNumberString = "No Employees are working on this project.";
-        } else if (project.assignedUsers.length === 1) {
-          employeeNumberString = "1 Employee is working on this project";
-        } else if (project.assignedUsers.length > 0) {
-          employeeNumberString = `${project.assignedUsers.length} are working on this project.`;
-        }
-
         return (
           <List key={projectId}>
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemText
                   primary={project.name}
-                  secondary={employeeNumberString}
+                  secondary={`Assigned employees: ${project.assignedUsers.length}`}
                 />
               </ListItemButton>
             </ListItem>
@@ -62,7 +53,9 @@ const Projects = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <Typography variant="h6">Projects list</Typography>
+        <Typography color="primary.contrastText" variant="h6">
+          Projects list
+        </Typography>
         <Button size="medium" variant="contained" startIcon={<AddIcon />}>
           Add Project
         </Button>
@@ -70,9 +63,10 @@ const Projects = () => {
       <Box
         sx={{
           width: "100%",
-          bgcolor: "background.paper",
+          bgcolor: "background.light",
           borderRadius: 2,
           mt: 3,
+          color: "primary.contrastText",
         }}
       >
         {content}

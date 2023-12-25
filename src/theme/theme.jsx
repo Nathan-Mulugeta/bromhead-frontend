@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { createTheme } from '@mui/material/styles';
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { createTheme } from "@mui/material/styles";
 
 const LinkBehavior = React.forwardRef((props, ref) => {
   const { href, ...other } = props;
@@ -22,16 +22,23 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      light: "#3085FE",
-      main: "#3085FE",
-      dark: "#002884",
+      light: "#FFAC1E",
+      main: "#FFAC1E",
+      dark: "#E16116",
       contrastText: "#fff",
     },
     secondary: {
-      light: "#ff7961",
-      main: "#f44336",
-      dark: "#ba000d",
-      contrastText: "#000",
+      light: "#E16116",
+      main: "#E16116",
+      dark: "#FFAC1E",
+      contrastText: "#fff",
+    },
+    background: {
+      light: "#124056",
+    },
+    text: {
+      primary: "#fff",
+      secondary: "#B2B2B2",
     },
   },
 });

@@ -15,6 +15,7 @@ import Projects from "./pages/Projects";
 import Prefetch from "./components/auth/Prefetch";
 import Clients from "./pages/Clients";
 import AddClient from "./pages/AddClient";
+import Users from "./pages/Users";
 
 const App = () => {
   useTitle("Bromhead");
@@ -37,6 +38,7 @@ const App = () => {
                   <Route path="home" element={<Home />} />
                   <Route path="profile" element={<Profile />} />
                   <Route path="projects" element={<Projects />} />
+                  <Route path="employees" element={<Users />} />
                   <Route path="clients">
                     <Route index element={<Clients />} />
                     <Route path="add" element={<AddClient />} />

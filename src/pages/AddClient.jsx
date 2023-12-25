@@ -20,12 +20,12 @@ const AddClient = () => {
         <Button to="/dash/clients">
           <ArrowBackIosIcon />
         </Button>
-        <Typography variant="h6" fontSize={22}>
+        <Typography color="primary.contrastText" variant="h6" fontSize={22}>
           Client details
         </Typography>
       </div>
 
-      <div className="mt-4 flex flex-col justify-center gap-8 rounded-md bg-white p-4">
+      <div className="bg-backgroundLight mt-4 flex flex-col justify-center gap-8 rounded-md p-4">
         <TextField
           id="name"
           label="Client Name"
@@ -34,7 +34,11 @@ const AddClient = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <BusinessIcon />
+                <BusinessIcon
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
               </InputAdornment>
             ),
           }}
@@ -43,13 +47,16 @@ const AddClient = () => {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
           <TextField
             id="email"
-            label="Client Email"
-            required
+            label="Client Email (Optional)"
             type="email"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <EmailIcon />
+                  <EmailIcon
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
                 </InputAdornment>
               ),
             }}
@@ -64,7 +71,11 @@ const AddClient = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <PhoneIcon />
+                  <PhoneIcon
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
                 </InputAdornment>
               ),
             }}
@@ -79,7 +90,11 @@ const AddClient = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LocationOnIcon />
+                  <LocationOnIcon
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
                 </InputAdornment>
               ),
             }}
@@ -88,13 +103,16 @@ const AddClient = () => {
 
           <TextField
             id="mapLocation"
-            label="Client Map Location"
-            required
+            label="Client Map Location (Optional)"
             type="url"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <MapIcon />
+                  <MapIcon
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
                 </InputAdornment>
               ),
             }}
