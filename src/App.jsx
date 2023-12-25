@@ -12,6 +12,7 @@ import { ROLES } from "../config/roles";
 import NotFound from "./pages/NotFound";
 import PersistLogin from "./components/auth/PersistLogin";
 import Projects from "./pages/Projects";
+import Prefetch from "./components/auth/Prefetch";
 
 const App = () => {
   useTitle("Bromhead");
@@ -29,10 +30,12 @@ const App = () => {
             <Route
               element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
             >
-              <Route path="dash" element={<DashLayout />}>
-                <Route path="home" element={<Home />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="projects" element={<Projects />} />
+              <Route element={<Prefetch />}>
+                <Route path="dash" element={<DashLayout />}>
+                  <Route path="home" element={<Home />} />
+                  <Route path="profile" element={<Profile />} />
+                  <Route path="projects" element={<Projects />} />
+                </Route>
               </Route>
             </Route>
           </Route>
