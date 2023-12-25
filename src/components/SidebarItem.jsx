@@ -2,12 +2,17 @@ import { useContext } from "react";
 import { SidebarContext } from "./DashLayout";
 import { NavLink } from "react-router-dom";
 
-const SidebarItem = ({ icon, title, onClick, to }) => {
-  const { expanded } = useContext(SidebarContext);
+const SidebarItem = ({ icon, title, to }) => {
+  const { expanded, setExpanded } = useContext(SidebarContext);
+
+  const handleNavclick = () => {
+    if (expanded) setExpanded(!expanded);
+  };
+
   return (
     <NavLink
       to={to}
-      onClick={onClick}
+      onClick={handleNavclick}
       className={({ isActive }) =>
         [
           isActive ? "bg-primary text-white" : "",
@@ -32,7 +37,7 @@ const SidebarItem = ({ icon, title, onClick, to }) => {
           invisible absolute left-full ml-6 -translate-x-3 rounded-md
           bg-primary px-2 py-1
           text-sm text-white opacity-20 transition-all
-          group-hover:visible group-hover:translate-x-0 group-hover:opacity-100
+          sm:group-hover:visible sm:group-hover:translate-x-0 sm:group-hover:opacity-100
       `}
         >
           {title}

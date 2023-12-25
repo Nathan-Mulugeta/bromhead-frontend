@@ -3,10 +3,12 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { MdMenuOpen } from "react-icons/md";
 import { MdOutlineMenu } from "react-icons/md";
+import GroupsIcon from "@mui/icons-material/Groups";
 import BusinessIcon from "@mui/icons-material/Business";
 import { useContext, useState } from "react";
 import { SidebarContext } from "./DashLayout";
 import Logo from "../assets/logo.svg";
+
 import { Link } from "react-router-dom";
 
 const SidebarMenuItems = [
@@ -27,6 +29,12 @@ const SidebarMenuItems = [
     title: "Clients",
     icon: <BusinessIcon />,
     to: "/dash/clients",
+  },
+  {
+    id: 4,
+    title: "Employees",
+    icon: <GroupsIcon />,
+    to: "/dash/employees",
   },
 ];
 

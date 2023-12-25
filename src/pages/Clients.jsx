@@ -82,7 +82,9 @@ const Clients = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <Typography variant="h6">Clients list</Typography>
+        <Typography color="primary.contrastText" variant="h6">
+          Clients list
+        </Typography>
         <Button
           to="/dash/clients/add"
           size="medium"
@@ -95,9 +97,10 @@ const Clients = () => {
       <Box
         sx={{
           width: "100%",
-          bgcolor: "background.paper",
+          bgcolor: "background.light",
           borderRadius: 2,
           mt: 3,
+          color: "primary.contrastText",
         }}
       >
         {content}

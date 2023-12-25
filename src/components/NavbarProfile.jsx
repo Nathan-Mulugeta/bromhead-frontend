@@ -14,15 +14,15 @@ const NavbarProfile = () => {
 
   return (
     <Link to="/dash/profile" className="flex items-center gap-4">
-      <div className="overflow-hidden rounded-full border">
-        <GoPerson color="#BDBFC4" fontSize={35} />
+      <div className="overflow-hidden rounded-full ">
+        <GoPerson color="#124056" fontSize={35} />
       </div>
       <div className="flex flex-col gap-1 text-sm leading-4">
         <div className="flex gap-1">
           <span>{firstName}</span>
           <span>{lastName}</span>
         </div>
-        <span className="text-text-light">{status}</span>
+        <span className="text-text-normal">{status}</span>
       </div>
     </Link>
   );
