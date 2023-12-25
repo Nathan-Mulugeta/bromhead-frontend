@@ -9,24 +9,8 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { ThemeProvider, createTheme } from "@mui/material";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#3085FE",
-      main: "#3085FE",
-      dark: "#002884",
-      contrastText: "#fff",
-    },
-    secondary: {
-      light: "#ff7961",
-      main: "#f44336",
-      dark: "#ba000d",
-      contrastText: "#000",
-    },
-  },
-});
+import { ThemeProvider } from "@mui/material";
+import theme from "./theme/theme.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

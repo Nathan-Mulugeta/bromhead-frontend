@@ -83,7 +83,12 @@ const Clients = () => {
     <div>
       <div className="flex items-center justify-between">
         <Typography variant="h6">Clients list</Typography>
-        <Button size="medium" variant="contained" startIcon={<AddIcon />}>
+        <Button
+          to="/dash/clients/add"
+          size="medium"
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
           Add Client
         </Button>
       </div>
