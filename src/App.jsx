@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import PersistLogin from "./components/auth/PersistLogin";
 import Projects from "./pages/Projects";
 import Prefetch from "./components/auth/Prefetch";
+import Clients from "./pages/Clients";
 
 const App = () => {
   useTitle("Bromhead");
@@ -35,6 +36,7 @@ const App = () => {
                   <Route path="home" element={<Home />} />
                   <Route path="profile" element={<Profile />} />
                   <Route path="projects" element={<Projects />} />
+                  <Route path="clients" element={<Clients />} />
                 </Route>
               </Route>
             </Route>

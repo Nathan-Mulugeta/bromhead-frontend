@@ -1,8 +1,9 @@
 import SidebarItem from "./SidebarItem";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { GoTasklist } from "react-icons/go";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { MdMenuOpen } from "react-icons/md";
 import { MdOutlineMenu } from "react-icons/md";
+import BusinessIcon from "@mui/icons-material/Business";
 import { useContext, useState } from "react";
 import { SidebarContext } from "./DashLayout";
 import Logo from "../assets/logo.svg";
@@ -12,14 +13,20 @@ const SidebarMenuItems = [
   {
     id: 1,
     title: "Dashboard",
-    icon: <LuLayoutDashboard />,
+    icon: <DashboardIcon />,
     to: "/dash/home",
   },
   {
     id: 2,
     title: "Projects",
-    icon: <GoTasklist />,
+    icon: <PlaylistAddCheckIcon />,
     to: "/dash/projects",
+  },
+  {
+    id: 3,
+    title: "Clients",
+    icon: <BusinessIcon />,
+    to: "/dash/clients",
   },
 ];
 
