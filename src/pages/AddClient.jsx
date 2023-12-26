@@ -83,6 +83,7 @@ const AddClient = () => {
       }
     }
   };
+
   return isLoading ? (
     <LoadingSpinner />
   ) : (
@@ -96,7 +97,7 @@ const AddClient = () => {
         </Typography>
       </div>
 
-      <div className="bg-backgroundLight mt-4 flex flex-col justify-center gap-8 rounded-md p-4">
+      <div className="mt-4 flex flex-col justify-center gap-8 rounded-md bg-backgroundLight p-4">
         <TextField
           id="name"
           label="Client Name"

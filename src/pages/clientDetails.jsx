@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   useDeleteClientMutation,
   useGetClientsQuery,
+  useUpdateClientMutation,
 } from "../slices/clients/clientsApiSlice";
 import { Button, InputAdornment, TextField, Typography } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -13,9 +14,56 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MapIcon from "@mui/icons-material/Map";
 import { toast } from "react-toastify";
+import { useState } from "react";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const clientDetails = () => {
   useTitle("Client details");
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    mapLocation: "",
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [
+    updateClient,
+    {
+      isLoading: isEditLoading,
+      isSuccess: isEditSuccess,
+      isError: isEditError,
+      editError,
+    },
+  ] = useUpdateClientMutation();
+
+  let errorMessage = editError?.data.message;
+
+  useEffect(() => {
+    if (isEditError) {
+      toast.error(editError?.data.message);
+    }
+  }, [isEditError, editError]);
+
+  const isFormComplete = Object.entries(formData).every(([key, value]) => {
+    return key === "email" || key === "mapLocation" || value !== "";
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
 
   const { clientId } = useParams();
 
@@ -24,6 +72,18 @@ const clientDetails = () => {
       client: data?.entities[clientId],
     }),
   });
+
+  useEffect(() => {
+    if (client) {
+      setFormData({
+        name: client.name,
+        email: client.contactInfo.email,
+        phone: client.contactInfo.phone,
+        address: client.contactInfo.address,
+        mapLocation: client.contactInfo.mapLocation,
+      });
+    }
+  }, [client]);
 
   const [
     deleteClient,
@@ -54,7 +114,29 @@ const clientDetails = () => {
     await deleteClient({ id: client.id });
   };
 
-  return (
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    toggleEdit();
+
+    if (isFormComplete) {
+      const res = await updateClient({
+        id: clientId,
+        name: formData.name,
+        contactInfo: {
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          mapLocation: formData.mapLocation,
+        },
+      });
+
+      toast.success(res.data);
+    }
+  };
+
+  return isDelLoading || isEditLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
         <Button to="/dash/clients">
@@ -69,15 +151,15 @@ const clientDetails = () => {
         <TextField
           id="name"
           label="Client Name"
-          // error={errorMessage === "Duplicate client."}
+          error={errorMessage === "Duplicate client."}
           autoComplete="off"
           name="name"
-          value={client.name}
-          // onChange={handleInputChange}
+          value={formData.name}
+          onChange={handleInputChange}
           type="text"
           required
           InputProps={{
-            readOnly: true,
+            readOnly: !isEditing,
             startAdornment: (
               <InputAdornment position="start">
                 <BusinessIcon
@@ -94,14 +176,14 @@ const clientDetails = () => {
           <TextField
             id="email"
             label="Client Email (Optional)"
-            // error={errorMessage === "Please input a valid email."}
+            error={errorMessage === "Please input a valid email."}
             name="email"
-            // onChange={handleInputChange}
-            value={client.contactInfo.email}
+            onChange={handleInputChange}
+            value={formData.email}
             autoComplete="off"
             type="email"
             InputProps={{
-              readOnly: true,
+              readOnly: !isEditing,
               startAdornment: (
                 <InputAdornment position="start">
                   <EmailIcon
@@ -118,15 +200,15 @@ const clientDetails = () => {
           <TextField
             id="phone"
             label="Client Phone no."
-            // onChange={handleInputChange}
-            // error={errorMessage === "Please input a valid phone number."}
-            value={client.contactInfo.phone}
+            onChange={handleInputChange}
+            error={errorMessage === "Please input a valid phone number."}
+            value={formData.phone}
             autoComplete="off"
             name="phone"
             required
             type="tel"
             InputProps={{
-              readOnly: true,
+              readOnly: !isEditing,
               startAdornment: (
                 <InputAdornment position="start">
                   <PhoneIcon
@@ -143,14 +225,14 @@ const clientDetails = () => {
           <TextField
             id="address"
             label="Client Address"
-            // onChange={handleInputChange}
-            value={client.contactInfo.address}
+            onChange={handleInputChange}
+            value={formData.address}
             name="address"
             autoComplete="off"
             required
             type="text"
             InputProps={{
-              readOnly: true,
+              readOnly: !isEditing,
               startAdornment: (
                 <InputAdornment position="start">
                   <LocationOnIcon
@@ -167,13 +249,13 @@ const clientDetails = () => {
           <TextField
             id="mapLocation"
             label="Client Map Location (Optional)"
-            // onChange={handleInputChange}
-            value={client.contactInfo.mapLocation}
+            onChange={handleInputChange}
+            value={formData.mapLocation}
             name="mapLocation"
             autoComplete="off"
             type="url"
             InputProps={{
-              readOnly: true,
+              readOnly: !isEditing,
               startAdornment: (
                 <InputAdornment position="start">
                   <MapIcon
@@ -189,7 +271,16 @@ const clientDetails = () => {
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-6 flex justify-between gap-4">
+        {!isEditing ? (
+          <Button color="primary" variant="contained" onClick={toggleEdit}>
+            Update client
+          </Button>
+        ) : (
+          <Button color="success" variant="contained" onClick={handleUpdate}>
+            Save changes
+          </Button>
+        )}
         <Button
           // disabled={!isFormComplete}
           color="error"

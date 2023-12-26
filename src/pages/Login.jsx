@@ -45,8 +45,7 @@ const Login = () => {
       } else if (err.status === 401) {
         toast.error("Wrong credentials");
       } else {
-        toast.error(err.data?.message);
-        console.log("Unable to connect to server");
+        toast.error("Unable to connect to server");
       }
     }
   };
@@ -81,7 +80,7 @@ const Login = () => {
             </p>
           </div>
         </div>
-        <div className="bg-background container mx-auto flex flex-1 flex-col items-center justify-center gap-1 p-4">
+        <div className="container mx-auto flex flex-1 flex-col items-center justify-center gap-1 bg-background p-4">
           <header className="text-3xl font-semibold leading-10 text-text-light lg:text-5xl">
             Welcome Back 👋
           </header>
