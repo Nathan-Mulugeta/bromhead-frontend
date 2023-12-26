@@ -15,6 +15,7 @@ import Projects from "./pages/Projects";
 import Prefetch from "./components/auth/Prefetch";
 import Clients from "./pages/Clients";
 import AddClient from "./pages/AddClient";
+import ClientDetails from "./pages/clientDetails";
 import Users from "./pages/Users";
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
                   <Route path="clients">
                     <Route index element={<Clients />} />
                     <Route path="add" element={<AddClient />} />
+                    <Route path=":clientId" element={<ClientDetails />} />
                   </Route>
                 </Route>
               </Route>

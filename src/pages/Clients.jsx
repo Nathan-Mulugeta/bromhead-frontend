@@ -7,6 +7,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { useNavigate } from "react-router-dom";
 
 const Clients = () => {
   useTitle("Clients");
@@ -25,6 +26,12 @@ const Clients = () => {
 
   let content;
 
+  const navigate = useNavigate();
+
+  const handleClick = (clientId) => {
+    navigate(`/dash/clients/${clientId}`);
+  };
+
   if (isLoading) content = <LoadingSpinner />;
 
   if (isSuccess) {
@@ -40,7 +47,7 @@ const Clients = () => {
         return (
           <List key={clientId}>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => handleClick(clientId)}>
                 <ListItemText
                   primary={client.name}
                   secondary={
@@ -53,14 +60,16 @@ const Clients = () => {
                       >
                         {client.contactInfo.address}
                       </Typography>
-                      <Typography
-                        sx={{ display: "block" }}
-                        component="span"
-                        variant="body2"
-                        color="text.secondary"
-                      >
-                        Email: {client.contactInfo.email}
-                      </Typography>
+                      {client.contactInfo.email && (
+                        <Typography
+                          sx={{ display: "block" }}
+                          component="span"
+                          variant="body2"
+                          color="text.secondary"
+                        >
+                          Email: {client.contactInfo.email}
+                        </Typography>
+                      )}
                       <Typography
                         sx={{ display: "block" }}
                         component="span"
