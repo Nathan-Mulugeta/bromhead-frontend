@@ -12,9 +12,9 @@ const ProfilePageHeader = () => {
         <p className="text-sm text-text-light">Employee</p>
       </div>
 
-      <div className="hover:bg-secondary bg-backgroundLight mt-6 flex w-full justify-center rounded-xl py-3 text-white">
+      {/* <div className="hover:bg-secondary bg-backgroundLight mt-6 flex w-full justify-center rounded-xl py-3 text-white">
         <button>Edit Profile</button>
-      </div>
+      </div> */}
     </div>
   );
 };

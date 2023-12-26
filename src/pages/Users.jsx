@@ -80,7 +80,7 @@ const Users = () => {
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemText
-                  primary={`${employee.firstname} ${employee.lastname}`}
+                  primary={`${employee.firstName} ${employee.lastName}`}
                 />
 
                 <Box className="flex items-center">

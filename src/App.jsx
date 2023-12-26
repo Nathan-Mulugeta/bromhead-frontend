@@ -17,6 +17,7 @@ import Clients from "./pages/Clients";
 import AddClient from "./pages/AddClient";
 import ClientDetails from "./pages/clientDetails";
 import Users from "./pages/Users";
+import MyProfile from "./pages/MyProfile";
 
 const App = () => {
   useTitle("Bromhead");
@@ -37,9 +38,15 @@ const App = () => {
               <Route element={<Prefetch />}>
                 <Route path="dash" element={<DashLayout />}>
                   <Route path="home" element={<Home />} />
-                  <Route path="profile" element={<Profile />} />
+
+                  <Route path="profile">
+                    <Route index element={<Profile />} />
+                    <Route path=":userId" element={<MyProfile />} />
+                  </Route>
+
                   <Route path="projects" element={<Projects />} />
                   <Route path="employees" element={<Users />} />
+
                   <Route path="clients">
                     <Route index element={<Clients />} />
                     <Route path="add" element={<AddClient />} />

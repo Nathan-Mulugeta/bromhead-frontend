@@ -11,7 +11,7 @@ const useAuth = () => {
 
   if (token) {
     const decoded = jwtDecode(token);
-    const { username, roles } = decoded.UserInfo;
+    const { id, username, roles } = decoded.UserInfo;
 
     const currentTime = Math.floor(Date.now() / 1000);
     isExpired = currentTime > decoded.exp;
@@ -25,9 +25,9 @@ const useAuth = () => {
     if (isManager) status = "Manager";
     if (isAdmin) status = "Admin";
 
-    return { username, roles, status, isManager, isAdmin };
+    return { id, username, roles, status, isManager, isAdmin };
   }
 
-  return { username: "", roles: [], isManager, isAdmin, status };
+  return { id: "", username: "", roles: [], isManager, isAdmin, status };
 };
 export default useAuth;

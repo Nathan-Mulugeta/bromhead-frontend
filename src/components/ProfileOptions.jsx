@@ -6,14 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { useSendLogoutMutation } from "../slices/auth/authApiSlice";
 import { toast } from "react-toastify";
 import LoadingSpinner from "./LoadingSpinner";
+import useAuth from "../hooks/useAuth";
 
-const profileIcon = <GoPerson color="#101317" fontSize={20} />;
+const profileIcon = <GoPerson color="#fff" fontSize={20} />;
 const settingsIcon = <RiSettingsLine color="#101317" fontSize={20} />;
 const logoutIcon = <CiLogout color="#FF7F74" fontSize={20} />;
 
 const profileOptionsList = [
   { title: "My Profile", icon: profileIcon },
-  { title: "Settings", icon: settingsIcon },
+  // { title: "Settings", icon: settingsIcon },
   { title: "Log out", icon: logoutIcon },
 ];
 
@@ -21,8 +22,10 @@ const ProfileOptions = () => {
   const navigate = useNavigate();
   const [logout, { isLoading }] = useSendLogoutMutation();
 
+  const { id: userId } = useAuth();
+
   const handleProfileClick = () => {
-    navigate("/");
+    navigate(`/dash/profile/${userId}`);
   };
 
   const handleSettingsClick = () => {

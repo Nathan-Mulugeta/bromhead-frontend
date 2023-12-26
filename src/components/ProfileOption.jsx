@@ -5,11 +5,11 @@ const ProfileOption = ({ title, Icon, onClick }) => {
 
   return (
     <button
-      className="bg-backgroundLight hover:bg-secondary flex w-full items-center justify-between rounded-xl p-4"
+      className="flex w-full items-center justify-between rounded-xl bg-backgroundLight p-4 hover:bg-secondary"
       onClick={onClick}
     >
       <div className="flex items-center gap-6 text-text-light">
-        <div className="bg-backgroundLight overflow-hidden rounded-full p-2 text-text-light">
+        <div className="overflow-hidden rounded-full bg-background p-2">
           {Icon}
         </div>
         <div className={`${isLogout && "text-[#FF7F74]"}`}>{title}</div>

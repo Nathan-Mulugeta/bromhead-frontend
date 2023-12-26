@@ -277,12 +277,16 @@ const clientDetails = () => {
             Update client
           </Button>
         ) : (
-          <Button color="success" variant="contained" onClick={handleUpdate}>
+          <Button
+            disabled={!isFormComplete}
+            color="success"
+            variant="contained"
+            onClick={handleUpdate}
+          >
             Save changes
           </Button>
         )}
         <Button
-          // disabled={!isFormComplete}
           color="error"
           variant="contained"
           onClick={onDeleteClientClicked}
