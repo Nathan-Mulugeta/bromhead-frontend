@@ -12,6 +12,8 @@ import KeyIcon from "@mui/icons-material/Key";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
+import EmailIcon from "@mui/icons-material/Email";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
   Autocomplete,
   Button,
@@ -40,6 +42,8 @@ const MyProfile = () => {
     roles: [],
     firstName: "",
     lastName: "",
+    email: "",
+    address: "",
     status: "",
   });
 
@@ -98,6 +102,8 @@ const MyProfile = () => {
         roles: user.roles,
         firstName: user.firstName,
         lastName: user.lastName,
+        address: user.address,
+        email: user.email,
         status: user.status,
       });
     }
@@ -131,7 +137,7 @@ const MyProfile = () => {
         <TextField
           id="username"
           label="User Name"
-          //   error={errorMessage === "Duplicate client."}
+          error={errorMessage === "Duplicate username"}
           autoComplete="off"
           name="username"
           value={formData.username}
@@ -221,6 +227,54 @@ const MyProfile = () => {
           }}
           variant="outlined"
         />
+
+        <TextField
+          id="email"
+          label="Email"
+          error={errorMessage === "Please input a valid email."}
+          onChange={handleInputChange}
+          value={formData.email}
+          name="email"
+          autoComplete="off"
+          type="email"
+          InputProps={{
+            readOnly: !isEditing,
+            startAdornment: (
+              <InputAdornment position="start">
+                <EmailIcon
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              </InputAdornment>
+            ),
+          }}
+          variant="outlined"
+        />
+
+        <TextField
+          id="address"
+          label="Home Address"
+          onChange={handleInputChange}
+          value={formData.address}
+          name="address"
+          autoComplete="off"
+          type="text"
+          InputProps={{
+            readOnly: !isEditing,
+            startAdornment: (
+              <InputAdornment position="start">
+                <LocationOnIcon
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              </InputAdornment>
+            ),
+          }}
+          variant="outlined"
+        />
+
         <div className="flex items-center gap-3">
           <WorkHistoryIcon
             sx={{
