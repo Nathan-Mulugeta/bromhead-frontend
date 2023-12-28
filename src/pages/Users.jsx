@@ -78,7 +78,7 @@ const Users = () => {
         return (
           <List key={employeeId}>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton to={`/dash/employees/${employeeId}`}>
                 <ListItemText
                   primary={`${employee.firstName} ${employee.lastName}`}
                 />
