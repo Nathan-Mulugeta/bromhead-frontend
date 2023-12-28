@@ -115,7 +115,14 @@ const MyProfile = () => {
     toggleEdit();
 
     if (isFormComplete) {
-      const res = await updateUser(formData);
+      const res = await updateUser({
+        ...formData,
+        username: formData.username.trim(),
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        address: formData.address.trim(),
+        email: formData.email.trim(),
+      });
 
       toast.success(res.data?.message);
     }
