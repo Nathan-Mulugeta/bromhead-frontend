@@ -37,17 +37,17 @@ const clientDetails = () => {
       isLoading: isEditLoading,
       isSuccess: isEditSuccess,
       isError: isEditError,
-      editError,
+      error: editError,
     },
   ] = useUpdateClientMutation();
-
-  let errorMessage = editError?.data.message;
 
   useEffect(() => {
     if (isEditError) {
       toast.error(editError?.data.message);
     }
   }, [isEditError, editError]);
+
+  let errorMessage = editError?.data.message;
 
   const isFormComplete = Object.entries(formData).every(([key, value]) => {
     return key === "email" || key === "mapLocation" || value !== "";
@@ -117,21 +117,23 @@ const clientDetails = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    toggleEdit();
 
     if (isFormComplete) {
       const res = await updateClient({
         id: clientId,
-        name: formData.name,
+        name: formData.name.trim(),
         contactInfo: {
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-          mapLocation: formData.mapLocation,
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          address: formData.address.trim(),
+          mapLocation: formData.mapLocation.trim(),
         },
       });
 
-      toast.success(res.data);
+      if (!res.error) {
+        toggleEdit();
+        toast.success(res.data?.message);
+      }
     }
   };
 

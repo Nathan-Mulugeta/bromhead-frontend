@@ -32,11 +32,11 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const { accessToken, firstName, lastName } = await login({
-        username,
-        password,
+      const { accessToken } = await login({
+        username: username.trim(),
+        password: password.trim(),
       }).unwrap();
-      dispatch(setCredentials({ accessToken, firstName, lastName }));
+      dispatch(setCredentials({ accessToken }));
       setUsername("");
       setPassword("");
       toast.success("Login successful");

@@ -110,21 +110,28 @@ const MyProfile = () => {
     }
   }, [user]);
 
+  // useEffect(() => {}, [isEditError])
+
   const handleUpdate = async (e) => {
     e.preventDefault();
-    toggleEdit();
 
     if (isFormComplete) {
       const res = await updateUser({
         ...formData,
         username: formData.username.trim(),
+        password: formData.password.trim(),
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         address: formData.address.trim(),
         email: formData.email.trim(),
       });
 
-      toast.success(res.data?.message);
+      console.log(res);
+
+      if (!res.error) {
+        toggleEdit();
+        toast.success(res.data?.message);
+      }
     }
   };
 

@@ -52,7 +52,8 @@ const AddEmployee = () => {
 
     if (isFormComplete) {
       const res = await addUser({
-        ...formData,
+        username: formData.username.trim(),
+        password: formData.password.trim(),
         roles: [`${formData.roles}`],
       });
 

@@ -65,12 +65,12 @@ const AddClient = () => {
 
     if (isFormComplete) {
       const res = await addNewClient({
-        name: formData.name,
+        name: formData.name.trim(),
         contactInfo: {
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-          mapLocation: formData.mapLocation,
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          address: formData.address.trim(),
+          mapLocation: formData.mapLocation.trim(),
         },
       });
 
