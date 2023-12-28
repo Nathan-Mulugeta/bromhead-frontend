@@ -18,8 +18,8 @@ import AddClient from "./pages/AddClient";
 import ClientDetails from "./pages/clientDetails";
 import Users from "./pages/Users";
 import MyProfile from "./pages/MyProfile";
-import EmployeeDetails from "./pages/EmployeeDetails";
 import AddEmployee from "./pages/AddEmployee";
+import EmployeeDetails from "./pages/EmployeeDetails";
 
 const App = () => {
   useTitle("Bromhead");

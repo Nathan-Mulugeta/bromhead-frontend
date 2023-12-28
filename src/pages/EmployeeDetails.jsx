@@ -104,7 +104,7 @@ const EmployeeDetails = () => {
         />
       </div>
 
-      <div className="mt-4 flex flex-col justify-between gap-4 text-text-light sm:flex-row sm:items-center">
+      <div className="mt-4 flex flex-col justify-between gap-4 overflow-hidden text-text-light sm:flex-row sm:items-center">
         <div className="flex flex-wrap gap-4">
           <Typography variant="subtitle1">Roles:</Typography>
           {user?.roles.length !== 0 &&
