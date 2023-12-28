@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useRefreshMutation } from "../../slices/auth/authApiSlice";
 import usePersist from "../../hooks/usePersist";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentToken } from "../../slices/auth/authSlice";
-import LoadingSpinner from "../LoadingSpinner";
 import { toast } from "react-toastify";
+import { setLoading } from "../../slices/loading/loadingSlice";
 
 const PersistLogin = () => {
   const [persist] = usePersist();
@@ -17,6 +17,12 @@ const PersistLogin = () => {
 
   const [refresh, { isUninitialized, isLoading, isSuccess, isError, error }] =
     useRefreshMutation();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   useEffect(() => {
     if (effectRan.current === true || process.env.NODE_ENV !== "development") {
@@ -41,9 +47,6 @@ const PersistLogin = () => {
   if (!persist) {
     // persist: no
     content = <Outlet />;
-  } else if (isLoading) {
-    //persist: yes, token: no
-    content = <LoadingSpinner />;
   } else if (isError) {
     //persist: yes, token: no
     toast.error(error?.data?.message);

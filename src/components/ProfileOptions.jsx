@@ -5,8 +5,10 @@ import { CiLogout } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { useSendLogoutMutation } from "../slices/auth/authApiSlice";
 import { toast } from "react-toastify";
-import LoadingSpinner from "./LoadingSpinner";
 import useAuth from "../hooks/useAuth";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const profileIcon = <GoPerson color="#fff" fontSize={20} />;
 const settingsIcon = <RiSettingsLine color="#101317" fontSize={20} />;
@@ -21,6 +23,14 @@ const profileOptionsList = [
 const ProfileOptions = () => {
   const navigate = useNavigate();
   const [logout, { isLoading }] = useSendLogoutMutation();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+
+    return () => dispatch(setLoading(false));
+  }, [dispatch, isLoading]);
 
   const { id: userId } = useAuth();
 
@@ -54,7 +64,6 @@ const ProfileOptions = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
       <div className="flex flex-1 flex-col items-center justify-evenly gap-4 p-4">
         {profileOptionsList.map((option) => (
           <ProfileOption

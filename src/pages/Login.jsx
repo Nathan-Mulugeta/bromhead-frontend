@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import useTitle from "../hooks/useTitle";
@@ -6,8 +6,8 @@ import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../slices/auth/authApiSlice";
 import { setCredentials } from "../slices/auth/authSlice";
 import { toast } from "react-toastify";
-import LoadingSpinner from "../components/LoadingSpinner";
 import usePersist from "../hooks/usePersist";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const Login = () => {
   useTitle("Employee Login");
@@ -23,6 +23,10 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const [login, { isLoading }] = useLoginMutation();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +62,6 @@ const Login = () => {
 
   return (
     <section>
-      {isLoading && <LoadingSpinner />}
       <div className="flex min-h-screen flex-col md:flex-row">
         {/* <div className="flex flex-1 p-10 text-6xl text-white items-center justify-center bg-gradient-to-r from-[#3C48FF] via-blue-500 to-[#957AFE]">
           Bromhead

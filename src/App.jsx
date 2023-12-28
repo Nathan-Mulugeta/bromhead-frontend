@@ -19,6 +19,7 @@ import ClientDetails from "./pages/clientDetails";
 import Users from "./pages/Users";
 import MyProfile from "./pages/MyProfile";
 import EmployeeDetils from "./pages/EmployeeDetils";
+import AddEmployee from "./pages/AddEmployee";
 
 const App = () => {
   useTitle("Bromhead");
@@ -49,6 +50,7 @@ const App = () => {
                   <Route path="employees">
                     <Route index element={<Users />} />
                     <Route path=":userId" element={<EmployeeDetils />} />
+                    <Route path="add" element={<AddEmployee />} />
                   </Route>
 
                   <Route path="clients">

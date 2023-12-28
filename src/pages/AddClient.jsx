@@ -15,15 +15,21 @@ import MapIcon from "@mui/icons-material/Map";
 import { useAddNewClientMutation } from "../slices/clients/clientsApiSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const AddClient = () => {
   const [addNewClient, { isLoading, isSuccess, isError, error }] =
     useAddNewClientMutation();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   let errorMessage = error?.data.message;
 
@@ -84,9 +90,7 @@ const AddClient = () => {
     }
   };
 
-  return isLoading ? (
-    <LoadingSpinner />
-  ) : (
+  return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
         <Button to="/dash/clients">

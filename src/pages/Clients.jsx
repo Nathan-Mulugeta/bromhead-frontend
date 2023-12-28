@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import LoadingSpinner from "../components/LoadingSpinner";
 import useTitle from "../hooks/useTitle";
 import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
 import AddIcon from "@mui/icons-material/Add";
@@ -8,6 +7,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const Clients = () => {
   useTitle("Clients");
@@ -32,7 +34,11 @@ const Clients = () => {
     navigate(`/dash/clients/${clientId}`);
   };
 
-  if (isLoading) content = <LoadingSpinner />;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   if (isSuccess) {
     const { ids, entities } = clients;

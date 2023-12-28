@@ -4,7 +4,6 @@ import {
   useGetUsersQuery,
   useUpdateUserMutation,
 } from "../slices/users/usersApiSlice";
-import LoadingSpinner from "../components/LoadingSpinner";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { toast } from "react-toastify";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -23,6 +22,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const statusList = [
   "available",
@@ -120,9 +121,13 @@ const MyProfile = () => {
     }
   };
 
-  return isEditLoading ? (
-    <LoadingSpinner />
-  ) : (
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isEditLoading));
+  }, [dispatch, isEditLoading]);
+
+  return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
         <Button to="/dash/profile">

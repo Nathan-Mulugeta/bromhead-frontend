@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useTitle from "../hooks/useTitle";
 import { useGetUsersQuery } from "../slices/users/usersApiSlice";
-import LoadingSpinner from "../components/LoadingSpinner";
 import {
   Box,
   Button,
@@ -13,6 +12,8 @@ import {
 } from "@mui/material";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import { DataGrid } from "@mui/x-data-grid";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const statusColors = {
   available: "bg-green-400", // Green for available
@@ -64,7 +65,11 @@ const Users = () => {
 
   let content;
 
-  if (isLoading) content = <LoadingSpinner />;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   if (isSuccess) {
     const { ids, entities } = employees;
@@ -106,6 +111,7 @@ const Users = () => {
           size="medium"
           variant="contained"
           startIcon={<PersonAddAltIcon />}
+          to="/dash/employees/add"
         >
           Add Employee
         </Button>

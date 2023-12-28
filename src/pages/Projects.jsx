@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import LoadingSpinner from "../components/LoadingSpinner";
 import useTitle from "../hooks/useTitle";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
 import AddIcon from "@mui/icons-material/Add";
@@ -7,6 +6,9 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const Projects = () => {
   useTitle("Projects");
@@ -25,7 +27,11 @@ const Projects = () => {
 
   let content;
 
-  if (isLoading) content = <LoadingSpinner />;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading]);
 
   if (isSuccess) {
     const { ids, entities } = projects;

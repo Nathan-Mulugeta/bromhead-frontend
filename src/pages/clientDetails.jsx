@@ -15,7 +15,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MapIcon from "@mui/icons-material/Map";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import LoadingSpinner from "../components/LoadingSpinner";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const clientDetails = () => {
   useTitle("Client details");
@@ -134,9 +135,13 @@ const clientDetails = () => {
     }
   };
 
-  return isDelLoading || isEditLoading ? (
-    <LoadingSpinner />
-  ) : (
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isDelLoading || isEditLoading));
+  }, [dispatch, isDelLoading, isEditLoading]);
+
+  return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
         <Button to="/dash/clients">
