@@ -80,18 +80,43 @@ const Users = () => {
         const employee = entities[employeeId];
         const statusColor = statusColors[employee.status.toLowerCase()];
 
+        let employeeName = `${employee.firstName} ${employee.lastName}`;
+        let notFilled = false;
+        if (
+          employee.firstName === "undefined" ||
+          employee.lastName === "undefined"
+        ) {
+          employeeName = "Incomplete profile";
+          notFilled = true;
+        }
+
         return (
           <List key={employeeId}>
             <ListItem disablePadding>
               <ListItemButton to={`/dash/employees/${employeeId}`}>
                 <ListItemText
-                  primary={`${employee.firstName} ${employee.lastName}`}
+                  sx={{
+                    color: notFilled && "#fca5a5",
+                  }}
+                  primary={employeeName}
                 />
 
                 <Box className="flex items-center">
-                  <span
-                    className={`mr-2 inline-block h-3 w-3 rounded-full ${statusColor}`}
-                  />
+                  {employee.status === "available" ? (
+                    <span class="relative mr-2 flex h-3 w-3">
+                      <span
+                        class={`absolute inline-flex h-full w-full animate-ping rounded-full ${statusColor} opacity-75`}
+                      ></span>
+                      <span
+                        class={`relative inline-flex h-3 w-3 rounded-full ${statusColor}`}
+                      ></span>
+                    </span>
+                  ) : (
+                    <span
+                      className={`mr-2 inline-block h-3 w-3 rounded-full ${statusColor}`}
+                    />
+                  )}
+
                   <Typography variant="caption">{employee.status}</Typography>
                 </Box>
               </ListItemButton>
