@@ -13,6 +13,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyIcon from "@mui/icons-material/Key";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const rolesList = ["Employee", "Manager", "Admin"];
 
@@ -41,6 +43,12 @@ const AddEmployee = () => {
 
   let errorMessage = error?.data.message;
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading]);
+
   useEffect(() => {
     if (isError) {
       toast.error(error?.data.message);
@@ -57,7 +65,14 @@ const AddEmployee = () => {
         roles: [`${formData.roles}`],
       });
 
-      toast.success(res.data?.message);
+      if (!res.error) {
+        setFormData({
+          username: "",
+          password: "",
+          roles: "Employee",
+        });
+        toast.success(res.data?.message);
+      }
     }
   };
 

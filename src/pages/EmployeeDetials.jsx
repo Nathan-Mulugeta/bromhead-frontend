@@ -1,6 +1,9 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useGetUsersQuery } from "../slices/users/usersApiSlice";
+import React, { useEffect, useId } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "../slices/users/usersApiSlice";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
@@ -11,6 +14,9 @@ import { Button, Chip, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import PersonOffIcon from "@mui/icons-material/PersonOff";
 import DataDisplayItem from "../components/DataDisplayItem";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
+import { toast } from "react-toastify";
 
 const EmployeeDetails = () => {
   const { userId } = useParams();
@@ -20,6 +26,34 @@ const EmployeeDetails = () => {
       user: data?.entities[userId],
     }),
   });
+
+  const [deleteEmployee, { isLoading, isSuccess, isError, error }] =
+    useDeleteUserMutation();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+  }, [isLoading, dispatch]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error?.data.message);
+    }
+  }, [isError, error]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Employee deleted successfully.");
+      navigate("/dash/employees");
+    }
+  }, [isSuccess, navigate]);
+
+  const handleDeleteClick = async () => {
+    const res = await deleteEmployee({ id: userId });
+  };
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -70,12 +104,17 @@ const EmployeeDetails = () => {
         />
       </div>
 
-      <div className="mt-4 flex items-center gap-4 text-text-light">
-        <Typography variant="subtitle1">Roles:</Typography>
-        {user?.roles.length !== 0 &&
-          user?.roles.map((role) => (
-            <Chip key={role} label={role} color="primary" />
-          ))}
+      <div className="mt-4 flex flex-col justify-between gap-4 text-text-light sm:flex-row sm:items-center">
+        <div className="flex flex-wrap gap-4">
+          <Typography variant="subtitle1">Roles:</Typography>
+          {user?.roles.length !== 0 &&
+            user?.roles.map((role) => (
+              <Chip key={role} label={role} color="primary" />
+            ))}
+        </div>
+        <Button color="error" variant="contained" onClick={handleDeleteClick}>
+          Delete Employee
+        </Button>
       </div>
     </div>
   );

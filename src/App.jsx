@@ -18,7 +18,7 @@ import AddClient from "./pages/AddClient";
 import ClientDetails from "./pages/clientDetails";
 import Users from "./pages/Users";
 import MyProfile from "./pages/MyProfile";
-import EmployeeDetils from "./pages/EmployeeDetils";
+import EmployeeDetails from "./pages/EmployeeDetails";
 import AddEmployee from "./pages/AddEmployee";
 
 const App = () => {
@@ -49,7 +49,7 @@ const App = () => {
                   <Route path="projects" element={<Projects />} />
                   <Route path="employees">
                     <Route index element={<Users />} />
-                    <Route path=":userId" element={<EmployeeDetils />} />
+                    <Route path=":userId" element={<EmployeeDetails />} />
                     <Route path="add" element={<AddEmployee />} />
                   </Route>
 
