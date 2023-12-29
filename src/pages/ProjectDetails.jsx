@@ -41,7 +41,7 @@ const ProjectDetails = () => {
   return (
     <div className="text-text-light">
       <div className="flex items-center justify-start">
-        <Button to="/dash/clients">
+        <Button to="/dash/projects">
           <ArrowBackIosIcon />
         </Button>
         <Typography color="primary.contrastText" variant="h6" fontSize={22}>
