@@ -7,16 +7,16 @@ const Hero = () => {
       className="flex h-screen items-center justify-center bg-cover bg-center"
     >
       <div className="relative flex max-w-[700px] flex-col items-start p-6 text-white">
-        <div className="bg-secondary/40 absolute -left-40 -top-32 h-[30rem] w-[30rem] rounded-full"></div>
+        <div className="absolute -left-40 -top-32 h-[30rem] w-[30rem] rounded-full bg-secondary/40"></div>
         <h1 className="z-10 mb-10 text-4xl font-bold md:text-6xl">
-          Meaningful Financial Investments
+          Comprehensive Audit Solutions
         </h1>
         <p className="z-10 mb-8 max-w-sm text-lg md:text-xl">
-          Browse vetted investment offerings in communities all over the US.
+          Explore meticulously curated audit services for businesses locally.
         </p>
         <Link
           to="/contact"
-          className="hover:bg-secondary z-10 rounded-md bg-primary px-6 py-3 font-semibold text-white transition duration-100"
+          className="z-10 rounded-md bg-primary px-6 py-3 font-semibold text-white transition duration-100 hover:bg-secondary"
         >
           Contact Us
         </Link>
