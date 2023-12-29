@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
-import { Avatar, Button, ListItem, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  List,
+  ListItem,
+  ListItemButton,
+  Typography,
+} from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PersonIcon from "@mui/icons-material/Person";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 const ProjectDetails = () => {
   const { projectId } = useParams();
@@ -22,9 +32,15 @@ const ProjectDetails = () => {
     }
   });
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(Boolean(!project?.name)));
+  }, [dispatch, project]);
+
   return (
     <div className="text-text-light">
-      <div className="flex items-center">
+      <div className="flex items-center justify-start">
         <Button to="/dash/clients">
           <ArrowBackIosIcon />
         </Button>
@@ -33,64 +49,125 @@ const ProjectDetails = () => {
         </Typography>
       </div>
 
-      <div className="mt-2 text-text-light">
-        <Typography variant="h6" fontSize={22}>
-          {project?.name}
-        </Typography>
-        <div className="text-text-dark mt-2 flex items-center gap-1">
-          <LocationOnIcon fontSize="small" />
-          <Typography variant="caption">
-            {project?.client.contactInfo.address}
-          </Typography>
-        </div>
-      </div>
+      <div className="mt-4 rounded-md bg-backgroundLight p-6 sm:flex sm:justify-center ">
+        <div className="flex flex-col justify-center sm:max-w-lg sm:flex-row sm:justify-evenly sm:gap-8">
+          <div>
+            <div className="text-text-light">
+              <Button
+                to={`/dash/clients/${project?.client._id}`}
+                sx={{
+                  color: "inherit",
+                  p: 0,
+                  textTransform: "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "start",
+                }}
+              >
+                <Typography variant="h6" fontSize={22}>
+                  {project?.name}
+                </Typography>
+                <div className="text-text-dark flex items-center gap-1">
+                  <LocationOnIcon fontSize="small" />
+                  <Typography variant="caption">
+                    {project?.client.contactInfo.address}
+                  </Typography>
+                </div>
+              </Button>
+            </div>
 
-      <div className="mt-8">
-        <Typography>Assigned Employees</Typography>
+            <div className="mt-4">
+              <Typography variant="h6" fontSize={16}>
+                Assigned Employees
+              </Typography>
 
-        <div className="grid grid-cols-2">
-          {project?.assignedUsers.map((user) => (
-            <ListItem key={user._id}>
-              {user.firstName} {user.lastName}
-            </ListItem>
-          ))}
-        </div>
-      </div>
+              <div className="grid grid-cols-1">
+                <List>
+                  {project?.assignedUsers.map((user) => (
+                    <ListItemButton
+                      disableGutters
+                      key={user._id}
+                      to={`/dash/employees/${user._id}`}
+                    >
+                      <ListItem disablePadding key={user._id}>
+                        <span className="text-text-dark mr-1">
+                          <PersonIcon />
+                        </span>
+                        {user.firstName} {user.lastName}
+                      </ListItem>
+                    </ListItemButton>
+                  ))}
+                </List>
+              </div>
+            </div>
 
-      <div className="mt-8">
-        <p>Description</p>
-        <p className="text-text-dark">{project?.description}</p>
-      </div>
+            <div className="mt-4">
+              <Typography variant="h6" fontSize={16}>
+                Description
+              </Typography>
+              <p className="text-text-dark">{project?.description}</p>
+            </div>
+          </div>
+          {project?.completed && (
+            <div className="mt-4">
+              <Typography variant="h6" fontSize={16}>
+                Project completed on
+              </Typography>
+              <p className="text-text-dark">
+                {new Date(project?.completedAt).toDateString()}
+              </p>
+            </div>
+          )}
 
-      <div className="border-text-dark mt-8 flex flex-col items-center rounded-xl border p-4">
-        <div className="flex flex-col items-center">
-          <Avatar
-            sx={{
-              mt: 2,
-              width: 90,
-              height: 90,
-              fontSize: 45,
-            }}
-          >
-            {teamLeader}
-          </Avatar>
-          <Typography
-            mt={1}
-            variant="body1"
-            fontSize={18}
-            color={!teamLeader && "#fca5a5"}
-          >
-            {teamLeader ?? "TBD"}
-          </Typography>
-          <Typography variant="caption" color="text.dark">
-            Team Leader
-          </Typography>
-          <Typography my={2} variant="body2">
-            Team leader of 5 projects
-          </Typography>
-          <Button color="success" variant="contained">
-            Call
-          </Button>
+          <div className="border-text-dark mt-4 flex flex-col items-center rounded-xl border p-4 sm:mt-0 sm:min-w-[14rem]">
+            <div className="flex flex-col items-center">
+              <Avatar
+                sx={{
+                  mt: 2,
+                  width: 90,
+                  height: 90,
+                  fontSize: 45,
+                }}
+              >
+                {teamLeader}
+              </Avatar>
+              <Typography
+                mt={1}
+                variant="body1"
+                fontSize={18}
+                color={!teamLeader && "#fca5a5"}
+              >
+                {teamLeader ?? "TBD"}
+              </Typography>
+              <Typography variant="caption" color="text.dark">
+                Team Leader
+              </Typography>
+              {/* <Typography mt={2} variant="body2">
+              Team leader of 5 projects
+            </Typography> */}
+              {/* <div className="flex w-full items-center gap-8">
+              <Button
+                disabled={!teamLeader?.phone}
+                href={`sms:${teamLeader?.phone}`}
+                color="success"
+                variant="contained"
+              >
+                Message
+              </Button> */}
+              <Button
+                disabled={!teamLeader?.phone}
+                href={`tel:${teamLeader?.phone}`}
+                color="success"
+                variant="contained"
+                sx={{
+                  mt: 2,
+                }}
+              >
+                Call
+              </Button>
+              {/* </div> */}
+            </div>
+          </div>
         </div>
       </div>
     </div>

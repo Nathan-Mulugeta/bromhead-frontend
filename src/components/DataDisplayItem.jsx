@@ -51,14 +51,14 @@ const DataDisplayItem = ({ label, value, icon }) => {
           >
             {statusColor && (
               <>
-                <span class="relative flex h-3 w-3">
+                <span className="relative flex h-3 w-3">
                   <span
-                    class={`absolute inline-flex h-full w-full ${
+                    className={`absolute inline-flex h-full w-full ${
                       statusColor === "bg-green-400" ? "animate-ping" : ""
                     }  rounded-full ${statusColor} opacity-75`}
                   ></span>
                   <span
-                    class={`relative inline-flex h-3 w-3 rounded-full ${statusColor}`}
+                    className={`relative inline-flex h-3 w-3 rounded-full ${statusColor}`}
                   ></span>
                 </span>
               </>

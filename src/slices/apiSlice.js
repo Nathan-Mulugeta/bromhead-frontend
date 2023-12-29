@@ -8,8 +8,6 @@ const baseUrl =
     ? "http://localhost:3500"
     : "https://bromhead-api.onrender.com";
 
-console.log(environment, baseUrl);
-
 const baseQuery = fetchBaseQuery({
   baseUrl: baseUrl,
   // baseUrl: "http://localhost:3500",
