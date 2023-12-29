@@ -1,8 +1,18 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setCredentials } from "./auth/authSlice";
 
+const environment = import.meta.env.VITE_ENVIRONMENT;
+
+const baseUrl =
+  environment === "development"
+    ? "http://localhost:3500"
+    : "https://bromhead-api.onrender.com";
+
+console.log(environment, baseUrl);
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3500",
+  baseUrl: baseUrl,
+  // baseUrl: "http://localhost:3500",
   // baseUrl: "https://bromhead-api.onrender.com",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
