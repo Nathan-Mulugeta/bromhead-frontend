@@ -103,12 +103,12 @@ const Users = () => {
 
                 <Box className="flex items-center">
                   {employee.status === "available" ? (
-                    <span class="relative mr-2 flex h-3 w-3">
+                    <span className="relative mr-2 flex h-3 w-3">
                       <span
-                        class={`absolute inline-flex h-full w-full animate-ping rounded-full ${statusColor} opacity-75`}
+                        className={`absolute inline-flex h-full w-full animate-ping rounded-full ${statusColor} opacity-75`}
                       ></span>
                       <span
-                        class={`relative inline-flex h-3 w-3 rounded-full ${statusColor}`}
+                        className={`relative inline-flex h-3 w-3 rounded-full ${statusColor}`}
                       ></span>
                     </span>
                   ) : (

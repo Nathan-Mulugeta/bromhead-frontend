@@ -44,7 +44,7 @@ const Projects = () => {
         return (
           <List key={projectId}>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton to={`/dash/projects/${projectId}`}>
                 <ListItemText
                   primary={project.name}
                   secondary={`Assigned employees: ${project.assignedUsers.length}`}
