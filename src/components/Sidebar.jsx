@@ -63,7 +63,7 @@ const Sidebar = () => {
       >
         <img src={Logo} />
       </Link>
-      <ul className="flex-1 px-3 py-2">
+      <ul className="mt-3 flex-1 border border-red-100 px-2 py-2">
         {SidebarMenuItems.map((item) => (
           <SidebarItem
             key={item.title}

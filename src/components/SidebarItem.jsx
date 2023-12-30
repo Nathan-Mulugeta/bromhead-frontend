@@ -16,16 +16,16 @@ const SidebarItem = ({ icon, title, to }) => {
       className={({ isActive }) =>
         [
           isActive ? "bg-primary text-white" : "",
-          "group relative my-1 flex items-center rounded-md px-2 py-1 text-text-normal hover:bg-primary hover:text-white sm:px-3 sm:py-2",
+          "group relative my-3 flex items-center rounded-md px-2 py-1 text-text-normal hover:bg-primary hover:text-white sm:px-3 sm:py-2",
         ].join(" ")
       }
     >
-      <div className={`text-sm transition-all duration-150 sm:text-xl`}>
+      <div className={`text-sm transition-all duration-150 sm:text-xl `}>
         {icon}
       </div>
       <span
         className={`sm:textxl overflow-hidden text-sm transition-all duration-150 ${
-          expanded ? "ml-3 sm:w-32" : "sm:w-0"
+          expanded ? "ml-3 w-24 sm:w-32" : "sm:w-0"
         }`}
       >
         {title}
