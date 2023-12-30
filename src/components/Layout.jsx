@@ -1,4 +1,4 @@
-import { Flip, Slide, ToastContainer } from "react-toastify";
+import { Bounce, Flip, Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { Outlet } from "react-router-dom";
@@ -8,9 +8,10 @@ const Layout = () => {
   return (
     <>
       <ToastContainer
+        position="bottom-left"
         hideProgressBar={true}
-        autoClose={3000}
-        transition={Slide}
+        autoClose={2000}
+        transition={Bounce}
       />
       <LoadingSpinner />
       <Outlet />
