@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetUsersQuery,
   useUpdateUserMutation,
@@ -161,10 +161,12 @@ const MyProfile = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
-        <Button to="/dash/profile">
+        <Button onClick={() => navigate(-1)}>
           <ArrowBackIosIcon />
         </Button>
         <Typography color="primary.contrastText" variant="h6" fontSize={22}>

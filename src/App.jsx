@@ -6,7 +6,6 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Layout from "./components/Layout";
-import Profile from "./pages/Profile";
 import RequireAuth from "./components/auth/RequireAuth";
 import { ROLES } from "../config/roles";
 import NotFound from "./pages/NotFound";
@@ -42,10 +41,7 @@ const App = () => {
                 <Route path="dash" element={<DashLayout />}>
                   <Route path="home" element={<Home />} />
 
-                  <Route path="profile">
-                    <Route index element={<Profile />} />
-                    <Route path=":userId" element={<MyProfile />} />
-                  </Route>
+                  <Route path="profile/:userId" element={<MyProfile />} />
 
                   <Route path="projects">
                     <Route index element={<Projects />} />

@@ -1,8 +1,14 @@
 import { GoPerson } from "react-icons/go";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useGetUsersQuery } from "../slices/users/usersApiSlice";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Button, Menu, MenuItem, Typography } from "@mui/material";
+import { useState } from "react";
+import { useSendLogoutMutation } from "../slices/auth/authApiSlice";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../slices/loading/loadingSlice";
 
 function stringToColor(string) {
   let hash = 0;
@@ -34,6 +40,15 @@ function stringAvatar(name) {
 }
 
 const NavbarProfile = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const { id: userId, status } = useAuth();
 
   const { user } = useGetUsersQuery("usersList", {
@@ -50,17 +65,96 @@ const NavbarProfile = () => {
     lastName = user.lastName;
   }
 
+  const navigate = useNavigate();
+
+  const [logout, { isLoading }] = useSendLogoutMutation();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+
+    return () => dispatch(setLoading(false));
+  }, [dispatch, isLoading]);
+
+  const handleLogoutClick = async () => {
+    setAnchorEl(null);
+
+    try {
+      await logout();
+      toast.success("Successfully logged out");
+      navigate("/", { replace: true });
+    } catch (error) {
+      toast.error("Unable to log out at the moment. Please try again later!");
+    }
+  };
+
   return (
-    <Link to="/dash/profile" className="flex items-center gap-4">
-      <Avatar {...stringAvatar(`${firstName ?? "U"} ${lastName ?? "U"}`)} />
-      <div className="flex flex-col text-sm leading-4">
-        <div className="flex gap-1">
-          <Typography variant="subtitle2">{firstName}</Typography>
-          <Typography variant="subtitle2">{lastName}</Typography>
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+        sx={{
+          textTransform: "none",
+          color: "background.light",
+        }}
+      >
+        <div className="flex items-center gap-2">
+          <Avatar {...stringAvatar(`${firstName ?? "U"} ${lastName ?? "U"}`)} />
+          <div className="hidden flex-col items-start sm:flex">
+            <span className="flex gap-1">
+              <Typography fontWeight={600} fontSize={14} variant="subtitle2">
+                {firstName}
+              </Typography>
+              <Typography fontWeight={600} fontSize={14} variant="subtitle2">
+                {lastName}
+              </Typography>
+            </span>
+            <Typography
+              fontWeight={400}
+              fontSize={14}
+              color="background.dark"
+              variant="caption"
+            >
+              {status}
+            </Typography>
+          </div>
         </div>
-        <Typography variant="caption">{status}</Typography>
-      </div>
-    </Link>
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem
+          sx={{
+            color: "background.dark",
+            width: "15ch",
+          }}
+          onClick={() => {
+            setAnchorEl(null);
+            navigate(`/dash/profile/${userId}`);
+          }}
+        >
+          Profile
+        </MenuItem>
+        <MenuItem
+          sx={{
+            color: "background.dark",
+          }}
+          onClick={handleLogoutClick}
+        >
+          Logout
+        </MenuItem>
+      </Menu>
+    </div>
   );
 };
 
