@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <ToastContainer
-        position="bottom-left"
+        position="bottom-right"
         hideProgressBar={true}
         autoClose={2000}
         transition={Bounce}
