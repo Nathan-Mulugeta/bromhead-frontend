@@ -143,6 +143,21 @@ const clientDetails = () => {
     dispatch(setLoading(isDelLoading || isEditLoading));
   }, [dispatch, isDelLoading, isEditLoading]);
 
+  const handleCancel = () => {
+    if (isEditing) {
+      if (client) {
+        setFormData({
+          name: client.name,
+          email: client.contactInfo.email,
+          phone: client.contactInfo.phone,
+          address: client.contactInfo.address,
+          mapLocation: client.contactInfo.mapLocation,
+        });
+      }
+      setIsEditing(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -284,17 +299,29 @@ const clientDetails = () => {
             Update client
           </Button>
         ) : (
-          <Button
-            disabled={!isFormComplete}
-            color="success"
-            variant="contained"
-            onClick={handleUpdate}
-          >
-            Save changes
-          </Button>
+          <div>
+            <Button
+              sx={{
+                mr: 1,
+              }}
+              color="warning"
+              variant="outlined"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button
+              disabled={!isFormComplete}
+              color="success"
+              variant="contained"
+              onClick={handleUpdate}
+            >
+              Save changes
+            </Button>
+          </div>
         )}
         <Button
-          color="error"
+          color="secondary"
           variant="contained"
           onClick={onDeleteClientClicked}
         >
