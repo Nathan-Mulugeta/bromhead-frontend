@@ -52,7 +52,7 @@ const NavbarProfile = () => {
 
   return (
     <Link to="/dash/profile" className="flex items-center gap-4">
-      <Avatar {...stringAvatar(`${firstName ?? "A"} ${lastName ?? "A"}`)} />
+      <Avatar {...stringAvatar(`${firstName ?? "U"} ${lastName ?? "U"}`)} />
       <div className="flex flex-col text-sm leading-4">
         <div className="flex gap-1">
           <Typography variant="subtitle2">{firstName}</Typography>

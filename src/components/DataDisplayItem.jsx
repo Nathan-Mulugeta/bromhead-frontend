@@ -28,16 +28,19 @@ const DataDisplayItem = ({ label, value, icon }) => {
     <Grid container alignItems="center" spacing={2}>
       {icon && (
         <Grid item>
-          <Avatar style={{ backgroundColor: "#124056" }}>{icon}</Avatar>
+          <Avatar
+            sx={{
+              color: "text.dark",
+              background: "none",
+            }}
+          >
+            {icon}
+          </Avatar>
         </Grid>
       )}
       <Grid item xs>
         <Box>
-          <Typography
-            color="primary.contrastText"
-            variant="subtitle1"
-            style={{ fontWeight: "bold" }}
-          >
+          <Typography color="text.dark" variant="subtitle1">
             {label}
           </Typography>
           <Typography

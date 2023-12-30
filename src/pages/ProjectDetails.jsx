@@ -108,6 +108,7 @@ const ProjectDetails = () => {
               <p className="text-text-dark">{project?.description}</p>
             </div>
           </div>
+
           {project?.completed && (
             <div className="mt-4">
               <Typography variant="h6" fontSize={16}>

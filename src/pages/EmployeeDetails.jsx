@@ -109,10 +109,14 @@ const EmployeeDetails = () => {
           <Typography variant="subtitle1">Roles:</Typography>
           {user?.roles.length !== 0 &&
             user?.roles.map((role) => (
-              <Chip key={role} label={role} color="primary" />
+              <Chip key={role} label={role} color="secondary" />
             ))}
         </div>
-        <Button color="error" variant="contained" onClick={handleDeleteClick}>
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={handleDeleteClick}
+        >
           Delete Employee
         </Button>
       </div>

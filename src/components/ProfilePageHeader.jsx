@@ -34,7 +34,7 @@ const ProfilePageHeader = () => {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 outline-none">
-      <Avatar {...stringAvatar(`${firstName ?? "A"} ${lastName ?? "A"}`)} />
+      <Avatar {...stringAvatar(`${firstName ?? "U"} ${lastName ?? "U"}`)} />
 
       <div className="mt-2 flex flex-col items-center gap-2 text-xl text-text-light">
         <Typography variant="h6">

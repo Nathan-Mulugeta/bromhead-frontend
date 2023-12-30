@@ -141,6 +141,26 @@ const MyProfile = () => {
     dispatch(setLoading(isEditLoading));
   }, [dispatch, isEditLoading]);
 
+  const handleCancel = () => {
+    if (isEditing) {
+      if (user) {
+        setFormData({
+          id: userId,
+          active: user.active,
+          username: user.username,
+          password: "",
+          roles: user.roles,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          address: user.address,
+          email: user.email,
+          status: user.status,
+        });
+      }
+      setIsEditing(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -337,28 +357,26 @@ const MyProfile = () => {
         </div>
       </div>
 
-      <div className="mt-6 flex justify-between gap-4">
+      <div className="mt-6 flex justify-end gap-4">
         {!isEditing ? (
           <Button color="primary" variant="contained" onClick={toggleEdit}>
             Update Profile
           </Button>
         ) : (
-          <Button
-            disabled={!isFormComplete}
-            color="success"
-            variant="contained"
-            onClick={handleUpdate}
-          >
-            Save changes
-          </Button>
+          <>
+            <Button color="warning" variant="outlined" onClick={handleCancel}>
+              Cancel
+            </Button>
+            <Button
+              disabled={!isFormComplete}
+              color="success"
+              variant="contained"
+              onClick={handleUpdate}
+            >
+              Save changes
+            </Button>
+          </>
         )}
-        {/* <Button
-          color="error"
-          variant="contained"
-          onClick={onDeleteClientClicked}
-        >
-          Delete client
-        </Button> */}
       </div>
     </div>
   );

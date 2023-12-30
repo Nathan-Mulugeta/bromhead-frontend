@@ -8,6 +8,9 @@ const LinkBehavior = React.forwardRef((props, ref) => {
 });
 
 const theme = createTheme({
+  typography: {
+    fontFamily: "Manrope, sans-serif",
+  },
   components: {
     MuiLink: {
       defaultProps: {
