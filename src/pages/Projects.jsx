@@ -62,7 +62,12 @@ const Projects = () => {
         <Typography color="primary.contrastText" variant="h6">
           Projects list
         </Typography>
-        <Button size="medium" variant="contained" startIcon={<AddIcon />}>
+        <Button
+          to="/dash/projects/add"
+          size="medium"
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
           Add Project
         </Button>
       </div>
