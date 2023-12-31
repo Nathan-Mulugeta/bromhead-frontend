@@ -55,11 +55,7 @@ const Sidebar = () => {
         }`}
       >
         <button className="absolute -right-10 top-5" onClick={sidebarToggle}>
-          {expanded ? (
-            <MdMenuOpen color="#fff" fontSize={25} />
-          ) : (
-            <MdOutlineMenu color="#fff" fontSize={25} />
-          )}
+          {!expanded && <MdOutlineMenu color="#fff" fontSize={25} />}
         </button>
         <Link
           to="/dash/home"
@@ -69,6 +65,9 @@ const Sidebar = () => {
         >
           <img src={Logo} />
         </Link>
+        <button className="absolute right-5 top-5" onClick={sidebarToggle}>
+          {expanded && <MdMenuOpen color="#fff" fontSize={25} />}
+        </button>
         <ul className="flex-1 px-2 py-2 pt-3">
           {SidebarMenuItems.map((item) => (
             <SidebarItem
