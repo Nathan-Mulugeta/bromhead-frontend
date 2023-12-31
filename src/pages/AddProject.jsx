@@ -141,8 +141,6 @@ const AddProject = () => {
     });
   }
 
-  console.log(formData.deadline);
-
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -224,30 +222,20 @@ const AddProject = () => {
           variant="outlined"
         />
 
-        <div className="flex items-center gap-3">
-          <HourglassBottomIcon
-            sx={{
-              color: "#fff",
-            }}
-          />
-          <DatePicker
-            sx={{
-              width: "100%",
-            }}
-            value={formData.deadline}
-            onChange={(newValue) =>
-              setFormData({
-                ...formData,
-                deadline: newValue,
-              })
-            }
-            slotProps={{
-              textField: {
-                error: false,
-              },
-            }}
-          />
-        </div>
+        <DatePicker
+          value={formData.deadline}
+          onChange={(newValue) =>
+            setFormData({
+              ...formData,
+              deadline: newValue,
+            })
+          }
+          slotProps={{
+            textField: {
+              error: false,
+            },
+          }}
+        />
 
         <div className="flex items-center gap-3">
           <PersonIcon

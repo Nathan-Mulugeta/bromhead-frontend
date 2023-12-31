@@ -12,6 +12,34 @@ const theme = createTheme({
     fontFamily: "Manrope, sans-serif",
   },
   components: {
+    MuiDateCalendar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#124056",
+        },
+      },
+    },
+    MuiPickersCalendarHeader: {
+      styleOverrides: {
+        switchViewIcon: {
+          color: "#fff",
+        },
+      },
+    },
+    MuiPickersToolbar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#124056",
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#124056",
+        },
+      },
+    },
     MuiLink: {
       defaultProps: {
         component: LinkBehavior,
