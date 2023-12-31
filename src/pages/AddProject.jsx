@@ -155,7 +155,7 @@ const AddProject = () => {
         </Typography>
       </div>
 
-      <div className="mt-4 flex flex-col justify-center gap-8 rounded-md bg-backgroundLight p-4">
+      <div className="mt-4 flex flex-col justify-center gap-6 rounded-md bg-backgroundLight p-4 sm:gap-8">
         <TextField
           id="name"
           label="Project Name"
