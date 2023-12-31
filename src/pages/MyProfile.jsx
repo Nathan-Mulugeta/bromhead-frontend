@@ -26,12 +26,12 @@ import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 
 const statusList = [
-  "available",
-  "casual leave",
-  "sick leave",
-  "without pay leave",
-  "at work",
-  "study leave",
+  "Available",
+  "Casual Leave",
+  "Sick Leave",
+  "Without Pay Leave",
+  "At Work",
+  "Study Leave",
 ];
 
 const MyProfile = () => {
@@ -45,7 +45,7 @@ const MyProfile = () => {
     lastName: "",
     email: "",
     address: "",
-    status: "",
+    status: "At Work",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -326,7 +326,7 @@ const MyProfile = () => {
           <Autocomplete
             disablePortal
             readOnly={!isEditing}
-            value={formData.status || "at work"}
+            value={formData.status}
             onChange={(event, newValue) => {
               setFormData({
                 ...formData,

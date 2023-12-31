@@ -38,6 +38,8 @@ const ProjectDetails = () => {
     dispatch(setLoading(Boolean(!project?.name)));
   }, [dispatch, project]);
 
+  console.log(project);
+
   return (
     <div className="text-text-light">
       <div className="flex items-center justify-start">

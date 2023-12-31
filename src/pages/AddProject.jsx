@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import WorkIcon from "@mui/icons-material/Work";
 import DescriptionIcon from "@mui/icons-material/Description";
 import BusinessIcon from "@mui/icons-material/Business";
-import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import CategoryIcon from "@mui/icons-material/Category";
 import PersonIcon from "@mui/icons-material/Person";
 import { useGetUsersQuery } from "../slices/users/usersApiSlice";
 import { styled, lighten } from "@mui/system";
@@ -35,13 +35,16 @@ const GroupItems = styled("ul")({
   padding: 0,
 });
 
+const serviceTypes = ["Audit", "Consulting", "Tax", "Other Services"];
+
 const AddProject = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    deadline: dayjs(),
+    deadline: "",
     assignedUsers: [],
     client: "",
+    serviceType: "Audit",
   });
 
   const [addNewProject, { isLoading, isSuccess, isError, error }] =
@@ -222,20 +225,40 @@ const AddProject = () => {
           variant="outlined"
         />
 
-        <DatePicker
-          value={formData.deadline}
-          onChange={(newValue) =>
-            setFormData({
-              ...formData,
-              deadline: newValue,
-            })
-          }
-          slotProps={{
-            textField: {
-              error: false,
-            },
-          }}
-        />
+        <div className="flex items-center gap-3">
+          <CategoryIcon
+            sx={{
+              color: "#fff",
+            }}
+          />
+
+          <Autocomplete
+            disablePortal
+            value={formData.serviceType}
+            onChange={(event, newValue) => {
+              setFormData({
+                ...formData,
+                serviceType: newValue,
+              });
+            }}
+            id="serviceType"
+            name="serviceType"
+            options={serviceTypes}
+            fullWidth
+            PaperComponent={({ children }) => (
+              <Paper
+                style={{
+                  background: "#124056",
+                }}
+              >
+                {children}
+              </Paper>
+            )}
+            renderInput={(params) => (
+              <TextField {...params} label="Service Type" />
+            )}
+          />
+        </div>
 
         <div className="flex items-center gap-3">
           <PersonIcon
@@ -285,6 +308,22 @@ const AddProject = () => {
             )}
           />
         </div>
+
+        <DatePicker
+          label="Project Deadline"
+          value={formData.deadline}
+          onChange={(newValue) =>
+            setFormData({
+              ...formData,
+              deadline: newValue,
+            })
+          }
+          slotProps={{
+            textField: {
+              error: false,
+            },
+          }}
+        />
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2"></div>
       </div>

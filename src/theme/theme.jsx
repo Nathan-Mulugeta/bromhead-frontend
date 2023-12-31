@@ -12,6 +12,13 @@ const theme = createTheme({
     fontFamily: "Manrope, sans-serif",
   },
   components: {
+    MuiIconButton: {
+      styleOverrides: {
+        sizeMedium: {
+          color: "#fff",
+        },
+      },
+    },
     MuiDateCalendar: {
       styleOverrides: {
         root: {
