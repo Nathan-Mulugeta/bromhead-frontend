@@ -16,12 +16,14 @@ import { toast } from "react-toastify";
 import WorkIcon from "@mui/icons-material/Work";
 import DescriptionIcon from "@mui/icons-material/Description";
 import BusinessIcon from "@mui/icons-material/Business";
+import GroupsIcon from "@mui/icons-material/Groups";
 import CategoryIcon from "@mui/icons-material/Category";
 import PersonIcon from "@mui/icons-material/Person";
 import { useGetUsersQuery } from "../slices/users/usersApiSlice";
 import { styled, lighten } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
@@ -43,8 +45,9 @@ const AddProject = () => {
     description: "",
     deadline: "",
     assignedUsers: [],
-    client: "",
-    serviceType: "Audit",
+    client: null,
+    serviceType: null,
+    teamLeader: null,
   });
 
   const [addNewProject, { isLoading, isSuccess, isError, error }] =
@@ -89,31 +92,32 @@ const AddProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Submit");
-    // if (isFormComplete) {
-    //   const res = await addNewProject({
-    //     name: "",
-    //     description: "",
-    //     deadline: "",
-    //     completed: false,
-    //     assignedUsers: [],
-    //     client: "",
-    //   });
+    const submitData = {
+      ...formData,
+      assignedUsers: formData.assignedUsers.map((user) => user.id),
+      client: formData.client.id,
+      deadline: formData.deadline.format("YYYY-MM-DD"),
+      teamLeader: formData.teamLeader.id,
+    };
 
-    //   if (!res.error) {
-    //     toast.success(res.data.message);
-    //     setFormData({
-    //       ...formData,
-    //       name: "",
-    //       email: "",
-    //       phone: "",
-    //       address: "",
-    //       mapLocation: "",
-    //     });
+    if (isFormComplete) {
+      const res = await addNewProject(submitData);
 
-    //     navigate("/dash/projects");
-    //   }
-    // }
+      if (!res.error) {
+        toast.success(res.data.message);
+        setFormData({
+          name: "",
+          description: "",
+          deadline: "",
+          assignedUsers: [],
+          client: null,
+          serviceType: null,
+          teamLeader: null,
+        });
+
+        navigate("/dash/projects");
+      }
+    }
   };
 
   const {
@@ -141,6 +145,33 @@ const AddProject = () => {
         status: user.status,
       };
       employeeList.push(employee);
+    });
+  }
+
+  const {
+    data: clients,
+    isLoading: isClientsLoading,
+    isSuccess: isClientsSuccess,
+    isError: isClientsError,
+    error: clientsError,
+  } = useGetClientsQuery("clientsList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+
+  let clientsList = [];
+
+  if (isClientsSuccess) {
+    const { ids, entities } = clients;
+
+    ids.map((id) => {
+      const client = entities[id];
+      const clientForList = {
+        id: client._id,
+        title: client.name,
+      };
+      clientsList.push(clientForList);
     });
   }
 
@@ -181,29 +212,6 @@ const AddProject = () => {
         />
 
         <TextField
-          id="client"
-          label="Client"
-          autoComplete="off"
-          name="client"
-          required
-          value={formData.client}
-          onChange={handleInputChange}
-          type="text"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <BusinessIcon
-                  sx={{
-                    color: "#fff",
-                  }}
-                />
-              </InputAdornment>
-            ),
-          }}
-          variant="outlined"
-        />
-
-        <TextField
           id="description"
           label="Project Description"
           autoComplete="off"
@@ -226,6 +234,39 @@ const AddProject = () => {
         />
 
         <div className="flex items-center gap-3">
+          <BusinessIcon
+            sx={{
+              color: "#fff",
+            }}
+          />
+          <Autocomplete
+            id="client"
+            value={formData.client}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(event, newValue) => {
+              setFormData({
+                ...formData,
+                client: newValue,
+              });
+            }}
+            options={clientsList}
+            PaperComponent={({ children }) => (
+              <Paper
+                style={{
+                  background: "#124056",
+                }}
+              >
+                {children}
+              </Paper>
+            )}
+            fullWidth
+            getOptionLabel={(option) => option.title}
+            filterSelectedOptions
+            renderInput={(params) => <TextField {...params} label="Client *" />}
+          />
+        </div>
+
+        <div className="flex items-center gap-3">
           <CategoryIcon
             sx={{
               color: "#fff",
@@ -234,6 +275,7 @@ const AddProject = () => {
 
           <Autocomplete
             disablePortal
+            required
             value={formData.serviceType}
             onChange={(event, newValue) => {
               setFormData({
@@ -255,19 +297,20 @@ const AddProject = () => {
               </Paper>
             )}
             renderInput={(params) => (
-              <TextField {...params} label="Service Type" />
+              <TextField {...params} label="Service Type *" />
             )}
           />
         </div>
 
         <div className="flex items-center gap-3">
-          <PersonIcon
+          <GroupsIcon
             sx={{
               color: "#fff",
             }}
           />
           <Autocomplete
             multiple
+            required
             id="assignedUsers"
             groupBy={(option) => option.status}
             value={formData.assignedUsers}
@@ -294,11 +337,52 @@ const AddProject = () => {
             getOptionLabel={(option) => option.title}
             filterSelectedOptions
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Assigned Employees"
-                // placeholder="Assigned Employees"
-              />
+              <TextField {...params} label="Assigned Employees *" />
+            )}
+            renderGroup={(params) => (
+              <li key={params.key}>
+                <GroupHeader>{params.group}</GroupHeader>
+                <GroupItems>{params.children}</GroupItems>
+              </li>
+            )}
+          />
+        </div>
+
+        <div className="flex items-center gap-3">
+          <PersonIcon
+            sx={{
+              color: "#fff",
+            }}
+          />
+          <Autocomplete
+            required
+            id="teamLeader"
+            groupBy={(option) => option.status}
+            value={formData.teamLeader}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            onChange={(event, newValue) => {
+              setFormData({
+                ...formData,
+                teamLeader: newValue,
+              });
+            }}
+            options={employeeList.sort(
+              (a, b) => -b.status.localeCompare(a.status),
+            )}
+            PaperComponent={({ children }) => (
+              <Paper
+                style={{
+                  background: "#124056",
+                }}
+              >
+                {children}
+              </Paper>
+            )}
+            fullWidth
+            getOptionLabel={(option) => option.title}
+            filterSelectedOptions
+            renderInput={(params) => (
+              <TextField {...params} label="Team Leader *" />
             )}
             renderGroup={(params) => (
               <li key={params.key}>
@@ -310,7 +394,8 @@ const AddProject = () => {
         </div>
 
         <DatePicker
-          label="Project Deadline"
+          required
+          label="Project Deadline *"
           value={formData.deadline}
           onChange={(newValue) =>
             setFormData({

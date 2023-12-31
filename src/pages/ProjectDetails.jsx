@@ -15,6 +15,12 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 
+function stringAvatar(name) {
+  return {
+    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+  };
+}
+
 const ProjectDetails = () => {
   const { projectId } = useParams();
 
@@ -24,21 +30,11 @@ const ProjectDetails = () => {
     }),
   });
 
-  let teamLeader;
-
-  project?.assignedUsers.map((user) => {
-    if (user.roles.includes("Team Leader")) {
-      teamLeader = user;
-    }
-  });
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setLoading(Boolean(!project?.name)));
   }, [dispatch, project]);
-
-  console.log(project);
 
   return (
     <div className="text-text-light">
@@ -131,16 +127,20 @@ const ProjectDetails = () => {
                   height: 90,
                   fontSize: 45,
                 }}
-              >
-                {teamLeader}
-              </Avatar>
+                {...stringAvatar(
+                  `${project?.teamLeader.firstName ?? "U"} ${
+                    project?.teamLeader.lastName ?? "U"
+                  }`,
+                )}
+              />
               <Typography
                 mt={1}
                 variant="body1"
                 fontSize={18}
-                color={!teamLeader && "#fca5a5"}
+                color={!project?.teamLeader && "#fca5a5"}
               >
-                {teamLeader ?? "TBD"}
+                {`${project?.teamLeader.firstName} ${project?.teamLeader.lastName}` ??
+                  "TBD"}
               </Typography>
               <Typography variant="caption" color="text.dark">
                 Team Leader
@@ -150,24 +150,25 @@ const ProjectDetails = () => {
             </Typography> */}
               {/* <div className="flex w-full items-center gap-8">
               <Button
-                disabled={!teamLeader?.phone}
-                href={`sms:${teamLeader?.phone}`}
+                disabled={!project?.teamLeader?.phone}
+                href={`sms:${project?.teamLeader?.phone}`}
                 color="success"
                 variant="contained"
               >
                 Message
               </Button> */}
-              <Button
-                disabled={!teamLeader?.phone}
-                href={`tel:${teamLeader?.phone}`}
-                color="success"
-                variant="contained"
-                sx={{
-                  mt: 2,
-                }}
-              >
-                Call
-              </Button>
+              {project?.teamLeader?.phone && (
+                <Button
+                  href={`tel:${project?.teamLeader?.phone}`}
+                  color="success"
+                  variant="contained"
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  Call
+                </Button>
+              )}
               {/* </div> */}
             </div>
           </div>

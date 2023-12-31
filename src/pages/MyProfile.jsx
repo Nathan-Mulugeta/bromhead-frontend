@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
+import useTitle from "../hooks/useTitle";
 
 const statusList = [
   "Available",
@@ -43,6 +44,8 @@ const statusList = [
 ];
 
 const MyProfile = () => {
+  useTitle("My Profile");
+
   const [formData, setFormData] = useState({
     id: "",
     active: "",
