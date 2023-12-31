@@ -20,6 +20,8 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import PersonIcon from "@mui/icons-material/Person";
 import { useGetUsersQuery } from "../slices/users/usersApiSlice";
 import { styled, lighten } from "@mui/system";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
@@ -37,7 +39,7 @@ const AddProject = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    deadline: "",
+    deadline: dayjs(),
     assignedUsers: [],
     client: "",
   });
@@ -139,6 +141,8 @@ const AddProject = () => {
     });
   }
 
+  console.log(formData.deadline);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -220,28 +224,30 @@ const AddProject = () => {
           variant="outlined"
         />
 
-        <TextField
-          id="deadline"
-          label="Deadline"
-          autoComplete="off"
-          required
-          name="deadline"
-          value={formData.deadline}
-          onChange={handleInputChange}
-          type="text"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <HourglassBottomIcon
-                  sx={{
-                    color: "#fff",
-                  }}
-                />
-              </InputAdornment>
-            ),
-          }}
-          variant="outlined"
-        />
+        <div className="flex items-center gap-3">
+          <HourglassBottomIcon
+            sx={{
+              color: "#fff",
+            }}
+          />
+          <DatePicker
+            sx={{
+              width: "100%",
+            }}
+            value={formData.deadline}
+            onChange={(newValue) =>
+              setFormData({
+                ...formData,
+                deadline: newValue,
+              })
+            }
+            slotProps={{
+              textField: {
+                error: false,
+              },
+            }}
+          />
+        </div>
 
         <div className="flex items-center gap-3">
           <PersonIcon

@@ -50,15 +50,15 @@ const Sidebar = () => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <nav
-        className={`fixed top-0 z-30 flex h-screen flex-col border-r bg-white shadow-sm transition-all duration-150 sm:sticky sm:translate-x-0 ${
+        className={`fixed top-0 z-30 flex h-screen flex-col border-r border-background bg-backgroundLight shadow-sm transition-all duration-150 sm:sticky sm:translate-x-0 ${
           expanded ? "" : "-translate-x-full"
         }`}
       >
         <button className="absolute -right-10 top-5" onClick={sidebarToggle}>
           {expanded ? (
-            <MdMenuOpen color="#101317" fontSize={25} />
+            <MdMenuOpen color="#fff" fontSize={25} />
           ) : (
-            <MdOutlineMenu color="#101317" fontSize={25} />
+            <MdOutlineMenu color="#fff" fontSize={25} />
           )}
         </button>
         <Link

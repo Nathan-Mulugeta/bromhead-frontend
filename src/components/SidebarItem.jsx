@@ -16,7 +16,7 @@ const SidebarItem = ({ icon, title, to }) => {
       className={({ isActive }) =>
         [
           isActive ? "bg-primary text-white" : "",
-          "group relative my-3 flex items-center rounded-md px-2 py-1 text-text-normal hover:bg-primary hover:text-white sm:px-3 sm:py-2",
+          "group relative my-3 flex items-center rounded-md px-2 py-1 text-text-light hover:bg-primary hover:text-white sm:px-3 sm:py-2",
         ].join(" ")
       }
     >

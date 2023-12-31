@@ -102,21 +102,21 @@ const NavbarProfile = () => {
           color: "background.light",
         }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-text-light">
           <Avatar {...stringAvatar(`${firstName ?? "U"} ${lastName ?? "U"}`)} />
           <div className="hidden flex-col items-start sm:flex">
             <span className="flex gap-1">
-              <Typography fontWeight={600} fontSize={14} variant="subtitle2">
+              <Typography fontWeight={500} fontSize={14} variant="subtitle2">
                 {firstName}
               </Typography>
-              <Typography fontWeight={600} fontSize={14} variant="subtitle2">
+              <Typography fontWeight={500} fontSize={14} variant="subtitle2">
                 {lastName}
               </Typography>
             </span>
             <Typography
+              color="text.dark"
               fontWeight={400}
               fontSize={14}
-              color="background.dark"
               variant="caption"
             >
               {status}
