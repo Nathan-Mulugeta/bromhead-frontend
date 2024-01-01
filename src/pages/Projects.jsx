@@ -14,6 +14,9 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ErrorIcon from "@mui/icons-material/Error";
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const Projects = () => {
   useTitle("Projects");
@@ -38,6 +41,10 @@ const Projects = () => {
     dispatch(setLoading(isLoading));
   }, [dispatch, isLoading]);
 
+  const getRelativeDateText = (date) => {
+    return dayjs(date).fromNow();
+  };
+
   const getProjectStatus = (project) => {
     const currentDate = dayjs();
     const startDate = dayjs(project.startDate);
@@ -61,9 +68,9 @@ const Projects = () => {
         color: "info",
         icon: <ChangeCircleIcon />,
       };
-    } else {
+    } else if (currentDate.isAfter(deadline)) {
       return {
-        label: "Past Deadline",
+        label: "Overdue",
         color: "error",
         icon: <ErrorIcon />,
       };
@@ -77,6 +84,19 @@ const Projects = () => {
       ids.length &&
       ids.map((projectId) => {
         const project = entities[projectId];
+        const status = getProjectStatus(project);
+
+        let daysText = "";
+
+        if (status.label.includes("Completed")) {
+          daysText = getRelativeDateText(project.deadline);
+        } else if (status.label.includes("Ongoing")) {
+          daysText = `Started ${getRelativeDateText(project.startDate)}`;
+        } else if (status.label.includes("Upcoming")) {
+          daysText = getRelativeDateText(project.startDate);
+        } else if (status.label.includes("Overdue")) {
+          daysText = getRelativeDateText(project.deadline);
+        }
 
         return (
           <List key={projectId}>
@@ -86,13 +106,18 @@ const Projects = () => {
                   primary={project.name}
                   secondary={`Assigned employees: ${project.assignedUsers.length}`}
                 />
-                <Chip
-                  variant="outlined"
-                  size="small"
-                  color={getProjectStatus(project).color}
-                  label={getProjectStatus(project).label}
-                  icon={getProjectStatus(project).icon}
-                />
+                <div className="flex flex-col items-center">
+                  <Chip
+                    variant="outlined"
+                    size="small"
+                    color={status.color}
+                    label={status.label}
+                    icon={status.icon}
+                  />
+                  <Typography variant="caption" color="#B2B2B2">
+                    {daysText}
+                  </Typography>
+                </div>
               </ListItemButton>
             </ListItem>
           </List>

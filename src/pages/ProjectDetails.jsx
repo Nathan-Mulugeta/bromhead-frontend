@@ -84,6 +84,10 @@ const ProjectDetails = () => {
         return "Please input a valid date";
       }
 
+      case "disablePast": {
+        return "Please input a date that is not in the past";
+      }
+
       default: {
         return "";
       }
@@ -370,7 +374,7 @@ const ProjectDetails = () => {
       };
     } else {
       return {
-        label: "Past Deadline",
+        label: "Overdue",
         color: "error",
         icon: <ErrorIcon />,
       };
@@ -609,46 +613,50 @@ const ProjectDetails = () => {
           />
         </div>
 
-        <DatePicker
-          required
-          readOnly={!isEditing}
-          disablePast
-          label="Project Start Date *"
-          value={formData.startDate}
-          onError={(newError) => setStartDateError(newError)}
-          onChange={(newValue) =>
-            setFormData({
-              ...formData,
-              startDate: newValue,
-            })
-          }
-          slotProps={{
-            textField: {
-              helperText: startDateErrorMessage,
-            },
-          }}
-        />
+        {getProjectStatus(project).label === "Upcoming" && (
+          <DatePicker
+            required
+            readOnly={!isEditing}
+            disablePast
+            label="Project Start Date *"
+            value={formData.startDate}
+            onError={(newError) => setStartDateError(newError)}
+            onChange={(newValue) =>
+              setFormData({
+                ...formData,
+                startDate: newValue,
+              })
+            }
+            slotProps={{
+              textField: {
+                helperText: startDateErrorMessage,
+              },
+            }}
+          />
+        )}
 
-        <DatePicker
-          required
-          readOnly={!isEditing}
-          disablePast
-          onError={(newError) => setDeadlineError(newError)}
-          label="Project Deadline *"
-          value={formData.deadline}
-          onChange={(newValue) =>
-            setFormData({
-              ...formData,
-              deadline: newValue,
-            })
-          }
-          slotProps={{
-            textField: {
-              helperText: deadlineErrorMessage,
-            },
-          }}
-          minDate={dayjs(formData.startDate)}
-        />
+        {!project?.completed && (
+          <DatePicker
+            required
+            readOnly={!isEditing}
+            disablePast
+            onError={(newError) => setDeadlineError(newError)}
+            label="Project Deadline *"
+            value={formData.deadline}
+            onChange={(newValue) =>
+              setFormData({
+                ...formData,
+                deadline: newValue,
+              })
+            }
+            slotProps={{
+              textField: {
+                helperText: deadlineErrorMessage,
+              },
+            }}
+            minDate={dayjs(formData.startDate)}
+          />
+        )}
 
         <FormGroup>
           <FormControlLabel
