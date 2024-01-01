@@ -77,7 +77,7 @@ const AddProject = () => {
       return Array.isArray(value) && value.length > 0;
     }
 
-    return value !== "";
+    return value !== "" && value !== null;
   });
 
   const handleInputChange = (e) => {
@@ -186,7 +186,7 @@ const AddProject = () => {
         </Typography>
       </div>
 
-      <div className="mt-4 flex flex-col justify-center gap-6 rounded-md bg-backgroundLight p-4 sm:gap-8">
+      <div className="mt-4 flex flex-col justify-center gap-4 rounded-md bg-backgroundLight p-4 sm:gap-8">
         <TextField
           id="name"
           label="Project Name"

@@ -326,7 +326,7 @@ const ProjectDetails = () => {
         )}
       </div>
 
-      <div className="mt-4 flex flex-col justify-center gap-4 rounded-md bg-backgroundLight p-4 sm:gap-8">
+      <div className="mt-4 flex flex-col justify-center gap-3 rounded-md bg-backgroundLight p-4 sm:gap-8">
         <TextField
           id="name"
           label="Project Name"
