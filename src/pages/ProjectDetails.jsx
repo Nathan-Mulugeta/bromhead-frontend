@@ -95,25 +95,25 @@ const ProjectDetails = () => {
   useEffect(() => {
     if (project) {
       setFormData({
-        name: project.name,
-        description: project.description,
-        deadline: dayjs(project.deadline),
-        assignedUsers: project.assignedUsers.map((employee) => ({
-          id: employee._id,
-          title: `${employee.firstName} ${employee.lastName}`,
-          status: employee.status,
+        name: project?.name,
+        description: project?.description,
+        deadline: dayjs(project?.deadline),
+        assignedUsers: project?.assignedUsers.map((employee) => ({
+          id: employee?._id,
+          title: `${employee?.firstName} ${employee?.lastName}`,
+          status: employee?.status,
         })),
         client: {
-          id: project.client._id,
-          title: project.client.name,
+          id: project?.client._id,
+          title: project?.client.name,
         },
-        serviceType: project.serviceType,
+        serviceType: project?.serviceType,
         teamLeader: {
-          id: project.teamLeader._id,
-          title: `${project.teamLeader.firstName} ${project.teamLeader.lastName}`,
-          status: project.teamLeader.status,
+          id: project?.teamLeader._id,
+          title: `${project?.teamLeader.firstName} ${project?.teamLeader.lastName}`,
+          status: project?.teamLeader.status,
         },
-        completed: project.completed,
+        completed: project?.completed,
       });
     }
   }, [project]);
@@ -284,6 +284,10 @@ const ProjectDetails = () => {
       toast.error(delError?.data.message);
     }
   }, [isDelError, delError]);
+
+  useEffect(() => {
+    dispatch(setLoading(isDelLoading));
+  }, [dispatch, isDelLoading]);
 
   useEffect(() => {
     if (isDelSuccess) {
@@ -608,13 +612,15 @@ const ProjectDetails = () => {
             </Button>
           </div>
         )}
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={onDeleteProjectClicked}
-        >
-          Delete Project
-        </Button>
+        {!isEditing && (
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={onDeleteProjectClicked}
+          >
+            Delete Project
+          </Button>
+        )}
       </div>
     </div>
   );

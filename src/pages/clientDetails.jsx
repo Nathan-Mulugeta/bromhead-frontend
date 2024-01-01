@@ -320,13 +320,15 @@ const clientDetails = () => {
             </Button>
           </div>
         )}
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={onDeleteClientClicked}
-        >
-          Delete client
-        </Button>
+        {!isEditing && (
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={onDeleteClientClicked}
+          >
+            Delete client
+          </Button>
+        )}
       </div>
     </div>
   );
