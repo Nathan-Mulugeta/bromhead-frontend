@@ -16,12 +16,20 @@ import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 
 const statusColors = {
-  available: "bg-green-400", // Green for available
-  "casual leave": "bg-orange-400", // Orange for casual leave
-  "sick leave": "bg-red-400", // Red for sick leave
-  "without pay leave": "bg-purple-400", // Purple for without pay leave
-  "at work": "bg-blue-400", // Blue for at work
-  "study leave": "bg-orange-400", // Yellow for study leave
+  Available: "bg-green-400",
+  "Casual Leave": "bg-orange-400",
+  "Sick Leave": "bg-red-400",
+  "Without Pay Leave": "bg-purple-400",
+  "At Work": "bg-blue-400",
+  "Study Leave": "bg-orange-400",
+  Administration: "bg-yellow-400",
+  "Staff Training": "bg-yellow-600",
+  "General Promotion": "bg-yellow-200",
+  "Public Holidays": "bg-yellow-500",
+  "Annual Leave": "bg-yellow-300",
+  "Mourning Leave": "bg-gray-400",
+  "Maternity Leave": "bg-pink-400",
+  Others: "bg-gray-200",
 };
 
 const columns = [
@@ -78,7 +86,7 @@ const Users = () => {
       ids.length &&
       ids.map((employeeId) => {
         const employee = entities[employeeId];
-        const statusColor = statusColors[employee.status.toLowerCase()];
+        const statusColor = statusColors[employee.status];
 
         let employeeName = `${employee.firstName} ${employee.lastName}`;
         let notFilled = false;
@@ -102,7 +110,7 @@ const Users = () => {
                 />
 
                 <Box className="flex items-center">
-                  {employee.status === "available" ? (
+                  {employee.status === "Available" ? (
                     <span className="relative mr-2 flex h-3 w-3">
                       <span
                         className={`absolute inline-flex h-full w-full animate-ping rounded-full ${statusColor} opacity-75`}

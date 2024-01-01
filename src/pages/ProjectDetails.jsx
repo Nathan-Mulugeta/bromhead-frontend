@@ -312,7 +312,7 @@ const ProjectDetails = () => {
             variant="filled"
             size="small"
             color="success"
-            label="Project Completed"
+            label="Completed"
             icon={<CheckCircleIcon />}
           />
         ) : (
