@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Chip, Typography } from "@mui/material";
 import useTitle from "../hooks/useTitle";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
 import AddIcon from "@mui/icons-material/Add";
@@ -9,6 +9,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setLoading } from "../slices/loading/loadingSlice";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const Projects = () => {
   useTitle("Projects");
@@ -49,6 +51,23 @@ const Projects = () => {
                   primary={project.name}
                   secondary={`Assigned employees: ${project.assignedUsers.length}`}
                 />
+                {project?.completed ? (
+                  <Chip
+                    variant="filled"
+                    size="small"
+                    color="success"
+                    label="Completed"
+                    icon={<CheckCircleIcon />}
+                  />
+                ) : (
+                  <Chip
+                    variant="outlined"
+                    size="small"
+                    color="info"
+                    label="On Going"
+                    icon={<ChangeCircleIcon />}
+                  />
+                )}
               </ListItemButton>
             </ListItem>
           </List>

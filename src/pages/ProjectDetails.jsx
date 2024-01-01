@@ -310,13 +310,15 @@ const ProjectDetails = () => {
         {project?.completed ? (
           <Chip
             variant="filled"
+            size="small"
             color="success"
             label="Project Completed"
             icon={<CheckCircleIcon />}
           />
         ) : (
           <Chip
-            variant="filled"
+            variant="outlined"
+            size="small"
             color="info"
             label="On Going"
             icon={<ChangeCircleIcon />}
