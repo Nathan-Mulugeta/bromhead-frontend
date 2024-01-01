@@ -68,7 +68,7 @@ const Login = () => {
         </div> */}
         <div
           id="loginHero"
-          className="flex flex-1 flex-col items-center justify-center p-4"
+          className="hidden flex-col items-center justify-center p-4 sm:flex"
         >
           <div className="container flex h-full flex-1 flex-col justify-between md:justify-center">
             <Link
