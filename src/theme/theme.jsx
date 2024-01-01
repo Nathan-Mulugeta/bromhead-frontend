@@ -12,6 +12,13 @@ const theme = createTheme({
     fontFamily: "Manrope, sans-serif",
   },
   components: {
+    MuiCheckbox: {
+      styleOverrides: {
+        sizeMedium: {
+          color: "#fff",
+        },
+      },
+    },
     MuiIconButton: {
       styleOverrides: {
         sizeMedium: {

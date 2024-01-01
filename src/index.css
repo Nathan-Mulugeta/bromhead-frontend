@@ -37,7 +37,7 @@ body {
   }
 
   :root {
-  --toastify-color-light: #fff;
+  --toastify-color-light: #124056;
   --toastify-color-dark: #121212;
   --toastify-color-info: #3498db;
   --toastify-color-success: #07bc0c;
@@ -51,13 +51,13 @@ body {
   --toastify-icon-color-error: var(--toastify-color-error);
 
   --toastify-toast-width: 320px;
-  --toastify-toast-background: #fff;
+  --toastify-toast-background: #124056;
   --toastify-toast-min-height: 64px;
   --toastify-toast-max-height: 800px;
   --toastify-font-family: sans-serif;
   --toastify-z-index: 9999;
 
-  --toastify-text-color-light: #757575;
+  --toastify-text-color-light: #fff;
   --toastify-text-color-dark: #fff;
 
   /* //Used only for colored theme */
