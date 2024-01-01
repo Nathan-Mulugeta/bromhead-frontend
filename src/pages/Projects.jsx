@@ -11,6 +11,9 @@ import { useEffect } from "react";
 import { setLoading } from "../slices/loading/loadingSlice";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ErrorIcon from "@mui/icons-material/Error";
+import dayjs from "dayjs";
 
 const Projects = () => {
   useTitle("Projects");
@@ -35,6 +38,38 @@ const Projects = () => {
     dispatch(setLoading(isLoading));
   }, [dispatch, isLoading]);
 
+  const getProjectStatus = (project) => {
+    const currentDate = dayjs();
+    const startDate = dayjs(project.startDate);
+    const deadline = dayjs(project.deadline);
+
+    if (project?.completed) {
+      return {
+        label: "Completed",
+        color: "success",
+        icon: <CheckCircleIcon />,
+      };
+    } else if (currentDate.isBefore(startDate)) {
+      return {
+        label: "Upcoming",
+        color: "primary",
+        icon: <AccessTimeIcon />,
+      };
+    } else if (currentDate.isBetween(startDate, deadline)) {
+      return {
+        label: "Ongoing",
+        color: "info",
+        icon: <ChangeCircleIcon />,
+      };
+    } else {
+      return {
+        label: "Past Deadline",
+        color: "error",
+        icon: <ErrorIcon />,
+      };
+    }
+  };
+
   if (isSuccess) {
     const { ids, entities } = projects;
 
@@ -51,23 +86,13 @@ const Projects = () => {
                   primary={project.name}
                   secondary={`Assigned employees: ${project.assignedUsers.length}`}
                 />
-                {project?.completed ? (
-                  <Chip
-                    variant="filled"
-                    size="small"
-                    color="success"
-                    label="Completed"
-                    icon={<CheckCircleIcon />}
-                  />
-                ) : (
-                  <Chip
-                    variant="outlined"
-                    size="small"
-                    color="info"
-                    label="On Going"
-                    icon={<ChangeCircleIcon />}
-                  />
-                )}
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  color={getProjectStatus(project).color}
+                  label={getProjectStatus(project).label}
+                  icon={getProjectStatus(project).icon}
+                />
               </ListItemButton>
             </ListItem>
           </List>

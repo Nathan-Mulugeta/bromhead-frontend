@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { useAddNewProjectMutation } from "../slices/projects/projectsApiSlice";
 import { useNavigate } from "react-router-dom";
@@ -43,11 +43,12 @@ const AddProject = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    deadline: "",
+    deadline: null,
     assignedUsers: [],
     client: null,
     serviceType: null,
     teamLeader: null,
+    startDate: null,
   });
 
   const [addNewProject, { isLoading, isSuccess, isError, error }] =
@@ -60,25 +61,61 @@ const AddProject = () => {
     dispatch(setLoading(isLoading));
   }, [dispatch, isLoading]);
 
-  let errorMessage = error?.data.message;
-
   useEffect(() => {
     if (isError) {
       toast.error(error?.data.message);
     }
   }, [isError, error]);
 
-  const isFormComplete = Object.entries(formData).every(([key, value]) => {
-    if (key === "description" || key === "completed") {
-      return true;
-    }
+  // Date Validation
+  const [deadlineError, setDeadlineError] = useState(null);
 
-    if (key === "assignedUsers") {
-      return Array.isArray(value) && value.length > 0;
-    }
+  const deadlineErrorMessage = useMemo(() => {
+    switch (deadlineError) {
+      case "minDate": {
+        return "Please select a date that is after the starting date";
+      }
 
-    return value !== "" && value !== null;
-  });
+      case "invalidDate": {
+        return "Please input a valid date";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  }, [deadlineError]);
+
+  // Date Validation
+  const [startDateError, setStartDateError] = useState(null);
+
+  const startDateErrorMessage = useMemo(() => {
+    switch (startDateError) {
+      case "disablePast": {
+        return "Please select a date that is not before today";
+      }
+
+      case "invalidDate": {
+        return "Please input a valid date";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  }, [startDateError]);
+
+  const isFormComplete =
+    formData.name !== "" &&
+    formData.client !== null &&
+    formData.serviceType !== null &&
+    formData.teamLeader !== null &&
+    Array.isArray(formData.assignedUsers) &&
+    formData.assignedUsers.length > 0 &&
+    formData.startDate &&
+    formData.deadline &&
+    !startDateError &&
+    !deadlineError;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -97,6 +134,7 @@ const AddProject = () => {
       assignedUsers: formData.assignedUsers.map((user) => user.id),
       client: formData.client.id,
       deadline: formData.deadline.format("YYYY-MM-DD"),
+      startDate: formData.startDate.format("YYYY-MM-DD"),
       teamLeader: formData.teamLeader.id,
     };
 
@@ -109,6 +147,7 @@ const AddProject = () => {
           name: "",
           description: "",
           deadline: "",
+          startDate: "",
           assignedUsers: [],
           client: null,
           serviceType: null,
@@ -395,6 +434,27 @@ const AddProject = () => {
 
         <DatePicker
           required
+          disablePast
+          label="Project Start Date *"
+          value={formData.startDate}
+          onError={(newError) => setStartDateError(newError)}
+          onChange={(newValue) =>
+            setFormData({
+              ...formData,
+              startDate: newValue,
+            })
+          }
+          slotProps={{
+            textField: {
+              helperText: startDateErrorMessage,
+            },
+          }}
+        />
+
+        <DatePicker
+          required
+          disablePast
+          onError={(newError) => setDeadlineError(newError)}
           label="Project Deadline *"
           value={formData.deadline}
           onChange={(newValue) =>
@@ -405,9 +465,10 @@ const AddProject = () => {
           }
           slotProps={{
             textField: {
-              error: false,
+              helperText: deadlineErrorMessage,
             },
           }}
+          minDate={dayjs(formData.startDate)}
         />
 
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2"></div>

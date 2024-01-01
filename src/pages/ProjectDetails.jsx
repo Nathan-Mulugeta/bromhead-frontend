@@ -10,12 +10,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
-  useAddNewProjectMutation,
   useDeleteProjectMutation,
   useGetProjectsQuery,
   useUpdateProjectMutation,
@@ -30,6 +29,8 @@ import BusinessIcon from "@mui/icons-material/Business";
 import GroupsIcon from "@mui/icons-material/Groups";
 import CategoryIcon from "@mui/icons-material/Category";
 import PersonIcon from "@mui/icons-material/Person";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ErrorIcon from "@mui/icons-material/Error";
 import { useGetUsersQuery } from "../slices/users/usersApiSlice";
 import { styled, lighten } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -60,13 +61,53 @@ const ProjectDetails = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    deadline: "",
+    deadline: null,
     assignedUsers: [],
     client: null,
     serviceType: null,
     teamLeader: null,
     completed: false,
+    completedAt: null,
+    startDate: null,
   });
+
+  // Date Validation
+  const [deadlineError, setDeadlineError] = useState(null);
+
+  const deadlineErrorMessage = useMemo(() => {
+    switch (deadlineError) {
+      case "minDate": {
+        return "Please select a date that is after the starting date";
+      }
+
+      case "invalidDate": {
+        return "Please input a valid date";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  }, [deadlineError]);
+
+  // Date Validation
+  const [startDateError, setStartDateError] = useState(null);
+
+  const startDateErrorMessage = useMemo(() => {
+    switch (startDateError) {
+      case "disablePast": {
+        return "Please select a date that is not before today";
+      }
+
+      case "invalidDate": {
+        return "Please input a valid date";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  }, [startDateError]);
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -98,6 +139,7 @@ const ProjectDetails = () => {
         name: project?.name,
         description: project?.description,
         deadline: dayjs(project?.deadline),
+        startDate: dayjs(project?.startDate),
         assignedUsers: project?.assignedUsers.map((employee) => ({
           id: employee?._id,
           title: `${employee?.firstName} ${employee?.lastName}`,
@@ -131,17 +173,17 @@ const ProjectDetails = () => {
     }
   }, [isUpdateError, updateError]);
 
-  const isFormComplete = Object.entries(formData).every(([key, value]) => {
-    if (key === "description" || key === "completed") {
-      return true;
-    }
-
-    if (key === "assignedUsers") {
-      return Array.isArray(value) && value.length > 0;
-    }
-
-    return value !== "";
-  });
+  const isFormComplete =
+    formData.name !== "" &&
+    formData.client !== null &&
+    formData.serviceType !== null &&
+    formData.teamLeader !== null &&
+    Array.isArray(formData.assignedUsers) &&
+    formData.assignedUsers.length > 0 &&
+    formData.startDate &&
+    formData.deadline &&
+    !startDateError &&
+    !deadlineError;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -161,6 +203,7 @@ const ProjectDetails = () => {
       assignedUsers: formData.assignedUsers.map((user) => user.id),
       client: formData.client.id,
       deadline: formData.deadline.format("YYYY-MM-DD"),
+      startDate: formData.startDate.format("YYYY-MM-DD"),
       teamLeader: formData.teamLeader.id,
     };
 
@@ -173,6 +216,7 @@ const ProjectDetails = () => {
           name: "",
           description: "",
           deadline: "",
+          startDate: null,
           assignedUsers: [],
           client: null,
           serviceType: null,
@@ -247,6 +291,7 @@ const ProjectDetails = () => {
           name: project.name,
           description: project.description,
           deadline: dayjs(project.deadline),
+          startDate: dayjs(project.startDate),
           assignedUsers: project.assignedUsers.map((employee) => ({
             id: employee._id,
             title: `${employee.firstName} ${employee.lastName}`,
@@ -300,6 +345,38 @@ const ProjectDetails = () => {
     await deleteProject({ id: project._id });
   };
 
+  const getProjectStatus = (project) => {
+    const currentDate = dayjs();
+    const startDate = dayjs(project?.startDate);
+    const deadline = dayjs(project?.deadline);
+
+    if (project?.completed) {
+      return {
+        label: "Completed",
+        color: "success",
+        icon: <CheckCircleIcon />,
+      };
+    } else if (currentDate.isBefore(startDate)) {
+      return {
+        label: "Upcoming",
+        color: "primary",
+        icon: <AccessTimeIcon />,
+      };
+    } else if (currentDate.isBetween(startDate, deadline)) {
+      return {
+        label: "Ongoing",
+        color: "info",
+        icon: <ChangeCircleIcon />,
+      };
+    } else {
+      return {
+        label: "Past Deadline",
+        color: "error",
+        icon: <ErrorIcon />,
+      };
+    }
+  };
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between">
@@ -311,23 +388,13 @@ const ProjectDetails = () => {
             Project details
           </Typography>
         </span>
-        {project?.completed ? (
-          <Chip
-            variant="filled"
-            size="small"
-            color="success"
-            label="Completed"
-            icon={<CheckCircleIcon />}
-          />
-        ) : (
-          <Chip
-            variant="outlined"
-            size="small"
-            color="info"
-            label="On Going"
-            icon={<ChangeCircleIcon />}
-          />
-        )}
+        <Chip
+          variant="outlined"
+          size="small"
+          color={getProjectStatus(project).color}
+          label={getProjectStatus(project).label}
+          icon={getProjectStatus(project).icon}
+        />
       </div>
 
       <div className="mt-4 flex flex-col justify-center gap-3 rounded-md bg-backgroundLight p-4 sm:gap-8">
@@ -545,6 +612,28 @@ const ProjectDetails = () => {
         <DatePicker
           required
           readOnly={!isEditing}
+          disablePast
+          label="Project Start Date *"
+          value={formData.startDate}
+          onError={(newError) => setStartDateError(newError)}
+          onChange={(newValue) =>
+            setFormData({
+              ...formData,
+              startDate: newValue,
+            })
+          }
+          slotProps={{
+            textField: {
+              helperText: startDateErrorMessage,
+            },
+          }}
+        />
+
+        <DatePicker
+          required
+          readOnly={!isEditing}
+          disablePast
+          onError={(newError) => setDeadlineError(newError)}
           label="Project Deadline *"
           value={formData.deadline}
           onChange={(newValue) =>
@@ -555,9 +644,10 @@ const ProjectDetails = () => {
           }
           slotProps={{
             textField: {
-              error: false,
+              helperText: deadlineErrorMessage,
             },
           }}
+          minDate={dayjs(formData.startDate)}
         />
 
         <FormGroup>
