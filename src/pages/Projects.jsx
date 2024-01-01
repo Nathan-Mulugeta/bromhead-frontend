@@ -7,7 +7,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { setLoading } from "../slices/loading/loadingSlice";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -15,6 +15,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ErrorIcon from "@mui/icons-material/Error";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import countWeekdays from "../utils/countWeekdays";
 
 dayjs.extend(relativeTime);
 
@@ -98,13 +99,36 @@ const Projects = () => {
           daysText = getRelativeDateText(project.deadline);
         }
 
+        let weekdaysCountText = "";
+        if (status.label.includes("Ongoing")) {
+          weekdaysCountText = `Working days: ${countWeekdays(
+            project.startDate,
+            dayjs(),
+          )}`;
+        } else if (status.label.includes("Overdue")) {
+          weekdaysCountText = `Working days: ${countWeekdays(
+            project.deadline,
+            dayjs(),
+          )}`;
+        } else if (status.label.includes("Completed")) {
+          weekdaysCountText = `Working days: ${countWeekdays(
+            project.startDate,
+            dayjs(project.completedAt),
+          )}`;
+        }
+
         return (
           <List key={projectId}>
             <ListItem disablePadding>
               <ListItemButton to={`/dash/projects/${projectId}`}>
                 <ListItemText
                   primary={project.name}
-                  secondary={`Assigned employees: ${project.assignedUsers.length}`}
+                  secondary={
+                    <span className="flex flex-col">
+                      <span>{`Assigned employees: ${project.assignedUsers.length}`}</span>
+                      <span>{weekdaysCountText}</span>
+                    </span>
+                  }
                 />
                 <div className="flex flex-col items-center">
                   <Chip
