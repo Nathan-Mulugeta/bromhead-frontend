@@ -137,8 +137,6 @@ const MyProfile = () => {
         email: formData.email.trim(),
       });
 
-      console.log(res);
-
       if (!res.error) {
         toggleEdit();
         toast.success(res.data?.message);
