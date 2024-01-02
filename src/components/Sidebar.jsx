@@ -17,7 +17,7 @@ const SidebarMenuItems = [
     id: 1,
     title: "Dashboard",
     icon: <DashboardIcon />,
-    to: "/dash/home",
+    to: "/dash/dashboard",
   },
   {
     id: 2,
@@ -58,10 +58,13 @@ const Sidebar = () => {
           {!expanded && <MdOutlineMenu color="#fff" fontSize={25} />}
         </button>
         <Link
-          to="/dash/home"
+          to="/dash/dashboard"
           className={`mx-auto w-8 py-3 transition-all duration-150 ${
             expanded ? "sm:w-10" : "sm:w-8"
           }`}
+          onClick={() => {
+            if (expanded) setExpanded(!expanded);
+          }}
         >
           <img src={Logo} />
         </Link>

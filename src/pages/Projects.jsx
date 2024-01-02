@@ -128,7 +128,7 @@ const Projects = () => {
                       <span>{`Assigned employees: ${project.assignedUsers.length}`}</span>
                       <span
                         className={
-                          status.label.includes("Overdue") && "text-red-400"
+                          status.label.includes("Overdue") ? "text-red-400" : ""
                         }
                       >
                         {weekdaysCountText}

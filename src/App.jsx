@@ -4,7 +4,7 @@ import useTitle from "./hooks/useTitle";
 import DashLayout from "./components/DashLayout";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
-import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import Layout from "./components/Layout";
 import RequireAuth from "./components/auth/RequireAuth";
 import { ROLES } from "../config/roles";
@@ -40,7 +40,7 @@ const App = () => {
             >
               <Route element={<Prefetch />}>
                 <Route path="dash" element={<DashLayout />}>
-                  <Route path="home" element={<Home />} />
+                  <Route path="dashboard" element={<Dashboard />} />
 
                   <Route path="profile/:userId" element={<MyProfile />} />
 

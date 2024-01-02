@@ -24,7 +24,7 @@ const SidebarItem = ({ icon, title, to }) => {
         {icon}
       </div>
       <span
-        className={`sm:textxl overflow-hidden text-sm transition-all duration-150 ${
+        className={`sm:textxl overflow-hidden text-lg transition-all duration-150 ${
           expanded ? "ml-3 w-56 sm:w-32" : "sm:w-0"
         }`}
       >
