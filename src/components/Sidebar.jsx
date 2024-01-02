@@ -7,7 +7,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import BusinessIcon from "@mui/icons-material/Business";
 import { useContext, useState } from "react";
 import { SidebarContext } from "./DashLayout";
-import Logo from "../assets/logo.svg";
+import Logo from "../assets/bromhead-logo.svg";
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 
 import { Link } from "react-router-dom";
@@ -57,21 +57,24 @@ const Sidebar = () => {
         <button className="absolute -right-10 top-5" onClick={sidebarToggle}>
           {!expanded && <MdOutlineMenu color="#fff" fontSize={25} />}
         </button>
-        <Link
-          to="/dash/dashboard"
-          className={`mx-auto w-8 py-3 transition-all duration-150 ${
-            expanded ? "sm:w-10" : "sm:w-8"
+        <span
+          className={`mx-auto h-16  px-1 py-4 transition-all ${
+            expanded ? "w-24" : "w-16"
           }`}
-          onClick={() => {
-            if (expanded) setExpanded(!expanded);
-          }}
         >
-          <img src={Logo} />
-        </Link>
+          <Link
+            to="/dash/dashboard"
+            onClick={() => {
+              if (expanded) setExpanded(!expanded);
+            }}
+          >
+            <img src={Logo} />
+          </Link>
+        </span>
         <button className="absolute right-5 top-5" onClick={sidebarToggle}>
           {expanded && <MdMenuOpen color="#fff" fontSize={25} />}
         </button>
-        <ul className="flex-1 px-2 py-2 pt-3">
+        <ul className="flex-1 px-2">
           {SidebarMenuItems.map((item) => (
             <SidebarItem
               key={item.title}
