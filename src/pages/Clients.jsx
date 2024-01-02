@@ -82,7 +82,8 @@ const Clients = () => {
                         variant="body2"
                         color="text.secondary"
                       >
-                        Phone: {client.contactInfo.phone}
+                        {client.contactInfo.contactPersonPosition} Phone:{" "}
+                        {client.contactInfo.phone}
                       </Typography>
                     </>
                   }

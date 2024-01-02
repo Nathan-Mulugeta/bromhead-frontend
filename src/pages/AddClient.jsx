@@ -11,6 +11,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import BadgeIcon from "@mui/icons-material/Badge";
 import MapIcon from "@mui/icons-material/Map";
 import { useAddNewClientMutation } from "../slices/clients/clientsApiSlice";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +40,7 @@ const AddClient = () => {
     phone: "",
     address: "",
     mapLocation: "",
+    contactPersonPosition: "",
   });
 
   useEffect(() => {
@@ -71,6 +73,7 @@ const AddClient = () => {
           phone: formData.phone.trim(),
           address: formData.address.trim(),
           mapLocation: formData.mapLocation.trim(),
+          contactPersonPosition: formData.contactPersonPosition.trim(),
         },
       });
 
@@ -83,6 +86,7 @@ const AddClient = () => {
           phone: "",
           address: "",
           mapLocation: "",
+          contactPersonPosition: "",
         });
 
         navigate("/dash/clients");
@@ -150,8 +154,31 @@ const AddClient = () => {
           />
 
           <TextField
+            id="contactPersonPosition"
+            label="Contact Person Position"
+            onChange={handleInputChange}
+            value={formData.contactPersonPosition}
+            autoComplete="off"
+            name="contactPersonPosition"
+            required
+            type="text"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <BadgeIcon
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
+                </InputAdornment>
+              ),
+            }}
+            variant="outlined"
+          />
+
+          <TextField
             id="phone"
-            label="Client Phone no."
+            label={`${formData.contactPersonPosition} Phone no.`}
             onChange={handleInputChange}
             error={errorMessage === "Please input a valid phone number."}
             value={formData.phone}

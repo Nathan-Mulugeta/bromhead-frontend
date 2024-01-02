@@ -449,38 +449,51 @@ const ProjectDetails = () => {
           variant="outlined"
         />
 
-        <div className="flex items-center gap-3">
-          <BusinessIcon
-            sx={{
-              color: "#fff",
-            }}
-          />
-          <Autocomplete
-            id="client"
-            readOnly={!isEditing}
-            value={formData.client}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            onChange={(event, newValue) => {
-              setFormData({
-                ...formData,
-                client: newValue,
-              });
-            }}
-            options={clientsList}
-            PaperComponent={({ children }) => (
-              <Paper
-                style={{
-                  background: "#124056",
-                }}
-              >
-                {children}
-              </Paper>
-            )}
-            fullWidth
-            getOptionLabel={(option) => option.title}
-            filterSelectedOptions
-            renderInput={(params) => <TextField {...params} label="Client *" />}
-          />
+        <div className="">
+          <div className="flex items-center gap-3">
+            <BusinessIcon
+              sx={{
+                color: "#fff",
+              }}
+            />
+            <Autocomplete
+              id="client"
+              readOnly={!isEditing}
+              value={formData.client}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={(event, newValue) => {
+                setFormData({
+                  ...formData,
+                  client: newValue,
+                });
+              }}
+              options={clientsList}
+              PaperComponent={({ children }) => (
+                <Paper
+                  style={{
+                    background: "#124056",
+                  }}
+                >
+                  {children}
+                </Paper>
+              )}
+              fullWidth
+              getOptionLabel={(option) => option.title}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField {...params} label="Client *" />
+              )}
+            />
+          </div>
+          <Button
+            to={`/dash/clients/${project?.client._id}`}
+            variant="text"
+            color="info"
+            size="small"
+            sx={{ ml: 5 }}
+          >
+            See More
+          </Button>
         </div>
 
         <div className="flex items-center gap-3">

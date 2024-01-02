@@ -11,6 +11,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
+import BadgeIcon from "@mui/icons-material/Badge";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MapIcon from "@mui/icons-material/Map";
 import { toast } from "react-toastify";
@@ -27,6 +28,7 @@ const clientDetails = () => {
     phone: "",
     address: "",
     mapLocation: "",
+    contactPersonPosition: "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -80,6 +82,7 @@ const clientDetails = () => {
         name: client.name,
         email: client.contactInfo.email,
         phone: client.contactInfo.phone,
+        contactPersonPosition: client.contactInfo.contactPersonPosition,
         address: client.contactInfo.address,
         mapLocation: client.contactInfo.mapLocation,
       });
@@ -125,6 +128,7 @@ const clientDetails = () => {
         contactInfo: {
           email: formData.email.trim(),
           phone: formData.phone.trim(),
+          contactPersonPosition: formData.contactPersonPosition.trim(),
           address: formData.address.trim(),
           mapLocation: formData.mapLocation.trim(),
         },
@@ -150,6 +154,7 @@ const clientDetails = () => {
           name: client.name,
           email: client.contactInfo.email,
           phone: client.contactInfo.phone,
+          contactPersonPosition: client.contactInfo.contactPersonPosition,
           address: client.contactInfo.address,
           mapLocation: client.contactInfo.mapLocation,
         });
@@ -220,8 +225,33 @@ const clientDetails = () => {
           />
 
           <TextField
+            id="contactPersonPosition"
+            label="Contact Person Position"
+            onChange={handleInputChange}
+            value={formData.contactPersonPosition}
+            autoComplete="off"
+            name="contactPersonPosition"
+            required
+            type="text"
+            InputProps={{
+              readOnly: !isEditing,
+
+              startAdornment: (
+                <InputAdornment position="start">
+                  <BadgeIcon
+                    sx={{
+                      color: "#fff",
+                    }}
+                  />
+                </InputAdornment>
+              ),
+            }}
+            variant="outlined"
+          />
+
+          <TextField
             id="phone"
-            label="Client Phone no."
+            label={`${formData.contactPersonPosition} Phone no.`}
             onChange={handleInputChange}
             error={errorMessage === "Please input a valid phone number."}
             value={formData.phone}
