@@ -111,7 +111,7 @@ const NavbarProfile = () => {
               </Typography>
             </span>
             <Typography
-              color="text.dark"
+              color="#B2B2B2"
               fontWeight={400}
               fontSize={14}
               variant="caption"

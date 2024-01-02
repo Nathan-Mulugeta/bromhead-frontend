@@ -106,7 +106,7 @@ const Projects = () => {
             dayjs(),
           )}`;
         } else if (status.label.includes("Overdue")) {
-          weekdaysCountText = `Working days: ${countWeekdays(
+          weekdaysCountText = `Overdue Working days: ${countWeekdays(
             project.deadline,
             dayjs(),
           )}`;
@@ -126,7 +126,13 @@ const Projects = () => {
                   secondary={
                     <span className="flex flex-col">
                       <span>{`Assigned employees: ${project.assignedUsers.length}`}</span>
-                      <span>{weekdaysCountText}</span>
+                      <span
+                        className={
+                          status.label.includes("Overdue") && "text-red-400"
+                        }
+                      >
+                        {weekdaysCountText}
+                      </span>
                     </span>
                   }
                 />
