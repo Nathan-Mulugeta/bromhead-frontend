@@ -449,7 +449,7 @@ const ProjectDetails = () => {
           variant="outlined"
         />
 
-        <div className="">
+        <div>
           <div className="flex items-center gap-3">
             <BusinessIcon
               sx={{
@@ -487,10 +487,10 @@ const ProjectDetails = () => {
           </div>
           <Button
             to={`/dash/clients/${project?.client._id}`}
-            variant="text"
-            color="info"
+            variant="outlined"
+            color="primary"
             size="small"
-            sx={{ ml: 5 }}
+            sx={{ ml: 5, mt: 1 }}
           >
             See More
           </Button>
