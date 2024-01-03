@@ -1,7 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { Typography } from "@mui/material";
+import {
+  Avatar,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  ListSubheader,
+  Typography,
+} from "@mui/material";
 import { useGetUsersQuery } from "../../slices/users/usersApiSlice";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../slices/loading/loadingSlice";
@@ -57,6 +66,7 @@ const EmployeeStatusChart = () => {
 
   const data = {
     labels: Object.keys(statusCounts),
+
     datasets: [
       {
         data: Object.values(statusCounts),
@@ -70,6 +80,47 @@ const EmployeeStatusChart = () => {
         borderWidth: 1,
       },
     ],
+  };
+
+  const [selectedSegment, setSelectedSegment] = useState(null);
+  const [specificPeople, setSpecificPeople] = useState([]);
+
+  const handleChartClick = (event, chartElement) => {
+    if (chartElement.length > 0) {
+      // Get the index of the clicked segment
+      const clickedSegmentIndex = chartElement[0].index;
+
+      // Retrieve data for the specific segment clicked
+      const selectedData = specificDataForSegment(clickedSegmentIndex);
+
+      // Update state to display specific details
+      setSelectedSegment(clickedSegmentIndex);
+      setSpecificPeople(selectedData);
+
+      // Now, display the specific details in your UI (e.g., show a modal with specific people)
+      // You might use 'selectedSegment' and 'specificPeople' state values to conditionally render the details
+    }
+  };
+
+  const specificDataForSegment = (segmentIndex) => {
+    if (!employees) {
+      return []; // Return an empty array if employee data is not available
+    }
+
+    const { ids, entities } = employees;
+
+    // Get the label (status) for the clicked segment
+    const clickedStatusLabel = Object.keys(statusCounts)[segmentIndex];
+
+    // Filter the employees for the clicked status label
+    const employeesWithClickedStatus = ids.filter(
+      (id) => entities[id].status === clickedStatusLabel,
+    );
+
+    // Map the employee IDs to their respective data/details
+    const specificData = employeesWithClickedStatus.map((id) => entities[id]);
+
+    return specificData;
   };
 
   return (
@@ -94,9 +145,59 @@ const EmployeeStatusChart = () => {
               },
             },
             responsive: true,
+            onClick: handleChartClick,
           }}
         />
       </div>
+
+      {/* Display specific people based on 'specificPeople' state */}
+      {specificPeople.length > 0 && (
+        <div className="rounded-lg bg-backgroundLight p-4 shadow-md">
+          <List
+            subheader={
+              <ListSubheader
+                sx={{
+                  bgcolor: "background.light",
+                }}
+              >
+                {Object.keys(statusCounts)[selectedSegment]}
+              </ListSubheader>
+            }
+            sx={{
+              width: "100%",
+              maxHeight: 300,
+              overflow: "auto",
+              bgcolor: "background.light",
+            }}
+          >
+            {specificPeople.map((person) => (
+              <ListItem disablePadding key={person._id} alignItems="flex-start">
+                <ListItemButton to={`/dash/employees/${person._id}`}>
+                  <ListItemAvatar>
+                    <Avatar
+                      sx={{
+                        bgcolor:
+                          statusColors[
+                            Object.keys(statusCounts)[selectedSegment]
+                          ],
+                      }}
+                    >
+                      {person.firstName[0]}
+                      {person.lastName[0]}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    sx={{
+                      color: "primary.contrastText",
+                    }}
+                    primary={`${person.firstName} ${person.lastName}`}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </div>
+      )}
     </div>
   );
 };
