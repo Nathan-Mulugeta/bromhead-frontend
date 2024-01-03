@@ -12,6 +12,8 @@ import {
   ListItemText,
   ListSubheader,
   Typography,
+  Skeleton,
+  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useGetUsersQuery } from "../../slices/users/usersApiSlice";
@@ -35,9 +37,9 @@ const EmployeeStatusChart = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(setLoading(isLoading));
-  }, [dispatch, isLoading]);
+  // useEffect(() => {
+  //   dispatch(setLoading(isLoading));
+  // }, [dispatch, isLoading]);
 
   let statusCounts = {};
 
@@ -134,24 +136,32 @@ const EmployeeStatusChart = () => {
         Employees status
       </Typography>
       <div className="pb-4">
-        <Doughnut
-          data={data}
-          options={{
-            cutout: "60%",
-            plugins: {
-              legend: {
-                position: "bottom",
-                labels: {
-                  color: "#fff",
-                  pointStyle: "circle",
-                  usePointStyle: true,
+        {employees ? (
+          <Doughnut
+            data={data}
+            options={{
+              cutout: "60%",
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    color: "#fff",
+                    pointStyle: "circle",
+                    usePointStyle: true,
+                  },
                 },
               },
-            },
-            responsive: true,
-            onClick: handleChartClick,
-          }}
-        />
+              responsive: true,
+              onClick: handleChartClick,
+            }}
+          />
+        ) : (
+          <Stack spacing={1} justifyContent="center" alignItems="center">
+            <Skeleton variant="circular" height={300} width={300} />
+            <Skeleton variant="text" width={300} />
+            <Skeleton variant="text" width="60%" />
+          </Stack>
+        )}
       </div>
 
       {/* Display specific people based on 'specificPeople' state */}
