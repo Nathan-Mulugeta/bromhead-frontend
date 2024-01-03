@@ -30,6 +30,8 @@ const ProjectsStartingToday = () => {
 
   return (
     <Card
+      tooltip="Projects"
+      to="/dash/projects"
       title="Projects Starting Today"
       value={projectsStartingToday}
       Icon={EventAvailableIcon}

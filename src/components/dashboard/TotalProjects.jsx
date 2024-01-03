@@ -19,7 +19,13 @@ const TotalProjects = () => {
   const numberOfProjects = projects?.ids.length;
 
   return (
-    <Card title="Total Projects" value={numberOfProjects} Icon={WorkIcon} />
+    <Card
+      tooltip="Projects"
+      to="/dash/projects"
+      title="Total Projects"
+      value={numberOfProjects}
+      Icon={WorkIcon}
+    />
   );
 };
 

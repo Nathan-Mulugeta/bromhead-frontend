@@ -27,6 +27,8 @@ const ActiveProjects = () => {
 
   return (
     <Card
+      tooltip="Projects"
+      to="/dash/projects"
       title="Active Projects"
       value={activeProjectsNumber}
       Icon={ChangeCircleIcon}

@@ -8,6 +8,7 @@ import ActiveProjects from "../components/dashboard/ActiveProjects";
 import UpcomingProjects from "../components/dashboard/UpcomingProjects";
 import ProjectsStartingThisWeek from "../components/dashboard/ProjectsStartingThisWeek";
 import ProjectsStartingToday from "../components/dashboard/ProjectsStartingToday";
+import AvailableEmployees from "../components/dashboard/AvailableEmployees";
 
 const Dashboard = () => {
   useTitle("Dashboard");
@@ -25,6 +26,9 @@ const Dashboard = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TotalEmployees />
+            </Grid>
+            <Grid item xs={12}>
+              <AvailableEmployees />
             </Grid>
             <Grid item xs={12}>
               <TotalClients />

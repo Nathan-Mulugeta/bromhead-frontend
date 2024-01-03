@@ -1,9 +1,9 @@
 import React from "react";
-import PersonIcon from "@mui/icons-material/Person";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import Card from "./Card";
 import { useGetUsersQuery } from "../../slices/users/usersApiSlice";
 
-const TotalEmployees = () => {
+const AvailableEmployees = () => {
   const {
     data: employees,
     isLoading,
@@ -16,17 +16,19 @@ const TotalEmployees = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  const numberOfEmployees = employees?.ids.length;
+  const availableEmployees = employees?.ids.filter(
+    (id) => employees.entities[id].status === "Available",
+  ).length;
 
   return (
     <Card
       tooltip="Employees"
       to="/dash/employees"
-      title="Total Employees"
-      value={numberOfEmployees}
-      Icon={PersonIcon}
+      title="Available Employees"
+      value={availableEmployees}
+      Icon={PersonOutlineIcon}
     />
   );
 };
 
-export default TotalEmployees;
+export default AvailableEmployees;

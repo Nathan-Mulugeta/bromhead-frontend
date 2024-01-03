@@ -30,6 +30,8 @@ const UpcomingProjects = () => {
 
   return (
     <Card
+      tooltip="Projects"
+      to="/dash/projects"
       title="Upcoming Projects"
       value={upcomingProjectsNumber}
       Icon={AccessTimeIcon}

@@ -19,7 +19,13 @@ const TotalClients = () => {
   const numberOfClients = clients?.ids.length;
 
   return (
-    <Card title="Total Clients" value={numberOfClients} Icon={BusinessIcon} />
+    <Card
+      tooltip="Clients"
+      to="/dash/clients"
+      title="Total Clients"
+      value={numberOfClients}
+      Icon={BusinessIcon}
+    />
   );
 };
 
