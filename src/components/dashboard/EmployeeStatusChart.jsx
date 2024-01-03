@@ -3,14 +3,17 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import {
   Avatar,
+  IconButton,
   List,
   ListItem,
+  Tooltip as TooltipMui,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
   ListSubheader,
   Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { useGetUsersQuery } from "../../slices/users/usersApiSlice";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../slices/loading/loadingSlice";
@@ -76,7 +79,8 @@ const EmployeeStatusChart = () => {
         borderColor: Object.keys(statusCounts).map(
           (status) => statusColors[status],
         ),
-
+        // hoverOffset: 5,
+        // hitRadius: [50, 50, 50],
         borderWidth: 1,
       },
     ],
@@ -158,16 +162,34 @@ const EmployeeStatusChart = () => {
               <ListSubheader
                 sx={{
                   bgcolor: "background.light",
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
                 {Object.keys(statusCounts)[selectedSegment]}
+                <TooltipMui title="Close List">
+                  <IconButton onClick={() => setSpecificPeople([])}>
+                    <CloseIcon />
+                  </IconButton>
+                </TooltipMui>
               </ListSubheader>
             }
             sx={{
               width: "100%",
-              maxHeight: 300,
+              maxHeight: 250,
               overflow: "auto",
               bgcolor: "background.light",
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#0F2332",
+                borderRadius: "4px",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#6F767E",
+                borderRadius: "8px",
+              },
             }}
           >
             {specificPeople.map((person) => (

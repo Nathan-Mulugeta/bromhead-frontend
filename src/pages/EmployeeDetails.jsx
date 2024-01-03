@@ -58,7 +58,7 @@ const EmployeeDetails = () => {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
-        <Button to="/dash/employees">
+        <Button onClick={() => navigate(-1)}>
           <ArrowBackIosIcon />
         </Button>
         <Typography color="primary.contrastText" variant="h6" fontSize={22}>

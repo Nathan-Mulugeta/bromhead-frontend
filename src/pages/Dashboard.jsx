@@ -6,6 +6,9 @@ const Dashboard = () => {
   useTitle("Dashboard");
   return (
     <>
+      <Typography mb={1} color="primary.contrastText" variant="h6">
+        Dashboard
+      </Typography>
       <EmployeeStatusChart />
     </>
   );

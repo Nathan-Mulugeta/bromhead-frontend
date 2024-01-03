@@ -92,7 +92,7 @@ const Projects = () => {
         if (status.label.includes("Completed")) {
           daysText = getRelativeDateText(project.deadline);
         } else if (status.label.includes("Ongoing")) {
-          daysText = `Started ${getRelativeDateText(project.startDate)}`;
+          daysText = `Deadline ${getRelativeDateText(project.deadline)}`;
         } else if (status.label.includes("Upcoming")) {
           daysText = getRelativeDateText(project.startDate);
         } else if (status.label.includes("Overdue")) {
