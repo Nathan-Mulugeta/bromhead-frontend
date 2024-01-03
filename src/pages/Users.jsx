@@ -143,6 +143,7 @@ const Users = () => {
         <Button
           size="medium"
           variant="contained"
+          color="secondary"
           startIcon={<PersonAddAltIcon />}
           to="/dash/employees/add"
         >

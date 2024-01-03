@@ -698,7 +698,7 @@ const ProjectDetails = () => {
 
       <div className="mt-6 flex justify-between gap-4">
         {!isEditing ? (
-          <Button color="primary" variant="contained" onClick={toggleEdit}>
+          <Button color="secondary" variant="contained" onClick={toggleEdit}>
             Update Project
           </Button>
         ) : (
@@ -707,7 +707,7 @@ const ProjectDetails = () => {
               sx={{
                 mr: 1,
               }}
-              color="warning"
+              color="secondary"
               variant="outlined"
               onClick={handleCancel}
             >
@@ -725,8 +725,8 @@ const ProjectDetails = () => {
         )}
         {!isEditing && (
           <Button
-            color="secondary"
-            variant="contained"
+            color="error"
+            variant="outlined"
             onClick={onDeleteProjectClicked}
           >
             Delete Project

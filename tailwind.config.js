@@ -10,6 +10,7 @@ export default {
           light: "#FFFFFF",
           normal: "#124056",
           dark: "#6F767E",
+          darkLight: "#B2B2B2",
         },
         background: "#0F2332",
         backgroundLight: "#124056",

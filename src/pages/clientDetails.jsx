@@ -325,7 +325,7 @@ const clientDetails = () => {
 
       <div className="mt-6 flex justify-between gap-4">
         {!isEditing ? (
-          <Button color="primary" variant="contained" onClick={toggleEdit}>
+          <Button color="secondary" variant="contained" onClick={toggleEdit}>
             Update client
           </Button>
         ) : (
@@ -334,7 +334,7 @@ const clientDetails = () => {
               sx={{
                 mr: 1,
               }}
-              color="warning"
+              color="secondary"
               variant="outlined"
               onClick={handleCancel}
             >
@@ -352,8 +352,8 @@ const clientDetails = () => {
         )}
         {!isEditing && (
           <Button
-            color="secondary"
-            variant="contained"
+            color="error"
+            variant="outlined"
             onClick={onDeleteClientClicked}
           >
             Delete client

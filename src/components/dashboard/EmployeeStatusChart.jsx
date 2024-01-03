@@ -131,7 +131,7 @@ const EmployeeStatusChart = () => {
 
   return (
     // Better not add px or mx because it pushed the chart container out of the screen and causes layout issues
-    <div className="flex flex-col overflow-hidden rounded-lg bg-backgroundLight">
+    <div className="flex flex-col overflow-hidden rounded-lg bg-backgroundLight sm:max-w-md lg:max-w-2xl">
       <Typography variant="h2" color="primary.contrastText" p={2} fontSize={20}>
         Employees status
       </Typography>

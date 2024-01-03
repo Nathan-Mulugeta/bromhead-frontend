@@ -363,19 +363,19 @@ const MyProfile = () => {
           <Typography variant="subtitle1">Roles:</Typography>
           {formData.roles.length !== 0 &&
             formData.roles.map((role) => (
-              <Chip key={role} label={role} color="primary" />
+              <Chip key={role} label={role} color="secondary" />
             ))}
         </div>
       </div>
 
       <div className="mt-6 flex justify-end gap-4">
         {!isEditing ? (
-          <Button color="primary" variant="contained" onClick={toggleEdit}>
+          <Button color="secondary" variant="contained" onClick={toggleEdit}>
             Update Profile
           </Button>
         ) : (
           <>
-            <Button color="warning" variant="outlined" onClick={handleCancel}>
+            <Button color="secondary" variant="outlined" onClick={handleCancel}>
               Cancel
             </Button>
             <Button

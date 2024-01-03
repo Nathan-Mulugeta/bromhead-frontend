@@ -164,6 +164,7 @@ const Projects = () => {
         <Button
           to="/dash/projects/add"
           size="medium"
+          color="secondary"
           variant="contained"
           startIcon={<AddIcon />}
         >

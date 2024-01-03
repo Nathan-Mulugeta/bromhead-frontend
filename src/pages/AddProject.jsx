@@ -478,6 +478,7 @@ const AddProject = () => {
         <Button
           disabled={!isFormComplete}
           variant="contained"
+          color="secondary"
           onClick={handleSubmit}
         >
           Add Project

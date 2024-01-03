@@ -17,13 +17,11 @@ const Dashboard = () => {
         Dashboard
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={8}>
-          {/* EmployeeStatusChart occupies the left side on larger screens */}
+        <Grid item xs={12} md={5}>
           <EmployeeStatusChart />
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          {/* TotalEmployees components will stack on the right side on larger screens */}
+        <Grid item xs={12} md={3}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TotalEmployees />
@@ -42,11 +40,16 @@ const Dashboard = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <ProjectsStartingThisWeek />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <ProjectsStartingToday />
+
+        <Grid item xs={12} md={4}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <ProjectsStartingThisWeek />
+            </Grid>
+            <Grid item xs={12}>
+              <ProjectsStartingToday />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>

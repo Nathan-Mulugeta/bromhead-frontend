@@ -15,8 +15,8 @@ const SidebarItem = ({ icon, title, to }) => {
       onClick={handleNavclick}
       className={({ isActive }) =>
         [
-          isActive ? "bg-primary text-white" : "",
-          "group relative my-3 flex items-center rounded-md px-2 py-1 text-text-light hover:bg-primary hover:text-white sm:px-3 sm:py-2",
+          isActive ? "bg-secondary text-white" : "",
+          "group relative my-3 flex items-center rounded-md px-2 py-1 text-text-light hover:bg-secondary hover:text-white sm:px-3 sm:py-2",
         ].join(" ")
       }
     >
@@ -35,7 +35,7 @@ const SidebarItem = ({ icon, title, to }) => {
         <div
           className={`
           invisible absolute left-full ml-6 -translate-x-3 rounded-md
-          bg-primary px-2 py-1
+          bg-secondary px-2 py-1
           text-sm text-white opacity-20 transition-all
           sm:group-hover:visible sm:group-hover:translate-x-0 sm:group-hover:opacity-100
       `}

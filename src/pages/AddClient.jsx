@@ -256,6 +256,7 @@ const AddClient = () => {
         <Button
           disabled={!isFormComplete}
           variant="contained"
+          color="secondary"
           onClick={handleSubmit}
         >
           Add Client

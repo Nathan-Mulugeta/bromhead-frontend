@@ -3,9 +3,9 @@ import React from "react";
 
 const Card = ({ title, value, Icon }) => {
   return (
-    <div className="flex items-center justify-between rounded-lg bg-backgroundLight p-4">
+    <div className="text-text-darkLight flex cursor-pointer items-center justify-between rounded-lg bg-backgroundLight p-4 transition-all hover:bg-secondary  hover:text-text-light">
       <div>
-        <Typography variant="body1" fontSize={14} color="text.darkLight">
+        <Typography variant="body1" fontSize={14} color="inherit">
           {title}
         </Typography>
         {value ? (
@@ -22,7 +22,7 @@ const Card = ({ title, value, Icon }) => {
         )}
       </div>
       {/* The icon should be passed as a value not as a component and should be from mui icons */}
-      <Icon color="info" fontSize="large" />
+      <Icon color="inherit" fontSize="large" />
     </div>
   );
 };

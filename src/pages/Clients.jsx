@@ -104,6 +104,7 @@ const Clients = () => {
         <Button
           to="/dash/clients/add"
           size="medium"
+          color="secondary"
           variant="contained"
           startIcon={<AddIcon />}
         >
