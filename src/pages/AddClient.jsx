@@ -50,7 +50,12 @@ const AddClient = () => {
   }, [isError, error]);
 
   const isFormComplete = Object.entries(formData).every(([key, value]) => {
-    return key === "email" || key === "mapLocation" || value !== "";
+    return (
+      key === "email" ||
+      key === "mapLocation" ||
+      key === "address" ||
+      value !== ""
+    );
   });
 
   const handleInputChange = (e) => {
