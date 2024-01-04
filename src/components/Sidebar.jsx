@@ -2,7 +2,7 @@ import SidebarItem from "./SidebarItem";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import { MdMenuOpen } from "react-icons/md";
-import { MdOutlineMenu } from "react-icons/md";
+
 import GroupsIcon from "@mui/icons-material/Groups";
 import BusinessIcon from "@mui/icons-material/Business";
 import { useContext, useState } from "react";
@@ -41,7 +41,12 @@ const SidebarMenuItems = [
 
 const Sidebar = () => {
   const { expanded, setExpanded } = useContext(SidebarContext);
-  const sidebarToggle = () => setExpanded(!expanded);
+
+  // Function to toggle sidebar expansion without affecting the ClickAwayListener
+  const sidebarToggle = (e) => {
+    e.stopPropagation(); // Prevents event propagation to ClickAwayListener
+    setExpanded(!expanded);
+  };
 
   const handleClickAway = () => {
     setExpanded(false);
@@ -54,9 +59,6 @@ const Sidebar = () => {
           expanded ? "" : "-translate-x-full"
         }`}
       >
-        <button className="absolute -right-10 top-5" onClick={sidebarToggle}>
-          {!expanded && <MdOutlineMenu color="#fff" fontSize={25} />}
-        </button>
         <span
           className={`mx-auto h-16  px-1 py-4 transition-all ${
             expanded ? "w-24" : "w-16"

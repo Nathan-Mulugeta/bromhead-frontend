@@ -51,22 +51,21 @@ const EmployeeStatusChart = () => {
       statusCounts[status] = (statusCounts[status] || 0) + 1;
     });
   }
-
   const statusColors = {
     Available: "#27ae60", // Green
     "Casual Leave": "#f39c12", // Orange
     "Sick Leave": "#e74c3c", // Red
     "Without Pay Leave": "#9b59b6", // Purple
     "At Work": "#3498db", // Blue
-    "Study Leave": "#f39c12", // Orange
-    Administration: "#f1c40f", // Yellow
-    "Staff Training": "#f39c12", // Orange
-    "General Promotion": "#f1c40f", // Yellow
-    "Public Holidays": "#f1c40f", // Yellow
-    "Annual Leave": "#f1c40f", // Yellow
+    "Study Leave": "#1abc9c", // Turquoise
+    Administration: "#f1c40f", // Yellow (Different from Public Holidays)
+    "Staff Training": "#e67e22", // Dark Orange
+    "General Promotion": "#2ecc71", // Emerald Green
+    "Public Holidays": "#d35400", // Lighter Orange (Different from Administration)
+    "Annual Leave": "#2980b9", // Pumpkin Orange (Different from Maternity Leave)
     "Mourning Leave": "#95a5a6", // Gray
-    "Maternity Leave": "#e74c3c", // Red
-    Others: "#95a5a6", // Gray
+    "Maternity Leave": "#c0392b", // Darker Red (Different from Annual Leave)
+    Others: "#7f8c8d", // Light Gray
   };
 
   const data = {
@@ -93,18 +92,26 @@ const EmployeeStatusChart = () => {
 
   const handleChartClick = (event, chartElement) => {
     if (chartElement.length > 0) {
-      // Get the index of the clicked segment
       const clickedSegmentIndex = chartElement[0].index;
 
-      // Retrieve data for the specific segment clicked
-      const selectedData = specificDataForSegment(clickedSegmentIndex);
+      // Check if the clicked segment matches the selected segment
+      const isSameSegment = clickedSegmentIndex === selectedSegment;
 
-      // Update state to display specific details
-      setSelectedSegment(clickedSegmentIndex);
-      setSpecificPeople(selectedData);
+      if (isSameSegment) {
+        // If the clicked segment matches the selected one, toggle it off
+        setSelectedSegment(null);
+        setSpecificPeople([]);
+      } else {
+        // Retrieve data for the specific segment clicked
+        const selectedData = specificDataForSegment(clickedSegmentIndex);
 
-      // Now, display the specific details in your UI (e.g., show a modal with specific people)
-      // You might use 'selectedSegment' and 'specificPeople' state values to conditionally render the details
+        // Update state to display specific details
+        setSelectedSegment(clickedSegmentIndex);
+        setSpecificPeople(selectedData);
+
+        // Now, display the specific details in your UI
+        // (e.g., show a modal with specific people based on 'selectedSegment' and 'specificPeople')
+      }
     }
   };
 
