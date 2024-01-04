@@ -42,7 +42,7 @@ const ProjectsStartingThisWeek = () => {
     <Card
       tooltip="Projects"
       to="/dash/projects"
-      title="Projects Starting This Week"
+      title="Starting This Week"
       value={projectsStartingThisWeek}
       Icon={DateRangeIcon}
     />

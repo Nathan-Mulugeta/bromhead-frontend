@@ -381,6 +381,20 @@ const ProjectDetails = () => {
     }
   };
 
+  const handleEscapeKey = (event) => {
+    if (event.key === "Escape" || event.key === "Esc") {
+      setIsEditing(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between">
@@ -403,6 +417,7 @@ const ProjectDetails = () => {
 
       <div className="mt-4 flex flex-col justify-center gap-3 rounded-md bg-backgroundLight p-4 sm:gap-8">
         <TextField
+          onDoubleClick={toggleEdit}
           id="name"
           label="Project Name"
           autoComplete="off"
@@ -432,6 +447,7 @@ const ProjectDetails = () => {
           autoComplete="off"
           name="description"
           value={formData.description}
+          onDoubleClick={toggleEdit}
           onChange={handleInputChange}
           type="text"
           InputProps={{
@@ -460,6 +476,7 @@ const ProjectDetails = () => {
               id="client"
               readOnly={!isEditing}
               value={formData.client}
+              onDoubleClick={toggleEdit}
               isOptionEqualToValue={(option, value) => option.id === value.id}
               onChange={(event, newValue) => {
                 setFormData({
@@ -488,7 +505,7 @@ const ProjectDetails = () => {
           <Button
             to={`/dash/clients/${project?.client._id}`}
             variant="outlined"
-            color="primary"
+            color="secondary"
             size="small"
             sx={{ ml: 5, mt: 1 }}
           >
@@ -508,6 +525,7 @@ const ProjectDetails = () => {
             readOnly={!isEditing}
             required
             value={formData.serviceType}
+            onDoubleClick={toggleEdit}
             onChange={(event, newValue) => {
               setFormData({
                 ...formData,
@@ -546,6 +564,7 @@ const ProjectDetails = () => {
             id="assignedUsers"
             groupBy={(option) => option.status}
             value={formData.assignedUsers}
+            onDoubleClick={toggleEdit}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(event, newValue) => {
               setFormData({
@@ -592,6 +611,7 @@ const ProjectDetails = () => {
             id="teamLeader"
             groupBy={(option) => option.status}
             value={formData.teamLeader}
+            onDoubleClick={toggleEdit}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(event, newValue) => {
               setFormData({

@@ -163,6 +163,20 @@ const clientDetails = () => {
     }
   };
 
+  const handleEscapeKey = (event) => {
+    if (event.key === "Escape" || event.key === "Esc") {
+      setIsEditing(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -178,6 +192,7 @@ const clientDetails = () => {
         <TextField
           id="name"
           label="Client Name"
+          onDoubleClick={toggleEdit}
           error={errorMessage === "Duplicate client."}
           autoComplete="off"
           name="name"
@@ -206,6 +221,7 @@ const clientDetails = () => {
             error={errorMessage === "Please input a valid email."}
             name="email"
             onChange={handleInputChange}
+            onDoubleClick={toggleEdit}
             value={formData.email}
             autoComplete="off"
             type="email"
@@ -228,6 +244,7 @@ const clientDetails = () => {
             id="contactPersonPosition"
             label="Contact Person Position"
             onChange={handleInputChange}
+            onDoubleClick={toggleEdit}
             value={formData.contactPersonPosition}
             autoComplete="off"
             name="contactPersonPosition"
@@ -253,6 +270,7 @@ const clientDetails = () => {
             id="phone"
             label={`${formData.contactPersonPosition} Phone no.`}
             onChange={handleInputChange}
+            onDoubleClick={toggleEdit}
             error={errorMessage === "Please input a valid phone number."}
             value={formData.phone}
             autoComplete="off"
@@ -278,6 +296,7 @@ const clientDetails = () => {
             id="address"
             label="Client Address"
             onChange={handleInputChange}
+            onDoubleClick={toggleEdit}
             value={formData.address}
             name="address"
             autoComplete="off"
@@ -302,6 +321,7 @@ const clientDetails = () => {
             id="mapLocation"
             label="Client Map Location (Optional)"
             onChange={handleInputChange}
+            onDoubleClick={toggleEdit}
             value={formData.mapLocation}
             name="mapLocation"
             autoComplete="off"

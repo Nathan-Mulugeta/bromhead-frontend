@@ -172,6 +172,20 @@ const MyProfile = () => {
 
   const navigate = useNavigate();
 
+  const handleEscapeKey = (event) => {
+    if (event.key === "Escape" || event.key === "Esc") {
+      setIsEditing(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscapeKey);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, []);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -185,6 +199,7 @@ const MyProfile = () => {
 
       <div className="mt-4 grid grid-cols-1 gap-3 rounded-md bg-backgroundLight p-4 pt-6 sm:grid-cols-2 sm:gap-8">
         <TextField
+          onDoubleClick={toggleEdit}
           id="username"
           label="User Name"
           error={errorMessage === "Duplicate username"}
@@ -211,7 +226,7 @@ const MyProfile = () => {
         <TextField
           id="password"
           label="Password"
-          // error={errorMessage === "Please input a valid email."}
+          onDoubleClick={toggleEdit}
           name="password"
           onChange={handleInputChange}
           value={formData.password}
@@ -235,6 +250,7 @@ const MyProfile = () => {
         <TextField
           id="firstName"
           label="First Name"
+          onDoubleClick={toggleEdit}
           onChange={handleInputChange}
           value={formData.firstName}
           name="firstName"
@@ -258,6 +274,7 @@ const MyProfile = () => {
         <TextField
           id="lastName"
           label="Last Name"
+          onDoubleClick={toggleEdit}
           onChange={handleInputChange}
           value={formData.lastName}
           name="lastName"
@@ -283,6 +300,7 @@ const MyProfile = () => {
           label="Email"
           error={errorMessage === "Please input a valid email."}
           onChange={handleInputChange}
+          onDoubleClick={toggleEdit}
           value={formData.email}
           name="email"
           autoComplete="off"
@@ -306,6 +324,7 @@ const MyProfile = () => {
           id="address"
           label="Home Address"
           onChange={handleInputChange}
+          onDoubleClick={toggleEdit}
           value={formData.address}
           name="address"
           autoComplete="off"
@@ -334,6 +353,7 @@ const MyProfile = () => {
 
           <Autocomplete
             disablePortal
+            onDoubleClick={toggleEdit}
             readOnly={!isEditing}
             value={formData.status}
             onChange={(event, newValue) => {

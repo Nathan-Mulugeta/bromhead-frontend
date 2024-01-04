@@ -9,6 +9,7 @@ import UpcomingProjects from "../components/dashboard/UpcomingProjects";
 import ProjectsStartingThisWeek from "../components/dashboard/ProjectsStartingThisWeek";
 import ProjectsStartingToday from "../components/dashboard/ProjectsStartingToday";
 import AvailableEmployees from "../components/dashboard/AvailableEmployees";
+import ProjectsStartingTodayList from "../components/dashboard/ProjectsStartingTodayList";
 
 const Dashboard = () => {
   useTitle("Dashboard");
@@ -17,12 +18,12 @@ const Dashboard = () => {
       <Typography mb={1} color="primary.contrastText" variant="h6">
         Dashboard
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={5}>
+      <Grid container mb={4} spacing={2}>
+        <Grid item xs={12} md={4}>
           <EmployeeStatusChart />
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={4}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TotalEmployees />
@@ -36,17 +37,17 @@ const Dashboard = () => {
             <Grid item xs={12}>
               <TotalProjects />
             </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
               <ActiveProjects />
             </Grid>
             <Grid item xs={12}>
               <UpcomingProjects />
             </Grid>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Grid container spacing={2}>
             <Grid item xs={12}>
               <ProjectsStartingThisWeek />
             </Grid>
@@ -56,6 +57,8 @@ const Dashboard = () => {
           </Grid>
         </Grid>
       </Grid>
+
+      <ProjectsStartingTodayList />
     </>
   );
 };
