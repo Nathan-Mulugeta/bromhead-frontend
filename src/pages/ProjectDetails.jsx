@@ -3,6 +3,11 @@ import {
   Button,
   Checkbox,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControlLabel,
   FormGroup,
   InputAdornment,
@@ -70,6 +75,8 @@ const ProjectDetails = () => {
     completedAt: null,
     startDate: null,
   });
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Date Validation
   const [deadlineError, setDeadlineError] = useState(null);
@@ -345,8 +352,16 @@ const ProjectDetails = () => {
     }
   }, [isDelSuccess, navigate]);
 
-  const onDeleteProjectClicked = async () => {
-    await deleteProject({ id: project._id });
+  const onDeleteProjectClicked = () => {
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirmed = async (confirmed) => {
+    setShowDeleteModal(false);
+
+    if (confirmed) {
+      await deleteProject({ id: project._id });
+    }
   };
 
   const getProjectStatus = (project) => {
@@ -753,6 +768,36 @@ const ProjectDetails = () => {
           </Button>
         )}
       </div>
+      <Dialog
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: "background.light",
+          },
+        }}
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+      >
+        <DialogTitle id="alert-dialog-title">
+          Are you sure you want to delete "{project?.name}"?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This is irreversible action!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="info" onClick={() => handleDeleteConfirmed(false)}>
+            Cancel
+          </Button>
+          <Button
+            color="secondary"
+            onClick={() => handleDeleteConfirmed(true)}
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

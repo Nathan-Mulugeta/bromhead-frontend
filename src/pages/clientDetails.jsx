@@ -6,7 +6,17 @@ import {
   useGetClientsQuery,
   useUpdateClientMutation,
 } from "../slices/clients/clientsApiSlice";
-import { Button, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
@@ -114,8 +124,18 @@ const clientDetails = () => {
     }
   }, [isDelSuccess, navigate]);
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const onDeleteClientClicked = async () => {
-    await deleteClient({ id: client.id });
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirmed = async (confirmed) => {
+    setShowDeleteModal(false);
+
+    if (confirmed) {
+      await deleteClient({ id: client.id });
+    }
   };
 
   const handleUpdate = async (e) => {
@@ -379,6 +399,37 @@ const clientDetails = () => {
             Delete client
           </Button>
         )}
+
+        <Dialog
+          sx={{
+            "& .MuiDialog-paper": {
+              backgroundColor: "background.light",
+            },
+          }}
+          open={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+        >
+          <DialogTitle id="alert-dialog-title">
+            Are you sure you want to delete {client?.name}?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              This is irreversible action!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button color="info" onClick={() => handleDeleteConfirmed(false)}>
+              Cancel
+            </Button>
+            <Button
+              color="secondary"
+              onClick={() => handleDeleteConfirmed(true)}
+              autoFocus
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   );

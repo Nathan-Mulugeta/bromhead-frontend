@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useDeleteUserMutation,
@@ -10,7 +10,16 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { Button, Chip, Typography } from "@mui/material";
+import {
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import PersonOffIcon from "@mui/icons-material/PersonOff";
 import DataDisplayItem from "../components/DataDisplayItem";
@@ -19,6 +28,8 @@ import { setLoading } from "../slices/loading/loadingSlice";
 import { toast } from "react-toastify";
 
 const EmployeeDetails = () => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const { userId } = useParams();
 
   const { user } = useGetUsersQuery("usersList", {
@@ -51,8 +62,16 @@ const EmployeeDetails = () => {
     }
   }, [isSuccess, navigate]);
 
-  const handleDeleteClick = async () => {
-    const res = await deleteEmployee({ id: userId });
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirmed = async (confirmed) => {
+    setShowDeleteModal(false);
+
+    if (confirmed) {
+      await deleteEmployee({ id: userId });
+    }
   };
 
   return (
@@ -120,6 +139,37 @@ const EmployeeDetails = () => {
           Delete Employee
         </Button>
       </div>
+
+      <Dialog
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: "background.light",
+          },
+        }}
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+      >
+        <DialogTitle id="alert-dialog-title">
+          Are you sure you want to delete {user?.firstName}?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This is irreversible action!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="info" onClick={() => handleDeleteConfirmed(false)}>
+            Cancel
+          </Button>
+          <Button
+            color="secondary"
+            onClick={() => handleDeleteConfirmed(true)}
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
