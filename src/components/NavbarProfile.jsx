@@ -129,10 +129,15 @@ const NavbarProfile = () => {
         MenuListProps={{
           "aria-labelledby": "basic-button",
         }}
+        sx={{
+          "& .MuiMenu-paper": {
+            backgroundColor: "background.light",
+          },
+        }}
       >
         <MenuItem
           sx={{
-            color: "background.dark",
+            color: "primary.contrastText",
             width: "15ch",
           }}
           onClick={() => {
@@ -144,7 +149,7 @@ const NavbarProfile = () => {
         </MenuItem>
         <MenuItem
           sx={{
-            color: "background.dark",
+            color: "primary.contrastText",
           }}
           onClick={handleLogoutClick}
         >
