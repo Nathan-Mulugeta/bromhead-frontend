@@ -121,8 +121,7 @@ const MyProfile = () => {
     }
   }, [user]);
 
-  // useEffect(() => {}, [isEditError])
-
+  
   const handleUpdate = async (e) => {
     e.preventDefault();
 
