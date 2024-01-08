@@ -26,6 +26,21 @@ const theme = createTheme({
         },
       },
     },
+
+    MuiDataGrid: {
+      defaultProps: {
+        slotProps: {
+          panel: {
+            sx: {
+              "& .MuiDataGrid-panelWrapper": {
+                maxWidth: "calc(100vw - 4rem)",
+              },
+            },
+          },
+        },
+      },
+    },
+
     MuiDateCalendar: {
       styleOverrides: {
         root: {
@@ -36,6 +51,13 @@ const theme = createTheme({
     MuiPickersCalendarHeader: {
       styleOverrides: {
         switchViewIcon: {
+          color: "#fff",
+        },
+      },
+    },
+    MuiTablePagination: {
+      styleOverrides: {
+        root: {
           color: "#fff",
         },
       },
@@ -59,6 +81,22 @@ const theme = createTheme({
         component: LinkBehavior,
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#124056 !important",
+        },
+      },
+    },
+
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          color: "#fff",
+        },
+      },
+    },
+
     MuiButtonBase: {
       defaultProps: {
         LinkComponent: LinkBehavior,

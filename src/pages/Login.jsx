@@ -49,7 +49,7 @@ const Login = () => {
       } else if (err.status === 401) {
         toast.error("Wrong credentials");
       } else {
-        toast.error("Unable to connect to server");
+        toast.error("Internal server error");
       }
     }
   };

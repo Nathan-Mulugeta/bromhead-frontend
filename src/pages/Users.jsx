@@ -11,9 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
+import { useNavigate } from "react-router-dom";
 
 const statusColors = {
   Available: "bg-green-400",
@@ -33,27 +34,13 @@ const statusColors = {
 };
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
+  { field: "firstName", headerName: "First Name", minWidth: 140 },
+  { field: "lastName", headerName: "Last Name", width: 140 },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "status",
+    headerName: "Status",
+    width: 150,
   },
-];
-
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
 ];
 
 const Users = () => {
@@ -79,63 +66,31 @@ const Users = () => {
     dispatch(setLoading(isLoading));
   }, [dispatch, isLoading]);
 
+  const rows = [];
+
   if (isSuccess) {
     const { ids, entities } = employees;
 
-    content =
-      ids.length &&
-      ids.map((employeeId) => {
-        const employee = entities[employeeId];
-        const statusColor = statusColors[employee.status];
-
-        let employeeName = `${employee.firstName} ${employee.lastName}`;
-        let notFilled = false;
-        if (
-          employee.firstName === "undefined" ||
-          employee.lastName === "undefined"
-        ) {
-          employeeName = "Incomplete profile";
-          notFilled = true;
-        }
-
-        return (
-          <List key={employeeId}>
-            <ListItem disablePadding>
-              <ListItemButton to={`/dash/employees/${employeeId}`}>
-                <ListItemText
-                  sx={{
-                    color: notFilled && "#fca5a5",
-                  }}
-                  primary={employeeName}
-                />
-
-                <Box className="flex items-center">
-                  {employee.status === "Available" ? (
-                    <span className="relative mr-2 flex h-3 w-3">
-                      <span
-                        className={`absolute inline-flex h-full w-full animate-ping rounded-full ${statusColor} opacity-75`}
-                      ></span>
-                      <span
-                        className={`relative inline-flex h-3 w-3 rounded-full ${statusColor}`}
-                      ></span>
-                    </span>
-                  ) : (
-                    <span
-                      className={`mr-2 inline-block h-3 w-3 rounded-full ${statusColor}`}
-                    />
-                  )}
-
-                  <Typography variant="caption">{employee.status}</Typography>
-                </Box>
-              </ListItemButton>
-            </ListItem>
-          </List>
-        );
+    ids.map((id) => {
+      rows.push({
+        id,
+        firstName: entities[id].firstName,
+        lastName: entities[id].lastName,
+        status: entities[id].status,
       });
+    });
   }
 
+  const navigate = useNavigate();
+
+  const handleRowClick = (params) => {
+    navigate(`/dash/employees/${params.id}`);
+  };
+
+  const testRows = [];
+
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between">
         <Typography color="primary.contrastText" variant="h6">
           Employees list
@@ -152,27 +107,34 @@ const Users = () => {
       </div>
       <Box
         sx={{
-          width: "100%",
           bgcolor: "background.light",
-          borderRadius: 2,
           mt: 3,
-          color: "primary.contrastText",
-          overflow: "hidden",
+          borderRadius: 2,
+          p: 1,
         }}
       >
-        {content}
-        {/* <DataGrid
-          rows={rows}
+        <DataGrid
+          sx={{
+            border: "none",
+            p: 1,
+          }}
+          onRowClick={handleRowClick}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
+          rows={rows}
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
             },
           }}
-          pageSizeOptions={[10, 20]}
-        /> */}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10 } },
+          }}
+          pageSizeOptions={[5, 10, 25]}
+          disableRowSelectionOnClick
+        />
       </Box>
-    </div>
+    </>
   );
 };
 

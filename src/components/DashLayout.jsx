@@ -14,7 +14,7 @@ const DashLayout = () => {
         <Sidebar />
         <div className="flex flex-1 flex-col">
           <NavBar />
-          <div className="container mx-auto p-4">
+          <div className="container mx-auto w-screen p-4">
             <Outlet />
           </div>
         </div>
