@@ -277,12 +277,12 @@ const MyProfile = () => {
         // Add more data properties as needed
       ]);
     });
+
     worksheet.columns.forEach(function (column, i) {
       let maxLength = 0;
-      column["eachCell"]({ includeEmpty: true, row: 5 }, function (cell) {
-        // Start considering cells from row 5
+      column["eachCell"]({ includeEmpty: true }, function (cell) {
         let columnLength = cell.value ? cell.value.toString().length : 0;
-        if (columnLength > maxLength) {
+        if (columnLength > maxLength && columnLength < 30) {
           maxLength = columnLength;
         }
       });
