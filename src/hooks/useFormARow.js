@@ -1,5 +1,7 @@
 import React from "react";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
+import countWeekdays from "../utils/countWeekdays";
+import dayjs from "dayjs";
 
 const parseDateRange = (startedAt, deadline) => {
   const startDate = new Date(startedAt);
@@ -14,7 +16,21 @@ const parseDateRange = (startedAt, deadline) => {
   return `${startDateStr} - ${endDateStr}`;
 };
 
-const useFormARow = (employeeId) => {
+const getMonthsForYear = (startYear, endYear) => {
+  const start = dayjs(`${startYear}-01-01`);
+  const end = dayjs(`${endYear}-12-31`);
+  const months = [];
+
+  let current = start.startOf("month");
+  while (current.isBefore(end)) {
+    months.push(current.format("MMM YYYY"));
+    current = current.add(1, "month");
+  }
+
+  return months;
+};
+
+const useFormARow = (employeeId, startDate, endDate) => {
   const {
     data: projects,
     isLoading,
@@ -41,13 +57,50 @@ const useFormARow = (employeeId) => {
         return;
       }
 
+      const projectStart = dayjs(project.startDate);
+      const projectEnd = dayjs(project.deadline);
+
+      const yearMonths = getMonthsForYear(
+        projectStart.year(),
+        projectEnd.year(),
+      );
+
+      const monthsData = {};
+
+      yearMonths.forEach((month) => {
+        const startOfMonth = dayjs(month, "MMM YYYY").startOf("month");
+        const endOfMonth = dayjs(month, "MMM YYYY").endOf("month");
+
+        let workingDays = 0;
+
+        if (
+          projectStart.isSameOrBefore(endOfMonth) &&
+          projectEnd.isSameOrAfter(startOfMonth)
+        ) {
+          const partialStart = projectStart.isAfter(startOfMonth)
+            ? projectStart
+            : startOfMonth;
+          const partialEnd = projectEnd.isBefore(endOfMonth)
+            ? projectEnd
+            : endOfMonth;
+
+          if (
+            partialStart.isSameOrBefore(partialEnd) &&
+            partialStart.isSameOrAfter(startOfMonth) &&
+            partialEnd.isSameOrBefore(endOfMonth)
+          ) {
+            workingDays = countWeekdays(partialStart, partialEnd);
+          }
+        }
+
+        monthsData[month] = workingDays * 8;
+      });
+
+      const hoursWorked = yearMonths.map((month) => monthsData[month] || 0);
+
       const periodOfWork = parseDateRange(project.startDate, project.deadline);
 
-      const clientData = {
-        clientName: project.client.name,
-        periodOfWork,
-        // Add more properties as needed
-      };
+      const clientData = [project.client.name, periodOfWork, ...hoursWorked];
 
       employeeClientsData.push(clientData);
     });

@@ -195,8 +195,8 @@ const MyProfile = () => {
 
   // Function to get an array of months between start and end dates
   const getMonthsBetweenDates = (startDate, endDate) => {
-    const start = dayjs(startDate);
-    const end = dayjs(endDate);
+    const start = dayjs().startOf("year");
+    const end = dayjs().endOf("year");
     const months = [];
 
     let current = start.startOf("month");
@@ -218,8 +218,8 @@ const MyProfile = () => {
     // Merge cells for the wider header
     worksheet.mergeCells("A1:G1");
     worksheet.mergeCells("A2:G2");
-    worksheet.mergeCells("A3:E3");
-    worksheet.mergeCells("F3:K3");
+    worksheet.mergeCells("A3:C3");
+    worksheet.mergeCells("D3:G3");
 
     // Set value and styling for the main header
     worksheet.getCell("A1").value = "A.A. BROMHEAD & CO. CHARTERED ACCOUNTANTS";
@@ -240,18 +240,19 @@ const MyProfile = () => {
       horizontal: "center",
     };
 
-    worksheet.getCell("A3").value =
-      `Name: ${formData.firstName} ${formData.lastName}`;
-    const thirdHeaderCell = worksheet.getCell("A3");
-    thirdHeaderCell.font = { size: 14, bold: true }; // Adjust font size as needed
-    thirdHeaderCell.alignment = {
+    const nameHeader = worksheet.getCell("A3");
+    nameHeader.value = `Name: ${formData.firstName} ${formData.lastName}`;
+    nameHeader.font = { size: 14, bold: true };
+    nameHeader.alignment = {
       vertical: "center",
-      horizontal: "center",
+      horizontal: "left",
     };
 
-    const timePeriod = `Time period: ${dayjs(date.start).format(
-      "MMM DD",
-    )} - ${dayjs(date.end).format("MMM DD")}`;
+    const timePeriod = `Time period: ${dayjs()
+      .startOf("year")
+      .format("MMM DD, YYYY")} - ${dayjs()
+      .endOf("year")
+      .format("MMM DD, YYYY")}`;
     worksheet.getCell("F3").value = timePeriod;
     const fourthHeaderCell = worksheet.getCell("F3");
     fourthHeaderCell.font = { size: 14, bold: true };
@@ -260,29 +261,48 @@ const MyProfile = () => {
       horizontal: "center",
     };
 
+    console.log(timePeriod);
+
     worksheet.getRow(1).height = 60;
+    worksheet.getRow(2).height = 30;
+    worksheet.getRow(3).height = 20;
+    worksheet.getRow(4).height = 15;
 
     // Create an array of months between start and end dates
     const months = getMonthsBetweenDates(date.start, date.end);
 
-    // Set headers
     const headers = ["Client", "Period of Work", ...months];
-    worksheet.addRow(headers);
+    const headerRow = worksheet.addRow(headers);
+
+    // Iterate through the cells in the header row
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true };
+      cell.alignment = {
+        vertical: "center",
+        horizontal: "center", // Align center
+      };
+    });
+
+    // Center the header row text
+    worksheet.columns.forEach((column) => {
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        cell.alignment = {
+          vertical: "center",
+          horizontal: "center", // Align center
+        };
+      });
+    });
 
     // Add data to the worksheet
     employeeClientsData.forEach((clientData) => {
-      worksheet.addRow([
-        clientData.clientName,
-        clientData.periodOfWork,
-        // Add more data properties as needed
-      ]);
+      worksheet.addRow(clientData);
     });
 
     worksheet.columns.forEach(function (column, i) {
-      let maxLength = 0;
+      let maxLength = 15;
       column["eachCell"]({ includeEmpty: true }, function (cell) {
-        let columnLength = cell.value ? cell.value.toString().length : 0;
-        if (columnLength > maxLength && columnLength < 30) {
+        let columnLength = cell.value ? cell.value.toString().length : 15;
+        if (columnLength > maxLength && columnLength < 35) {
           maxLength = columnLength;
         }
       });
