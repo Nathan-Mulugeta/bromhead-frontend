@@ -300,7 +300,7 @@ const MyProfile = () => {
     // Create a download link and trigger the download
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.download = "FormA.xlsx";
+    link.download = `${formData.firstName}-${formData.lastName}-FormA.xlsx`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
