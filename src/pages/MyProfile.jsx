@@ -25,6 +25,10 @@ import {
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 import useTitle from "../hooks/useTitle";
+import ExcelJS from "exceljs";
+import useFormARow from "../hooks/useFormARow";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const statusList = [
   "Available",
@@ -60,6 +64,11 @@ const MyProfile = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
+
+  const [date, setDate] = useState({
+    start: null,
+    end: null,
+  });
 
   const [
     updateUser,
@@ -121,7 +130,6 @@ const MyProfile = () => {
     }
   }, [user]);
 
-  
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -184,6 +192,119 @@ const MyProfile = () => {
       document.removeEventListener("keydown", handleEscapeKey);
     };
   }, []);
+
+  // Function to get an array of months between start and end dates
+  const getMonthsBetweenDates = (startDate, endDate) => {
+    const start = dayjs(startDate);
+    const end = dayjs(endDate);
+    const months = [];
+
+    let current = start.startOf("month");
+    while (current.isBefore(end)) {
+      months.push(current.format("MMM"));
+      current = current.add(1, "month");
+    }
+
+    return months;
+  };
+
+  // Get client names from useFormARow hook
+  const employeeClientsData = useFormARow(userId); // Replace 'userId' with the appropriate user ID
+
+  const generateExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Form A");
+
+    // Merge cells for the wider header
+    worksheet.mergeCells("A1:G1");
+    worksheet.mergeCells("A2:G2");
+    worksheet.mergeCells("A3:E3");
+    worksheet.mergeCells("F3:K3");
+
+    // Set value and styling for the main header
+    worksheet.getCell("A1").value = "A.A. BROMHEAD & CO. CHARTERED ACCOUNTANTS";
+    const mainHeaderCell = worksheet.getCell("A1");
+    mainHeaderCell.font = { size: 24, bold: true };
+    mainHeaderCell.alignment = {
+      vertical: "middle",
+      horizontal: "center",
+      wrapText: true,
+    };
+
+    // Add and style the secondary header
+    worksheet.getCell("A2").value = "Summary Of Work";
+    const secondaryHeaderCell = worksheet.getCell("A2");
+    secondaryHeaderCell.font = { size: 16, bold: true }; // Adjust font size as needed
+    secondaryHeaderCell.alignment = {
+      vertical: "center",
+      horizontal: "center",
+    };
+
+    worksheet.getCell("A3").value =
+      `Name: ${formData.firstName} ${formData.lastName}`;
+    const thirdHeaderCell = worksheet.getCell("A3");
+    thirdHeaderCell.font = { size: 14, bold: true }; // Adjust font size as needed
+    thirdHeaderCell.alignment = {
+      vertical: "center",
+      horizontal: "center",
+    };
+
+    const timePeriod = `Time period: ${dayjs(date.start).format(
+      "MMM DD",
+    )} - ${dayjs(date.end).format("MMM DD")}`;
+    worksheet.getCell("F3").value = timePeriod;
+    const fourthHeaderCell = worksheet.getCell("F3");
+    fourthHeaderCell.font = { size: 14, bold: true };
+    fourthHeaderCell.alignment = {
+      vertical: "center",
+      horizontal: "center",
+    };
+
+    worksheet.getRow(1).height = 60;
+
+    // Create an array of months between start and end dates
+    const months = getMonthsBetweenDates(date.start, date.end);
+
+    // Set headers
+    const headers = ["Client", "Period of Work", ...months];
+    worksheet.addRow(headers);
+
+    // Add data to the worksheet
+    employeeClientsData.forEach((clientData) => {
+      worksheet.addRow([
+        clientData.clientName,
+        clientData.periodOfWork,
+        // Add more data properties as needed
+      ]);
+    });
+    worksheet.columns.forEach(function (column, i) {
+      let maxLength = 0;
+      column["eachCell"]({ includeEmpty: true, row: 5 }, function (cell) {
+        // Start considering cells from row 5
+        let columnLength = cell.value ? cell.value.toString().length : 0;
+        if (columnLength > maxLength) {
+          maxLength = columnLength;
+        }
+      });
+      column.width = maxLength;
+    });
+
+    // Write to a buffer
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    // Create a Blob from the buffer
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    // Create a download link and trigger the download
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "FormA.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -408,6 +529,47 @@ const MyProfile = () => {
           </>
         )}
       </div>
+
+      <DatePicker
+        required
+        disablePast
+        label="Start Date *"
+        value={date.start}
+        // onError={(newError) => setStartDateError(newError)}
+        onChange={(newValue) =>
+          setDate({
+            ...date,
+            start: newValue,
+          })
+        }
+        // slotProps={{
+        //   textField: {
+        //     helperText: startDateErrorMessage,
+        //   },
+        // }}
+      />
+
+      <DatePicker
+        required
+        disablePast
+        label="End Date *"
+        value={date.end}
+        // onError={(newError) => setStartDateError(newError)}
+        onChange={(newValue) =>
+          setDate({
+            ...date,
+            end: newValue,
+          })
+        }
+        // slotProps={{
+        //   textField: {
+        //     helperText: startDateErrorMessage,
+        //   },
+        // }}
+      />
+      <Button color="secondary" variant="contained" onClick={generateExcel}>
+        Generate Excel
+      </Button>
     </div>
   );
 };
