@@ -24,6 +24,7 @@ import { styled, lighten } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
+import countWeekdays from "../utils/countWeekdays";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
@@ -182,6 +183,7 @@ const AddProject = () => {
         id: user._id,
         title: `${user.firstName} ${user.lastName}`,
         status: user.status,
+        chargeOutRate: user.chargeOutRate,
       };
       employeeList.push(employee);
     });
@@ -213,6 +215,23 @@ const AddProject = () => {
       clientsList.push(clientForList);
     });
   }
+
+  const workingDays = countWeekdays(formData.startDate, formData.deadline);
+  let totalChargeOutRates = 0;
+
+  if (formData.assignedUsers) {
+    formData.assignedUsers.forEach((user) => {
+      totalChargeOutRates += user.chargeOutRate || 0;
+    });
+  }
+
+  const estimatedBudget = totalChargeOutRates * workingDays;
+
+  const formattedBudget = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ETB",
+    currencyDisplay: "code",
+  }).format(estimatedBudget);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -405,7 +424,7 @@ const AddProject = () => {
                 teamLeader: newValue,
               });
             }}
-            options={employeeList.sort(
+            options={formData.assignedUsers.sort(
               (a, b) => -b.status.localeCompare(a.status),
             )}
             PaperComponent={({ children }) => (
@@ -471,7 +490,18 @@ const AddProject = () => {
           minDate={dayjs(formData.startDate)}
         />
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2"></div>
+        <div className="flex items-center gap-2">
+          <Typography
+            variant="subtitle1"
+            fontSize={13}
+            color="primary.contrastText"
+          >
+            Est. Budget
+          </Typography>
+          <Typography variant="body1" color="primary.main">
+            {formattedBudget}
+          </Typography>
+        </div>
       </div>
 
       <div className="mt-6 flex justify-end">
