@@ -12,6 +12,7 @@ import {
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyIcon from "@mui/icons-material/Key";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
@@ -22,12 +23,16 @@ const AddEmployee = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    chargeOutRate: 0,
     roles: "Employee",
   });
 
-  const isFormComplete = Object.entries(formData).every(([key, value]) => {
-    return key !== "Roles" || value !== "";
-  });
+  const isFormComplete =
+    formData.username !== "" &&
+    formData.password !== "" &&
+    formData.chargeOutRate !== 0 &&
+    formData.chargeOutRate !== "0" &&
+    formData.chargeOutRate !== "";
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -62,6 +67,7 @@ const AddEmployee = () => {
       const res = await addUser({
         username: formData.username.trim(),
         password: formData.password.trim(),
+        chargeOutRate: formData.chargeOutRate,
         roles: [`${formData.roles}`],
       });
 
@@ -69,10 +75,28 @@ const AddEmployee = () => {
         setFormData({
           username: "",
           password: "",
+          chargeOutRate: 0,
           roles: "Employee",
         });
         toast.success(res.data?.message);
       }
+    }
+  };
+
+  const handleNumberInput = (e) => {
+    const inputValue = e.target.value.trim(); // Trim leading/trailing spaces
+
+    // Check if the input value is not an empty string
+    if (inputValue !== "") {
+      setFormData({
+        ...formData,
+        chargeOutRate: parseFloat(inputValue),
+      });
+    } else {
+      setFormData({
+        ...formData,
+        chargeOutRate: "", // Set it as an empty string if the input is empty
+      });
     }
   };
 
@@ -129,6 +153,31 @@ const AddEmployee = () => {
                 />
               </InputAdornment>
             ),
+          }}
+          variant="outlined"
+        />
+
+        <TextField
+          id="chargeOutRate"
+          label="Charge Out Rate"
+          name="chargeOutRate"
+          onChange={handleNumberInput}
+          value={formData.chargeOutRate}
+          autoComplete="off"
+          type="number"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AttachMoneyIcon
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              </InputAdornment>
+            ),
+            inputProps: {
+              min: 0,
+            },
           }}
           variant="outlined"
         />

@@ -61,6 +61,7 @@ const MyProfile = () => {
     email: "",
     address: "",
     status: "At Work",
+    chargeOutRate: 0,
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -89,7 +90,7 @@ const MyProfile = () => {
   }, [isEditError, editError]);
 
   const isFormComplete = Object.entries(formData).every(([key, value]) => {
-    return key === "password" || value !== "";
+    return key === "password" || key === "chargeOutRate" || value !== "";
   });
 
   const handleInputChange = (e) => {
@@ -123,9 +124,10 @@ const MyProfile = () => {
         roles: user.roles,
         firstName: user.firstName,
         lastName: user.lastName,
-        address: user.address,
-        email: user.email,
+        address: user.address === "undefined" ? "" : user.address,
+        email: user.email === "undefined" ? "" : user.email,
         status: user.status,
+        chargeOutRate: user.chargeOutRate,
       });
     }
   }, [user]);
@@ -168,9 +170,10 @@ const MyProfile = () => {
           roles: user.roles,
           firstName: user.firstName,
           lastName: user.lastName,
-          address: user.address,
-          email: user.email,
+          address: user.address === "undefined" ? "" : user.address,
+          email: user.email === "undefined" ? "" : user.email,
           status: user.status,
+          chargeOutRate: user.chargeOutRate,
         });
       }
       setIsEditing(false);
@@ -260,8 +263,6 @@ const MyProfile = () => {
       vertical: "center",
       horizontal: "center",
     };
-
-    console.log(timePeriod);
 
     worksheet.getRow(1).height = 60;
     worksheet.getRow(2).height = 30;
@@ -413,6 +414,7 @@ const MyProfile = () => {
         />
         <TextField
           id="lastName"
+          required
           label="Last Name"
           onDoubleClick={toggleEdit}
           onChange={handleInputChange}
@@ -436,6 +438,7 @@ const MyProfile = () => {
         />
 
         <TextField
+          required
           id="email"
           label="Email"
           error={errorMessage === "Please input a valid email."}
@@ -462,6 +465,7 @@ const MyProfile = () => {
 
         <TextField
           id="address"
+          required
           label="Home Address"
           onChange={handleInputChange}
           onDoubleClick={toggleEdit}
@@ -550,46 +554,11 @@ const MyProfile = () => {
         )}
       </div>
 
-      <DatePicker
-        required
-        disablePast
-        label="Start Date *"
-        value={date.start}
-        // onError={(newError) => setStartDateError(newError)}
-        onChange={(newValue) =>
-          setDate({
-            ...date,
-            start: newValue,
-          })
-        }
-        // slotProps={{
-        //   textField: {
-        //     helperText: startDateErrorMessage,
-        //   },
-        // }}
-      />
-
-      <DatePicker
-        required
-        disablePast
-        label="End Date *"
-        value={date.end}
-        // onError={(newError) => setStartDateError(newError)}
-        onChange={(newValue) =>
-          setDate({
-            ...date,
-            end: newValue,
-          })
-        }
-        // slotProps={{
-        //   textField: {
-        //     helperText: startDateErrorMessage,
-        //   },
-        // }}
-      />
-      <Button color="secondary" variant="contained" onClick={generateExcel}>
-        Generate Excel
-      </Button>
+      <div className="mt-6 flex justify-end gap-4">
+        <Button color="secondary" variant="contained" onClick={generateExcel}>
+          Generate Form A
+        </Button>
+      </div>
     </div>
   );
 };
