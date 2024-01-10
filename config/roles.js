@@ -2,5 +2,5 @@ export const ROLES = {
   Admin: "Admin",
   Manager: "Manager",
   Employee: "Employee",
-  Assistant: "Assistant",
+  OfficeAdmin: "Office Admin",
 };
