@@ -225,7 +225,7 @@ const AddProject = () => {
     });
   }
 
-  const estimatedBudget = totalChargeOutRates * workingDays;
+  const estimatedBudget = totalChargeOutRates * workingDays * 8;
 
   const formattedBudget = new Intl.NumberFormat("en-US", {
     style: "currency",

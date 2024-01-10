@@ -329,16 +329,33 @@ const MyProfile = () => {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="flex items-center">
-        <Button onClick={() => navigate(-1)}>
-          <ArrowBackIosIcon />
-        </Button>
-        <Typography color="primary.contrastText" variant="h6" fontSize={22}>
-          Profile details
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Button onClick={() => navigate(-1)}>
+            <ArrowBackIosIcon />
+          </Button>
+          <Typography color="primary.contrastText" variant="h6" fontSize={22}>
+            Profile details
+          </Typography>
+        </div>
+        <Chip
+          label={new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "ETB",
+            currencyDisplay: "code",
+          }).format(user?.chargeOutRate)}
+          variant="filled"
+          color="success"
+        />
+      </div>
+
+      <div className="flex justify-start p-2  sm:justify-end">
+        <Typography color="primary.contrastText" variant="caption">
+          Double click on any field to toggle edit mode.
         </Typography>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-3 rounded-md bg-backgroundLight p-4 pt-6 sm:grid-cols-2 sm:gap-8">
+      <div className="grid grid-cols-1 gap-3 rounded-md bg-backgroundLight p-4 pt-6 sm:grid-cols-2 sm:gap-8">
         <TextField
           onDoubleClick={toggleEdit}
           id="username"

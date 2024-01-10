@@ -430,7 +430,13 @@ const ProjectDetails = () => {
         />
       </div>
 
-      <div className="mt-4 flex flex-col justify-center gap-3 rounded-md bg-backgroundLight p-4 sm:gap-8">
+      <div className="flex justify-start p-2  sm:justify-end">
+        <Typography color="primary.contrastText" variant="caption">
+          Double click on any field to toggle edit mode.
+        </Typography>
+      </div>
+
+      <div className="flex flex-col justify-center gap-3 rounded-md bg-backgroundLight p-4 sm:gap-8">
         <TextField
           onDoubleClick={toggleEdit}
           id="name"

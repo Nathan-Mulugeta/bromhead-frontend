@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import KeyIcon from "@mui/icons-material/Key";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import { useDispatch } from "react-redux";
@@ -24,12 +25,16 @@ const AddEmployee = () => {
     username: "",
     password: "",
     chargeOutRate: 0,
+    firstName: "",
+    lastName: "",
     roles: "Employee",
   });
 
   const isFormComplete =
     formData.username !== "" &&
     formData.password !== "" &&
+    formData.firstName !== "" &&
+    formData.lastName !== "" &&
     formData.chargeOutRate !== 0 &&
     formData.chargeOutRate !== "0" &&
     formData.chargeOutRate !== "";
@@ -67,6 +72,8 @@ const AddEmployee = () => {
       const res = await addUser({
         username: formData.username.trim(),
         password: formData.password.trim(),
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
         chargeOutRate: formData.chargeOutRate,
         roles: [`${formData.roles}`],
       });
@@ -75,6 +82,8 @@ const AddEmployee = () => {
         setFormData({
           username: "",
           password: "",
+          firstName: "",
+          lastName: "",
           chargeOutRate: 0,
           roles: "Employee",
         });
@@ -147,6 +156,51 @@ const AddEmployee = () => {
             startAdornment: (
               <InputAdornment position="start">
                 <KeyIcon
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              </InputAdornment>
+            ),
+          }}
+          variant="outlined"
+        />
+
+        <TextField
+          id="firstName"
+          label="First Name"
+          onChange={handleInputChange}
+          value={formData.firstName}
+          name="firstName"
+          autoComplete="off"
+          required
+          type="text"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <DriveFileRenameOutlineIcon
+                  sx={{
+                    color: "#fff",
+                  }}
+                />
+              </InputAdornment>
+            ),
+          }}
+          variant="outlined"
+        />
+        <TextField
+          id="lastName"
+          required
+          label="Last Name"
+          onChange={handleInputChange}
+          value={formData.lastName}
+          name="lastName"
+          autoComplete="off"
+          type="text"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <DriveFileRenameOutlineIcon
                   sx={{
                     color: "#fff",
                   }}
