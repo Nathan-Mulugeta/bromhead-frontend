@@ -11,7 +11,6 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import {
   Button,
   Chip,
@@ -200,13 +199,7 @@ const EmployeeDetails = () => {
             type="number"
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  <AttachMoneyIcon
-                    sx={{
-                      color: "#fff",
-                    }}
-                  />
-                </InputAdornment>
+                <InputAdornment position="start">ETB</InputAdornment>
               ),
               inputProps: {
                 min: 0,

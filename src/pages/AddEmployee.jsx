@@ -12,7 +12,6 @@ import {
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyIcon from "@mui/icons-material/Key";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
@@ -167,13 +166,7 @@ const AddEmployee = () => {
           type="number"
           InputProps={{
             startAdornment: (
-              <InputAdornment position="start">
-                <AttachMoneyIcon
-                  sx={{
-                    color: "#fff",
-                  }}
-                />
-              </InputAdornment>
+              <InputAdornment position="start">ETB</InputAdornment>
             ),
             inputProps: {
               min: 0,
