@@ -13,10 +13,20 @@ import { setLoading } from "../slices/loading/loadingSlice";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 const columns = [
-  { field: "name", headerName: "Client Name", minWidth: 140 },
+  { field: "name", headerName: "Client Name", minWidth: 150 },
   {
     field: "address",
     headerName: "Address",
+    width: 150,
+  },
+  {
+    field: "contactPerson",
+    headerName: "Contact Person",
+    width: 180,
+  },
+  {
+    field: "contactPersonPhone",
+    headerName: "Phone",
     width: 150,
   },
 ];
@@ -60,6 +70,8 @@ const Clients = () => {
         id,
         name: entities[id].name,
         address: entities[id].contactInfo.address,
+        contactPerson: entities[id].contactInfo.contactPersonPosition,
+        contactPersonPhone: entities[id].contactInfo.phone,
       });
     });
   }
