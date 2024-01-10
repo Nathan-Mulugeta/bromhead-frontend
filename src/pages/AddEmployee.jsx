@@ -15,8 +15,9 @@ import KeyIcon from "@mui/icons-material/Key";
 import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
+import { ROLES } from "../../config/roles";
 
-const rolesList = ["Employee", "Manager", "Admin"];
+const rolesList = [...Object.values(ROLES)];
 
 const AddEmployee = () => {
   const [formData, setFormData] = useState({
