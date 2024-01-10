@@ -130,6 +130,7 @@ const Login = () => {
                   className="bg-transparent text-primary outline-none"
                   type="password"
                   id="password"
+                  autoComplete="password"
                   value={password}
                   onChange={handlePassword}
                   required
