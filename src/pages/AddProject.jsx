@@ -233,6 +233,19 @@ const AddProject = () => {
     currencyDisplay: "code",
   }).format(estimatedBudget);
 
+  useEffect(() => {
+    if (
+      !formData.assignedUsers?.find(
+        (user) => user.id === formData.teamLeader?.id,
+      )
+    ) {
+      setFormData({
+        ...formData,
+        teamLeader: null,
+      });
+    }
+  }, [formData.assignedUsers]);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
