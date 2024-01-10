@@ -86,11 +86,10 @@ const Clients = () => {
       </div>
       <Box
         sx={{
-          width: "100%",
           bgcolor: "background.light",
-          borderRadius: 2,
           mt: 3,
-          color: "primary.contrastText",
+          borderRadius: 2,
+          p: 1,
         }}
       >
         <DataGrid
