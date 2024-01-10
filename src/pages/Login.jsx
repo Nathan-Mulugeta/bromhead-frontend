@@ -109,7 +109,7 @@ const Login = () => {
                   id="username"
                   value={username}
                   onChange={handleUsername}
-                  autoComplete="off"
+                  autoComplete="username"
                   required
                   onFocus={handleUsernameFocus}
                   onBlur={handleUsernameFocus}

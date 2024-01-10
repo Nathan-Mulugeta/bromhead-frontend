@@ -36,6 +36,17 @@ body {
     background-position: bottom center;
   }
 
+
+  input:-webkit-autofill {
+    -webkit-transition: background-color 5000s ease-in-out 0s; 
+    color: #fff;
+  }
+
+  input:-webkit-autofill {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #fff;
+  }
+  
   :root {
   --toastify-color-light: #124056;
   --toastify-color-dark: #121212;
