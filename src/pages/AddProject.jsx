@@ -453,7 +453,6 @@ const AddProject = () => {
 
         <DatePicker
           required
-          disablePast
           label="Project Start Date *"
           value={formData.startDate}
           onError={(newError) => setStartDateError(newError)}
@@ -472,7 +471,6 @@ const AddProject = () => {
 
         <DatePicker
           required
-          disablePast
           onError={(newError) => setDeadlineError(newError)}
           label="Project Deadline *"
           value={formData.deadline}
