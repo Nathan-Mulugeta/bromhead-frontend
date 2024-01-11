@@ -441,10 +441,10 @@ const ProjectDetails = () => {
       )
     ) {
       if (project)
-        setFormData({
-          ...formData,
+        setFormData((prevFormData) => ({
+          ...prevFormData,
           teamLeader: null,
-        });
+        }));
     }
   }, [formData.assignedUsers]);
 
