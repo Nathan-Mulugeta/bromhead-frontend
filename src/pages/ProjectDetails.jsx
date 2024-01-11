@@ -265,6 +265,7 @@ const ProjectDetails = () => {
         id: user._id,
         title: `${user.firstName} ${user.lastName}`,
         status: user.status,
+        chargeOutRate: user.chargeOutRate,
       };
       employeeList.push(employee);
     });
