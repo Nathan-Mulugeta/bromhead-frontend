@@ -433,20 +433,26 @@ const ProjectDetails = () => {
     currencyDisplay: "code",
   }).format(estimatedBudget);
 
-  // Remove team leader if it is removed from assigned users list
-  useEffect(() => {
-    if (
-      !formData.assignedUsers?.find(
-        (user) => user.id === formData.teamLeader?.id,
-      )
-    ) {
-      if (project)
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          teamLeader: null,
-        }));
-    }
-  }, [formData.assignedUsers]);
+  // // Remove team leader if it is removed from assigned users list
+  // useEffect(() => {
+  //   if (!formData.teamLeader) {
+  //     const teamLeaderInAssignedUsers = formData.assignedUsers?.find(
+  //       (user) => user.id === formData.teamLeader?.id,
+  //     );
+
+  //     if (!teamLeaderInAssignedUsers) {
+  //       if (project)
+  //         setFormData((prevFormData) => ({
+  //           ...prevFormData,
+  //           teamLeader: null,
+  //         }));
+  //     }
+  //   }
+  // }, [formData.assignedUsers, project]);
+
+  // console.log(
+  //   formData.assignedUsers?.find((user) => user.id === formData.teamLeader?.id),
+  // );
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -627,10 +633,24 @@ const ProjectDetails = () => {
             onDoubleClick={toggleEdit}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(event, newValue) => {
-              setFormData({
-                ...formData,
+              // First lets check if the new value has removed the team leader
+              const teamLeaderRemoved = !newValue.find(
+                (user) => user.id === formData.teamLeader?.id,
+              );
+
+              // if the new value has removed the team leader from the assigned user's list then we will nullify the team leader state
+              if (teamLeaderRemoved) {
+                setFormData((prev) => ({
+                  ...prev,
+                  teamLeader: null,
+                }));
+              }
+
+              //  then we update the state for the assigned users
+              setFormData((prev) => ({
+                ...prev,
                 assignedUsers: newValue,
-              });
+              }));
             }}
             options={employeeList.sort(
               (a, b) => -b.status.localeCompare(a.status),
