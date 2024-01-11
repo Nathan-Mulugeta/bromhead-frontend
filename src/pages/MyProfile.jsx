@@ -27,25 +27,10 @@ import { setLoading } from "../slices/loading/loadingSlice";
 import useTitle from "../hooks/useTitle";
 import ExcelJS from "exceljs";
 import useFormARow from "../hooks/useFormARow";
-import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { STATUSLIST } from "../../config/status";
 
-const statusList = [
-  "Available",
-  "Casual Leave",
-  "Sick Leave",
-  "Without Pay Leave",
-  "At Work",
-  "Study Leave",
-  "Administration",
-  "Staff Training",
-  "General Promotion",
-  "Public Holidays",
-  "Annual Leave",
-  "Mourning Leave",
-  "Maternity Leave",
-  "Others",
-];
+const statusList = [...Object.values(STATUSLIST)];
 
 const MyProfile = () => {
   useTitle("My Profile");

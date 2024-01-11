@@ -2,6 +2,7 @@ import React from "react";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import Card from "./Card";
 import { useGetUsersQuery } from "../../slices/users/usersApiSlice";
+import { STATUSLIST } from "../../../config/status";
 
 const AvailableEmployees = () => {
   const {
@@ -17,7 +18,7 @@ const AvailableEmployees = () => {
   });
 
   const availableEmployees = employees?.ids.filter(
-    (id) => employees.entities[id].status === "Available",
+    (id) => employees.entities[id].status === STATUSLIST.Available,
   ).length;
 
   return (

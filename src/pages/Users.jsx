@@ -16,23 +16,6 @@ import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 import { useNavigate } from "react-router-dom";
 
-const statusColors = {
-  Available: "bg-green-400",
-  "Casual Leave": "bg-orange-400",
-  "Sick Leave": "bg-red-400",
-  "Without Pay Leave": "bg-purple-400",
-  "At Work": "bg-blue-400",
-  "Study Leave": "bg-orange-400",
-  Administration: "bg-yellow-400",
-  "Staff Training": "bg-yellow-600",
-  "General Promotion": "bg-yellow-200",
-  "Public Holidays": "bg-yellow-500",
-  "Annual Leave": "bg-yellow-300",
-  "Mourning Leave": "bg-gray-400",
-  "Maternity Leave": "bg-pink-400",
-  Others: "bg-gray-200",
-};
-
 const columns = [
   { field: "firstName", headerName: "First Name", minWidth: 140 },
   { field: "lastName", headerName: "Last Name", width: 140 },
