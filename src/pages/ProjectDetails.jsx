@@ -433,6 +433,21 @@ const ProjectDetails = () => {
     currencyDisplay: "code",
   }).format(estimatedBudget);
 
+  // Remove team leader if it is removed from assigned users list
+  useEffect(() => {
+    if (
+      !formData.assignedUsers?.find(
+        (user) => user.id === formData.teamLeader?.id,
+      )
+    ) {
+      if (project)
+        setFormData({
+          ...formData,
+          teamLeader: null,
+        });
+    }
+  }, [formData.assignedUsers]);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between">
@@ -664,7 +679,7 @@ const ProjectDetails = () => {
                 teamLeader: newValue,
               });
             }}
-            options={employeeList.sort(
+            options={formData.assignedUsers.sort(
               (a, b) => -b.status.localeCompare(a.status),
             )}
             PaperComponent={({ children }) => (
