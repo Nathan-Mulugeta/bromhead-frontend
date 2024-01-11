@@ -706,27 +706,24 @@ const ProjectDetails = () => {
           />
         </div>
 
-        {getProjectStatus(project).label === "Upcoming" && (
-          <DatePicker
-            required
-            readOnly={!isEditing}
-            disablePast
-            label="Project Start Date *"
-            value={formData.startDate}
-            onError={(newError) => setStartDateError(newError)}
-            onChange={(newValue) =>
-              setFormData({
-                ...formData,
-                startDate: newValue,
-              })
-            }
-            slotProps={{
-              textField: {
-                helperText: startDateErrorMessage,
-              },
-            }}
-          />
-        )}
+        <DatePicker
+          required
+          readOnly={!isEditing}
+          label="Project Start Date *"
+          value={formData.startDate}
+          onError={(newError) => setStartDateError(newError)}
+          onChange={(newValue) =>
+            setFormData({
+              ...formData,
+              startDate: newValue,
+            })
+          }
+          slotProps={{
+            textField: {
+              helperText: startDateErrorMessage,
+            },
+          }}
+        />
 
         {!project?.completed && (
           <DatePicker
