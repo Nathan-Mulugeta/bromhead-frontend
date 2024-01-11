@@ -41,6 +41,7 @@ import { styled, lighten } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
+import countWeekdays from "../utils/countWeekdays";
 
 function stringAvatar(name) {
   return {
@@ -155,6 +156,7 @@ const ProjectDetails = () => {
           id: employee?._id,
           title: `${employee?.firstName} ${employee?.lastName}`,
           status: employee?.status,
+          chargeOutRate: employee.chargeOutRate,
         })),
         client: {
           id: project?.client._id,
@@ -307,6 +309,7 @@ const ProjectDetails = () => {
             id: employee._id,
             title: `${employee.firstName} ${employee.lastName}`,
             status: employee.status,
+            chargeOutRate: employee.chargeOutRate,
           })),
           client: {
             id: project.client._id,
@@ -410,6 +413,25 @@ const ProjectDetails = () => {
     };
   }, []);
 
+  // Show estimated budget
+
+  const workingDays = countWeekdays(formData.startDate, formData.deadline);
+  let totalChargeOutRates = 0;
+
+  if (formData.assignedUsers) {
+    formData.assignedUsers.forEach((user) => {
+      totalChargeOutRates += user.chargeOutRate || 0;
+    });
+  }
+
+  const estimatedBudget = totalChargeOutRates * workingDays * 8;
+
+  const formattedBudget = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ETB",
+    currencyDisplay: "code",
+  }).format(estimatedBudget);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between">
@@ -421,6 +443,7 @@ const ProjectDetails = () => {
             Project details
           </Typography>
         </span>
+
         <Chip
           variant="outlined"
           size="small"
@@ -735,6 +758,19 @@ const ProjectDetails = () => {
             label="Project Completed"
           />
         </FormGroup>
+
+        <div className="flex items-center gap-2">
+          <Typography
+            variant="subtitle1"
+            fontSize={13}
+            color="primary.contrastText"
+          >
+            Est. Budget
+          </Typography>
+          <Typography variant="body1" color="primary.main">
+            {formattedBudget}
+          </Typography>
+        </div>
       </div>
 
       <div className="mt-6 flex justify-between gap-4">
