@@ -1,0 +1,16 @@
+export const STATUSLIST = {
+  Available: "Available",
+  CasualLeave: "Casual Leave",
+  SickLeave: "Sick Leave",
+  WithoutPayLeave: "Without Pay Leave",
+  AtWork: "At Work",
+  StudyLeave: "Study Leave",
+  Administration: "Administration",
+  StaffTraining: "Staff Training",
+  GeneralPromotion: "General Promotion",
+  PublicHolidays: "Public Holidays",
+  AnnualLeave: "Annual Leave",
+  MourningLeave: "Mourning Leave",
+  MaternityLeave: "Maternity Leave",
+  Others: "Others",
+};

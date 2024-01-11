@@ -25,6 +25,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
 import countWeekdays from "../utils/countWeekdays";
+import { STATUSLIST } from "../../config/status";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
@@ -386,6 +387,10 @@ const AddProject = () => {
             groupBy={(option) => option.status}
             value={formData.assignedUsers}
             isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionDisabled={(option) =>
+              option.status !== STATUSLIST.Available &&
+              option.status !== STATUSLIST.AtWork
+            }
             onChange={(event, newValue) => {
               setFormData({
                 ...formData,

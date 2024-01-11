@@ -212,7 +212,6 @@ const AddClient = () => {
             value={formData.address}
             name="address"
             autoComplete="off"
-            required
             type="text"
             InputProps={{
               startAdornment: (
