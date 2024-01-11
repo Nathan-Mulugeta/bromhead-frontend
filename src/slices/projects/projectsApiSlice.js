@@ -2,8 +2,20 @@ import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../apiSlice";
 
 const projectsAdapter = createEntityAdapter({
-  sortComparer: (a, b) =>
-    a.completed === b.completed ? 0 : a.completed ? 1 : -1,
+  sortComparer: (a, b) => {
+    // First, sort based on completion status (completed first)
+    if (a.completed !== b.completed) {
+      return a.completed ? -1 : 1;
+    }
+
+    // If startDate is the same, sort by deadline in descending order
+    return new Date(a.deadline) - new Date(b.deadline);
+
+    // If completion status is the same, sort by startDate in descending order
+    if (a.startDate !== b.startDate) {
+      return new Date(b.startDate) - new Date(a.startDate);
+    }
+  },
 });
 
 const initialState = projectsAdapter.getInitialState();
