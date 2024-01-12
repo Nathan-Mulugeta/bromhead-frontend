@@ -781,33 +781,31 @@ const ProjectDetails = () => {
             minDate={dayjs(formData.startDate)}
           />
         )}
-
-        {isAdminOrManager ||
-          (isTeamLeader && (
-            <FormGroup>
-              <FormControlLabel
-                disabled={!isEditing}
-                sx={{
-                  color: "#fff",
-                }}
-                control={
-                  <Checkbox
-                    id="completed"
-                    name="completed"
-                    checked={formData.completed}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        completed: e.target.checked,
-                      })
-                    }
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
-                }
-                label="Project Completed"
-              />
-            </FormGroup>
-          ))}
+        {isAdminOrManager || isTeamLeader ? (
+          <FormGroup>
+            <FormControlLabel
+              disabled={!isEditing}
+              sx={{
+                color: "#fff",
+              }}
+              control={
+                <Checkbox
+                  id="completed"
+                  name="completed"
+                  checked={formData.completed}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      completed: e.target.checked,
+                    })
+                  }
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              }
+              label="Project Completed"
+            />
+          </FormGroup>
+        ) : null}
 
         {!project?.confirmed &&
           projectStartsToday &&

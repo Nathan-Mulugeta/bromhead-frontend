@@ -212,7 +212,9 @@ const EmployeeDetails = () => {
       .filter((project) => {
         const assignedUserIds = project.assignedUsers.map((user) => user._id);
         return (
-          assignedUserIds.includes(userId) || userId === project.teamLeader?._id
+          (assignedUserIds.includes(userId) ||
+            userId === project.teamLeader?._id) &&
+          !project.completed
         );
       });
   }
@@ -231,7 +233,7 @@ const EmployeeDetails = () => {
       <div className="mt-4 rounded-lg bg-backgroundLight p-4">
         <div className="flex gap-1 align-middle">
           <Typography mb={1} color="text.darkLight" variant="h6">
-            Employee's active projects
+            Employee's active and upcoming projects
           </Typography>
           <Typography variant="caption" fontSize={20} color="text.primary">
             ({userActiveProjects.length})
