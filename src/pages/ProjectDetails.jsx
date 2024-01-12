@@ -31,6 +31,7 @@ import { toast } from "react-toastify";
 import WorkIcon from "@mui/icons-material/Work";
 import DescriptionIcon from "@mui/icons-material/Description";
 import BusinessIcon from "@mui/icons-material/Business";
+import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import GroupsIcon from "@mui/icons-material/Groups";
 import CategoryIcon from "@mui/icons-material/Category";
 import PersonIcon from "@mui/icons-material/Person";
@@ -170,7 +171,7 @@ const ProjectDetails = () => {
           status: project?.teamLeader.status,
         },
         completed: project?.completed,
-        confirmed: false,
+        confirmed: project?.confirmed,
       });
     }
   }, [project]);
@@ -389,7 +390,19 @@ const ProjectDetails = () => {
         color: "primary",
         icon: <AccessTimeIcon />,
       };
-    } else if (currentDate.isBetween(startDate, deadline)) {
+    } else if (
+      currentDate.isBetween(startDate, deadline) &&
+      !project.confirmed
+    ) {
+      return {
+        label: "Awaiting Confirmation",
+        color: "warning",
+        icon: <UnpublishedIcon />,
+      };
+    } else if (
+      currentDate.isBetween(startDate, deadline) &&
+      project.confirmed
+    ) {
       return {
         label: "Ongoing",
         color: "info",
@@ -779,7 +792,7 @@ const ProjectDetails = () => {
           />
         </FormGroup>
 
-        {projectStartsToday && (
+        {!project?.confirmed && projectStartsToday && (
           <FormGroup>
             <FormControlLabel
               disabled={!isEditing}

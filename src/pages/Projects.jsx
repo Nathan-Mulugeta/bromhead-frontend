@@ -12,6 +12,7 @@ import { setLoading } from "../slices/loading/loadingSlice";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import ErrorIcon from "@mui/icons-material/Error";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -48,8 +49,8 @@ const Projects = () => {
 
   const getProjectStatus = (project) => {
     const currentDate = dayjs();
-    const startDate = dayjs(project.startDate);
-    const deadline = dayjs(project.deadline);
+    const startDate = dayjs(project?.startDate);
+    const deadline = dayjs(project?.deadline);
 
     if (project?.completed) {
       return {
@@ -63,13 +64,25 @@ const Projects = () => {
         color: "primary",
         icon: <AccessTimeIcon />,
       };
-    } else if (currentDate.isBetween(startDate, deadline)) {
+    } else if (
+      currentDate.isBetween(startDate, deadline) &&
+      !project.confirmed
+    ) {
+      return {
+        label: "Awaiting Confirmation",
+        color: "warning",
+        icon: <UnpublishedIcon />,
+      };
+    } else if (
+      currentDate.isBetween(startDate, deadline) &&
+      project.confirmed
+    ) {
       return {
         label: "Ongoing",
         color: "info",
         icon: <ChangeCircleIcon />,
       };
-    } else if (currentDate.isAfter(deadline)) {
+    } else {
       return {
         label: "Overdue",
         color: "error",
