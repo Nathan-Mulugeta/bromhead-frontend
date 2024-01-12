@@ -54,54 +54,115 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-      <Grid container mb={4} spacing={2}>
-        <Grid item xs={12} md={4}>
-          <EmployeeStatusChart />
-        </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TotalEmployees />
+      {isAdminOrManager ? (
+        <>
+          <Grid container mb={4} spacing={2}>
+            <Grid item xs={12} md={4}>
+              <EmployeeStatusChart />
             </Grid>
-            <Grid item xs={12}>
-              <AvailableEmployees />
+
+            <Grid item xs={12} md={4}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TotalEmployees />
+                </Grid>
+                <Grid item xs={12}>
+                  <AvailableEmployees />
+                </Grid>
+                <Grid item xs={12}>
+                  <TotalClients />
+                </Grid>
+                <Grid item xs={12}>
+                  <TotalProjects />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TotalClients />
-            </Grid>
-            <Grid item xs={12}>
-              <TotalProjects />
+
+            <Grid item xs={12} md={4}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <ActiveProjects />
+                </Grid>
+                <Grid item xs={12}>
+                  <UpcomingProjects />
+                </Grid>
+                <Grid item xs={12}>
+                  <ProjectsStartingThisWeek />
+                </Grid>
+                <Grid item xs={12}>
+                  <ProjectsStartingToday />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <ActiveProjects />
+          <Grid container mb={4} spacing={2}>
+            <Grid item xs={12} md={6}>
+              <ProjectsStartingTodayList />
             </Grid>
-            <Grid item xs={12}>
-              <UpcomingProjects />
-            </Grid>
-            <Grid item xs={12}>
-              <ProjectsStartingThisWeek />
-            </Grid>
-            <Grid item xs={12}>
-              <ProjectsStartingToday />
+            <Grid item xs={12} md={6}>
+              <ProjectsEndingTodayList />
             </Grid>
           </Grid>
-        </Grid>
-      </Grid>
+        </>
+      ) : (
+        <>
+          <Grid container mb={4} spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <ProjectsStartingTodayList />
+                </Grid>
+                <Grid item xs={12}>
+                  <ProjectsEndingTodayList />
+                </Grid>
+              </Grid>
+            </Grid>
 
-      <Grid container mb={4} spacing={2}>
-        <Grid item xs={12} md={6}>
-          <ProjectsStartingTodayList />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <ProjectsEndingTodayList />
-        </Grid>
-      </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TotalEmployees />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TotalClients />
+                </Grid>
+                <Grid item xs={12}>
+                  <TotalProjects />
+                </Grid>
+                <Grid item xs={12}>
+                  <ActiveProjects />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <ActiveProjects />
+                </Grid>
+                <Grid item xs={12}>
+                  <UpcomingProjects />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <ProjectsStartingThisWeek />
+                </Grid>
+                <Grid item xs={12}>
+                  <ProjectsStartingToday />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </>
+      )}
     </>
   );
 };

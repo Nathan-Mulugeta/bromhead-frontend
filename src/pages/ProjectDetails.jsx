@@ -368,7 +368,7 @@ const ProjectDetails = () => {
   useEffect(() => {
     if (isDelSuccess) {
       toast.success("Project deleted successfully.");
-      navigate("/dash/projects");
+      navigate(-1);
     }
   }, [isDelSuccess, navigate]);
 
@@ -811,7 +811,7 @@ const ProjectDetails = () => {
 
         {!project?.confirmed &&
           projectStartsToday &&
-          (isAdminOrManager || isTeamLeader)(
+          (isAdminOrManager || isTeamLeader) && (
             <FormGroup>
               <FormControlLabel
                 disabled={!isEditing}
@@ -834,7 +834,7 @@ const ProjectDetails = () => {
                 }
                 label="Confirm Project Starts Today"
               />
-            </FormGroup>,
+            </FormGroup>
           )}
 
         {isAdminOrManager && (

@@ -39,7 +39,6 @@ const Login = () => {
       dispatch(setCredentials({ accessToken }));
       setUsername("");
       setPassword("");
-      toast.success("Login successful");
       navigate("/dash/dashboard", { replace: true });
     } catch (err) {
       if (!err.status) {
@@ -138,7 +137,7 @@ const Login = () => {
                   onBlur={handlePasswordFocus}
                 />
               </div>
-              <p className="text-primary">Forgot password ?</p>
+
               <button className="rounded-xl bg-primary p-2 py-3 text-white outline-text-light">
                 Login
               </button>
