@@ -132,9 +132,6 @@ const Dashboard = () => {
                 <Grid item xs={12}>
                   <TotalProjects />
                 </Grid>
-                <Grid item xs={12}>
-                  <ActiveProjects />
-                </Grid>
               </Grid>
             </Grid>
           </Grid>

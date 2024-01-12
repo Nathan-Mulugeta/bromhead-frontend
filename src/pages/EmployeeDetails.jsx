@@ -7,6 +7,8 @@ import {
 } from "../slices/users/usersApiSlice";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import WorkIcon from "@mui/icons-material/Work";
+import FolderOffOutlinedIcon from "@mui/icons-material/FolderOffOutlined";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import EmailIcon from "@mui/icons-material/Email";
@@ -20,6 +22,12 @@ import {
   DialogContentText,
   DialogTitle,
   InputAdornment,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Skeleton,
   TextField,
   Typography,
 } from "@mui/material";
@@ -31,6 +39,7 @@ import { setLoading } from "../slices/loading/loadingSlice";
 import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 import { ROLES } from "../../config/roles";
+import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
 
 const EmployeeDetails = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -175,6 +184,39 @@ const EmployeeDetails = () => {
     if (isAdminOrManagerOrOfficeAdmin) setIsEditing(!isEditing);
   };
 
+  // Get all the projects the employee is currently working on
+
+  const {
+    data: projects,
+    isLoading: isProjectsLoading,
+    isSuccess: isProjectsSuccess,
+    isError: isProjectsError,
+    error: isprojectsError,
+  } = useGetProjectsQuery("projectsList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+
+  useEffect(() => {
+    dispatch(setLoading(isProjectsLoading));
+  }, [dispatch, isProjectsLoading]);
+
+  let userActiveProjects;
+
+  if (projects) {
+    const { ids, entities } = projects;
+
+    userActiveProjects = ids
+      .map((projectId) => entities[projectId])
+      .filter((project) => {
+        const assignedUserIds = project.assignedUsers.map((user) => user._id);
+        return (
+          assignedUserIds.includes(userId) || userId === project.teamLeader?._id
+        );
+      });
+  }
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -186,16 +228,86 @@ const EmployeeDetails = () => {
         </Typography>
       </div>
 
-      {isAdminOrManagerOrOfficeAdmin && (
-        <div className="flex justify-start p-2  sm:justify-end">
-          <Typography color="primary.contrastText" variant="caption">
-            Double click on any field to toggle edit mode.
+      <div className="mt-4 rounded-lg bg-backgroundLight p-4">
+        <div className="flex gap-1 align-middle">
+          <Typography mb={1} color="text.darkLight" variant="h6">
+            Employee's active projects
+          </Typography>
+          <Typography variant="caption" fontSize={20} color="text.primary">
+            ({userActiveProjects.length})
           </Typography>
         </div>
-      )}
+        {projects ? (
+          <List
+            sx={{
+              width: "100%",
+              maxHeight: 250,
+              overflow: "auto",
+              bgcolor: "background.light",
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#0F2332",
+                borderRadius: "4px",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#6F767E",
+                borderRadius: "8px",
+              },
+            }}
+          >
+            {userActiveProjects.length > 0 ? (
+              <>
+                {userActiveProjects.map((project) => (
+                  <ListItem
+                    disablePadding
+                    key={project._id}
+                    alignItems="flex-start"
+                  >
+                    <ListItemButton to={`/dash/projects/${project._id}`}>
+                      <ListItemIcon>
+                        <WorkIcon color="secondary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        sx={{
+                          color: "primary.contrastText",
+                        }}
+                        primary={`${project.name}`}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </>
+            ) : (
+              <div className="flex items-center justify-center text-text-dark">
+                <div className="flex items-center gap-2">
+                  <FolderOffOutlinedIcon
+                    sx={{
+                      fontSize: 50,
+                    }}
+                  />
+                  <Typography variant="h5" fontWeight={400}>
+                    None
+                  </Typography>
+                </div>
+              </div>
+            )}
+          </List>
+        ) : (
+          <Skeleton variant="text" />
+        )}
+      </div>
 
       <div className="mt-2 rounded-md bg-backgroundLight p-4 pt-6">
-        <div className="grid grid-cols-1 gap-3   sm:grid-cols-2 sm:gap-8">
+        {isAdminOrManagerOrOfficeAdmin && (
+          <div className="flex justify-start p-2  sm:justify-end">
+            <Typography color="primary.contrastText" variant="caption">
+              Double click on any field to toggle edit mode.
+            </Typography>
+          </div>
+        )}
+        <div className="grid grid-cols-1 gap-3  sm:grid-cols-2 sm:gap-8">
           <DataDisplayItem
             label="User Name"
             value={user?.username}
