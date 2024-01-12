@@ -46,19 +46,41 @@ const App = () => {
 
                   <Route path="projects">
                     <Route index element={<Projects />} />
+                    <Route
+                      element={
+                        <RequireAuth
+                          allowedRoles={[ROLES.Admin, ROLES.Manager]}
+                        />
+                      }
+                    >
+                      <Route path="add" element={<AddProject />} />
+                    </Route>
                     <Route path=":projectId" element={<ProjectDetails />} />
-                    <Route path="add" element={<AddProject />} />
                   </Route>
 
                   <Route path="employees">
                     <Route index element={<Users />} />
                     <Route path=":userId" element={<EmployeeDetails />} />
-                    <Route path="add" element={<AddEmployee />} />
+                    <Route
+                      element={
+                        <RequireAuth allowedRoles={[ROLES.OfficeAdmin]} />
+                      }
+                    >
+                      <Route path="add" element={<AddEmployee />} />
+                    </Route>
                   </Route>
 
                   <Route path="clients">
                     <Route index element={<Clients />} />
-                    <Route path="add" element={<AddClient />} />
+                    <Route
+                      element={
+                        <RequireAuth
+                          allowedRoles={[ROLES.Admin, ROLES.Manager]}
+                        />
+                      }
+                    >
+                      <Route path="add" element={<AddClient />} />
+                    </Route>
                     <Route path=":clientId" element={<ClientDetails />} />
                   </Route>
                 </Route>

@@ -43,6 +43,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
 import countWeekdays from "../utils/countWeekdays";
+import useAuth from "../hooks/useAuth";
+import { ROLES } from "../../config/roles";
 
 function stringAvatar(name) {
   return {
@@ -79,7 +81,16 @@ const ProjectDetails = () => {
     confirmed: false,
   });
 
+  const { roles, id } = useAuth();
+
+  const isAdminOrManager =
+    roles.includes(ROLES.Manager) || roles.includes(ROLES.Admin);
+
+  const [isTeamLeader, setIsTeamLeader] = useState(false);
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
 
   // Date Validation
   const [deadlineError, setDeadlineError] = useState(null);
@@ -123,10 +134,8 @@ const ProjectDetails = () => {
     }
   }, [startDateError]);
 
-  const [isEditing, setIsEditing] = useState(false);
-
   const toggleEdit = () => {
-    setIsEditing(!isEditing);
+    if (isAdminOrManager || isTeamLeader) setIsEditing(!isEditing);
   };
 
   const [
@@ -173,6 +182,8 @@ const ProjectDetails = () => {
         completed: project?.completed,
         confirmed: project?.confirmed,
       });
+
+      setIsTeamLeader(project?.teamLeader?._id === id);
     }
   }, [project]);
 
@@ -362,15 +373,17 @@ const ProjectDetails = () => {
   }, [isDelSuccess, navigate]);
 
   const onDeleteProjectClicked = () => {
-    setShowDeleteModal(true);
+    if (isAdminOrManager) setShowDeleteModal(true);
   };
 
   const handleDeleteConfirmed = async (deleteConfirmed) => {
-    setShowDeleteModal(false);
+    if (isAdminOrManager) {
+      setShowDeleteModal(false);
 
-    if (deleteConfirmed) {
-      await deleteProject({ id: project._id });
-    }
+      if (deleteConfirmed) {
+        await deleteProject({ id: project._id });
+      }
+    } else toast.error("You are not authorized to delete a project.");
   };
 
   const getProjectStatus = (project) => {
@@ -768,55 +781,60 @@ const ProjectDetails = () => {
           />
         )}
 
-        <FormGroup>
-          <FormControlLabel
-            disabled={!isEditing}
-            sx={{
-              color: "#fff",
-            }}
-            control={
-              <Checkbox
-                id="completed"
-                name="completed"
-                checked={formData.completed}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    completed: e.target.checked,
-                  })
+        {isAdminOrManager ||
+          (isTeamLeader && (
+            <FormGroup>
+              <FormControlLabel
+                disabled={!isEditing}
+                sx={{
+                  color: "#fff",
+                }}
+                control={
+                  <Checkbox
+                    id="completed"
+                    name="completed"
+                    checked={formData.completed}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        completed: e.target.checked,
+                      })
+                    }
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
                 }
-                inputProps={{ "aria-label": "controlled" }}
+                label="Project Completed"
               />
-            }
-            label="Project Completed"
-          />
-        </FormGroup>
+            </FormGroup>
+          ))}
 
-        {!project?.confirmed && projectStartsToday && (
-          <FormGroup>
-            <FormControlLabel
-              disabled={!isEditing}
-              sx={{
-                color: "#fff",
-              }}
-              control={
-                <Checkbox
-                  id="confirmed"
-                  name="confirmed"
-                  checked={formData.confirmed}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      confirmed: e.target.checked,
-                    })
-                  }
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-              }
-              label="Confirm Project Starts Today"
-            />
-          </FormGroup>
-        )}
+        {!project?.confirmed &&
+          projectStartsToday &&
+          (isAdminOrManager || isTeamLeader)(
+            <FormGroup>
+              <FormControlLabel
+                disabled={!isEditing}
+                sx={{
+                  color: "#fff",
+                }}
+                control={
+                  <Checkbox
+                    id="confirmed"
+                    name="confirmed"
+                    checked={formData.confirmed}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        confirmed: e.target.checked,
+                      })
+                    }
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
+                }
+                label="Confirm Project Starts Today"
+              />
+            </FormGroup>,
+          )}
 
         <div className="flex items-center gap-2">
           <Typography
@@ -833,33 +851,41 @@ const ProjectDetails = () => {
       </div>
 
       <div className="mt-6 flex justify-between gap-4">
-        {!isEditing ? (
-          <Button color="secondary" variant="contained" onClick={toggleEdit}>
-            Update Project
-          </Button>
-        ) : (
-          <div>
-            <Button
-              sx={{
-                mr: 1,
-              }}
-              color="secondary"
-              variant="outlined"
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              disabled={!isFormComplete}
-              color="success"
-              variant="contained"
-              onClick={handleUpdate}
-            >
-              Save changes
-            </Button>
-          </div>
+        {(isAdminOrManager || isTeamLeader) && (
+          <React.Fragment>
+            {!isEditing ? (
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={toggleEdit}
+              >
+                Update Project
+              </Button>
+            ) : (
+              <div>
+                {/* Cancel and Save buttons */}
+                <Button
+                  sx={{ mr: 1 }}
+                  color="secondary"
+                  variant="outlined"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  disabled={!isFormComplete}
+                  color="success"
+                  variant="contained"
+                  onClick={handleUpdate}
+                >
+                  Save changes
+                </Button>
+              </div>
+            )}
+          </React.Fragment>
         )}
-        {!isEditing && (
+
+        {isAdminOrManager && !isEditing && (
           <Button
             color="error"
             variant="outlined"
