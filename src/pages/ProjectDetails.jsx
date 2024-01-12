@@ -251,8 +251,7 @@ const ProjectDetails = () => {
           completed: false,
           confirmed: false,
         });
-
-        navigate("/dash/projects");
+        toggleEdit();
       }
     }
   };

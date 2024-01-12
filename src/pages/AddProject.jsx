@@ -8,7 +8,10 @@ import {
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { useAddNewProjectMutation } from "../slices/projects/projectsApiSlice";
+import {
+  useAddNewProjectMutation,
+  useGetProjectsQuery,
+} from "../slices/projects/projectsApiSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
@@ -173,6 +176,18 @@ const AddProject = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  const {
+    data: projects,
+    isLoading: isProjectsLoading,
+    isSuccess: isProjectsSuccess,
+    isError: isProjectsError,
+    error: isprojectsError,
+  } = useGetProjectsQuery("projectsList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+
   let employeeList = [];
 
   if (isUsersSuccess) {
@@ -180,10 +195,41 @@ const AddProject = () => {
 
     ids.map((id) => {
       const user = entities[id];
+
+      let upcomingProjects;
+
+      if (projects) {
+        const { ids, entities } = projects;
+
+        const currentDate = new Date();
+
+        upcomingProjects = ids
+          .map((projectId) => entities[projectId])
+          .filter((project) => {
+            const assignedUserIds = project.assignedUsers.map(
+              (user) => user._id,
+            );
+
+            return (
+              (assignedUserIds.includes(user._id) ||
+                user._id === project.teamLeader?._id) &&
+              new Date(project.startDate).setHours(0, 0, 0, 0) >
+                currentDate.setHours(0, 0, 0, 0)
+            );
+          });
+      }
+
+      let newStatus;
+      if (user.status === STATUSLIST.Available && upcomingProjects.length > 0) {
+        newStatus = "Has Upcoming Project";
+      } else {
+        newStatus = user.status;
+      }
+
       const employee = {
         id: user._id,
         title: `${user.firstName} ${user.lastName}`,
-        status: user.status,
+        status: newStatus,
         chargeOutRate: user.chargeOutRate,
       };
       employeeList.push(employee);
@@ -389,7 +435,8 @@ const AddProject = () => {
             isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionDisabled={(option) =>
               option.status !== STATUSLIST.Available &&
-              option.status !== STATUSLIST.AtWork
+              option.status !== STATUSLIST.AtWork &&
+              option.status !== "Has Upcoming Project"
             }
             onChange={(event, newValue) => {
               setFormData({
