@@ -29,6 +29,8 @@ import DataDisplayItem from "../components/DataDisplayItem";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 import { toast } from "react-toastify";
+import useAuth from "../hooks/useAuth";
+import { ROLES } from "../../config/roles";
 
 const EmployeeDetails = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -162,8 +164,15 @@ const EmployeeDetails = () => {
     }
   };
 
+  const { roles } = useAuth();
+
+  const isAdminOrManagerOrOfficeAdmin =
+    roles.includes(ROLES.Manager) ||
+    roles.includes(ROLES.Admin) ||
+    roles.includes(ROLES.OfficeAdmin);
+
   const toggleEdit = () => {
-    setIsEditing(!isEditing);
+    if (isAdminOrManagerOrOfficeAdmin) setIsEditing(!isEditing);
   };
 
   return (
@@ -177,13 +186,15 @@ const EmployeeDetails = () => {
         </Typography>
       </div>
 
-      <div className="flex justify-start p-2  sm:justify-end">
-        <Typography color="primary.contrastText" variant="caption">
-          Double click on any field to toggle edit mode.
-        </Typography>
-      </div>
+      {isAdminOrManagerOrOfficeAdmin && (
+        <div className="flex justify-start p-2  sm:justify-end">
+          <Typography color="primary.contrastText" variant="caption">
+            Double click on any field to toggle edit mode.
+          </Typography>
+        </div>
+      )}
 
-      <div className="rounded-md bg-backgroundLight p-4 pt-6">
+      <div className="mt-2 rounded-md bg-backgroundLight p-4 pt-6">
         <div className="grid grid-cols-1 gap-3   sm:grid-cols-2 sm:gap-8">
           <DataDisplayItem
             label="User Name"
@@ -275,52 +286,58 @@ const EmployeeDetails = () => {
           />
         </div>
 
-        <div className="mt-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
-          <TextField
-            id="chargeOutRate"
-            label="Charge Out Rate"
-            name="chargeOutRate"
-            onDoubleClick={toggleEdit}
-            onChange={handleNumberInput}
-            value={chargeOutRate}
-            autoComplete="off"
-            type="number"
-            InputProps={{
-              readOnly: !isEditing,
-              startAdornment: (
-                <InputAdornment position="start">ETB</InputAdornment>
-              ),
-              inputProps: {
-                min: 0,
-              },
-            }}
-            variant="outlined"
-          />
+        {isAdminOrManagerOrOfficeAdmin && (
+          <div className="mt-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-5">
+            <TextField
+              id="chargeOutRate"
+              label="Charge Out Rate"
+              name="chargeOutRate"
+              onDoubleClick={toggleEdit}
+              onChange={handleNumberInput}
+              value={chargeOutRate}
+              autoComplete="off"
+              type="number"
+              InputProps={{
+                readOnly: !isEditing,
+                startAdornment: (
+                  <InputAdornment position="start">ETB</InputAdornment>
+                ),
+                inputProps: {
+                  min: 0,
+                },
+              }}
+              variant="outlined"
+            />
 
-          {!isEditing ? (
-            <Button color="secondary" variant="contained" onClick={toggleEdit}>
-              Update Profile
-            </Button>
-          ) : (
-            <>
+            {!isEditing ? (
               <Button
                 color="secondary"
-                variant="outlined"
-                onClick={handleCancel}
-              >
-                Cancel
-              </Button>
-              <Button
-                disabled={!isFormComplete}
-                color="success"
                 variant="contained"
-                onClick={handleUpdate}
+                onClick={toggleEdit}
               >
-                Save changes
+                Update Profile
               </Button>
-            </>
-          )}
-        </div>
+            ) : (
+              <>
+                <Button
+                  color="secondary"
+                  variant="outlined"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  disabled={!isFormComplete}
+                  color="success"
+                  variant="contained"
+                  onClick={handleUpdate}
+                >
+                  Save changes
+                </Button>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="mt-4 flex flex-col justify-between gap-4 overflow-hidden text-text-light sm:flex-row sm:items-center">
@@ -331,13 +348,15 @@ const EmployeeDetails = () => {
               <Chip key={role} label={role} color="secondary" />
             ))}
         </div>
-        <Button
-          color="secondary"
-          variant="outlined"
-          onClick={handleDeleteClick}
-        >
-          Delete Employee
-        </Button>
+        {isAdminOrManagerOrOfficeAdmin && (
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={handleDeleteClick}
+          >
+            Delete Employee
+          </Button>
+        )}
       </div>
 
       <Dialog

@@ -13,10 +13,14 @@ import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
+import FolderOffOutlinedIcon from "@mui/icons-material/FolderOffOutlined";
 import ErrorIcon from "@mui/icons-material/Error";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import countWeekdays from "../utils/countWeekdays";
+
+import useAuth from "../hooks/useAuth";
+import { ROLES } from "../../config/roles";
 
 dayjs.extend(relativeTime);
 
@@ -91,13 +95,34 @@ const Projects = () => {
     }
   };
 
+  const { id: userId, roles } = useAuth();
+
+  const isAdminOrManager =
+    roles.includes(ROLES.Manager) || roles.includes(ROLES.Admin);
+
   if (isSuccess) {
     const { ids, entities } = projects;
 
+    // Filter projects based on user's role and assignments
+    const filteredProjects = ids
+      .map((projectId) => entities[projectId])
+      .filter((project) => {
+        // If user is Admin or Manager, show all projects
+        if (roles.includes(ROLES.Admin) || roles.includes(ROLES.Manager)) {
+          return true;
+        }
+
+        const assignedUserIds = project.assignedUsers.map((user) => user._id);
+
+        // If user is assigned to the project or is team leader, show the project
+        return (
+          assignedUserIds.includes(userId) || userId === project.teamLeader?._id
+        );
+      });
+
     content =
-      ids.length &&
-      ids.map((projectId) => {
-        const project = entities[projectId];
+      filteredProjects.length &&
+      filteredProjects.map((project) => {
         const status = getProjectStatus(project);
 
         let daysText = "";
@@ -135,9 +160,9 @@ const Projects = () => {
         }
 
         return (
-          <List key={projectId}>
+          <List key={project._id}>
             <ListItem disablePadding>
-              <ListItemButton to={`/dash/projects/${projectId}`}>
+              <ListItemButton to={`/dash/projects/${project._id}`}>
                 <ListItemText
                   primary={project.name}
                   secondary={
@@ -178,15 +203,17 @@ const Projects = () => {
         <Typography color="primary.contrastText" variant="h6">
           Projects list
         </Typography>
-        <Button
-          to="/dash/projects/add"
-          size="medium"
-          color="secondary"
-          variant="contained"
-          startIcon={<AddIcon />}
-        >
-          Add Project
-        </Button>
+        {isAdminOrManager && (
+          <Button
+            to="/dash/projects/add"
+            size="medium"
+            color="secondary"
+            variant="contained"
+            startIcon={<AddIcon />}
+          >
+            Add Project
+          </Button>
+        )}
       </div>
       <Box
         sx={{
@@ -197,7 +224,24 @@ const Projects = () => {
           color: "primary.contrastText",
         }}
       >
-        {content}
+        {content ? (
+          content
+        ) : (
+          <div className="flex items-center justify-center p-4">
+            <div>
+              <Typography variant="h4" fontWeight={600}>
+                No projects yet
+              </Typography>
+              <div className="flex justify-center">
+                <FolderOffOutlinedIcon
+                  sx={{
+                    fontSize: 200,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </Box>
     </div>
   );

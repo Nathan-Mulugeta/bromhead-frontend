@@ -487,14 +487,15 @@ const ProjectDetails = () => {
           icon={getProjectStatus(project).icon}
         />
       </div>
+      {(isAdminOrManager || isTeamLeader) && (
+        <div className="flex justify-start p-2  sm:justify-end">
+          <Typography color="primary.contrastText" variant="caption">
+            Double click on any field to toggle edit mode.
+          </Typography>
+        </div>
+      )}
 
-      <div className="flex justify-start p-2  sm:justify-end">
-        <Typography color="primary.contrastText" variant="caption">
-          Double click on any field to toggle edit mode.
-        </Typography>
-      </div>
-
-      <div className="flex flex-col justify-center gap-3 rounded-md bg-backgroundLight p-4 sm:gap-8">
+      <div className="mt-2 flex flex-col justify-center gap-3 rounded-md bg-backgroundLight p-4 sm:gap-8">
         <TextField
           onDoubleClick={toggleEdit}
           id="name"
@@ -836,18 +837,20 @@ const ProjectDetails = () => {
             </FormGroup>,
           )}
 
-        <div className="flex items-center gap-2">
-          <Typography
-            variant="subtitle1"
-            fontSize={13}
-            color="primary.contrastText"
-          >
-            Est. Budget
-          </Typography>
-          <Typography variant="body1" color="primary.main">
-            {formattedBudget}
-          </Typography>
-        </div>
+        {isAdminOrManager && (
+          <div className="flex items-center gap-2">
+            <Typography
+              variant="subtitle1"
+              fontSize={13}
+              color="primary.contrastText"
+            >
+              Est. Budget
+            </Typography>
+            <Typography variant="body1" color="primary.main">
+              {formattedBudget}
+            </Typography>
+          </div>
+        )}
       </div>
 
       <div className="mt-6 flex justify-between gap-4">

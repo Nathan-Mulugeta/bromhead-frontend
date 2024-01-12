@@ -15,6 +15,8 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { ROLES } from "../../config/roles";
 
 const columns = [
   { field: "firstName", headerName: "First Name", minWidth: 140 },
@@ -72,21 +74,27 @@ const Users = () => {
 
   const testRows = [];
 
+  const { roles } = useAuth();
+
+  const isOfficeManager = roles.includes(ROLES.OfficeAdmin);
+
   return (
     <>
       <div className="flex items-center justify-between">
         <Typography color="primary.contrastText" variant="h6">
           Employees list
         </Typography>
-        <Button
-          size="medium"
-          variant="contained"
-          color="secondary"
-          startIcon={<PersonAddAltIcon />}
-          to="/dash/employees/add"
-        >
-          Add Employee
-        </Button>
+        {isOfficeManager && (
+          <Button
+            size="medium"
+            variant="contained"
+            color="secondary"
+            startIcon={<PersonAddAltIcon />}
+            to="/dash/employees/add"
+          >
+            Add Employee
+          </Button>
+        )}
       </div>
       <Box
         sx={{

@@ -28,6 +28,8 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
+import { ROLES } from "../../config/roles";
+import useAuth from "../hooks/useAuth";
 
 const clientDetails = () => {
   useTitle("Client details");
@@ -42,6 +44,11 @@ const clientDetails = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
+
+  const { id: userId, roles } = useAuth();
+
+  const isAdminOrManager =
+    roles.includes(ROLES.Manager) || roles.includes(ROLES.Admin);
 
   const [
     updateClient,
@@ -75,7 +82,7 @@ const clientDetails = () => {
   };
 
   const toggleEdit = () => {
-    setIsEditing(!isEditing);
+    if (isAdminOrManager) setIsEditing(!isEditing);
   };
 
   const { clientId } = useParams();
@@ -208,13 +215,15 @@ const clientDetails = () => {
         </Typography>
       </div>
 
-      <div className="flex justify-start p-2  sm:justify-end">
-        <Typography color="primary.contrastText" variant="caption">
-          Double click on any field to toggle edit mode.
-        </Typography>
-      </div>
+      {isAdminOrManager && (
+        <div className="flex justify-start p-2  sm:justify-end">
+          <Typography color="primary.contrastText" variant="caption">
+            Double click on any field to toggle edit mode.
+          </Typography>
+        </div>
+      )}
 
-      <div className="flex flex-col justify-center gap-8 rounded-md bg-backgroundLight p-4">
+      <div className="mt-2 flex flex-col justify-center gap-8 rounded-md bg-backgroundLight p-4">
         <TextField
           id="name"
           label="Client Name"
@@ -370,40 +379,48 @@ const clientDetails = () => {
       </div>
 
       <div className="mt-6 flex justify-between gap-4">
-        {!isEditing ? (
-          <Button color="secondary" variant="contained" onClick={toggleEdit}>
-            Update client
-          </Button>
-        ) : (
-          <div>
-            <Button
-              sx={{
-                mr: 1,
-              }}
-              color="secondary"
-              variant="outlined"
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              disabled={!isFormComplete}
-              color="success"
-              variant="contained"
-              onClick={handleUpdate}
-            >
-              Save changes
-            </Button>
-          </div>
-        )}
-        {!isEditing && (
-          <Button
-            color="error"
-            variant="outlined"
-            onClick={onDeleteClientClicked}
-          >
-            Delete client
-          </Button>
+        {isAdminOrManager && (
+          <>
+            {!isEditing ? (
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={toggleEdit}
+              >
+                Update client
+              </Button>
+            ) : (
+              <div>
+                <Button
+                  sx={{
+                    mr: 1,
+                  }}
+                  color="secondary"
+                  variant="outlined"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  disabled={!isFormComplete}
+                  color="success"
+                  variant="contained"
+                  onClick={handleUpdate}
+                >
+                  Save changes
+                </Button>
+              </div>
+            )}
+            {!isEditing && (
+              <Button
+                color="error"
+                variant="outlined"
+                onClick={onDeleteClientClicked}
+              >
+                Delete client
+              </Button>
+            )}
+          </>
         )}
 
         <Dialog

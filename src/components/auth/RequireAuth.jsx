@@ -1,16 +1,20 @@
-import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useLocation, Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const RequireAuth = ({ allowedRoles }) => {
-  const location = useLocation();
   const { roles } = useAuth();
+  const navigate = useNavigate();
 
-  const content = roles.some((role) => allowedRoles.includes(role)) ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+  useEffect(() => {
+    if (!roles.some((role) => allowedRoles.includes(role))) {
+      toast.error("Unauthorized!");
+      navigate("/dash/dashboard");
+    }
+  }, [roles, allowedRoles, navigate]);
 
-  return content;
+  return roles.some((role) => allowedRoles.includes(role)) ? <Outlet /> : null;
 };
+
 export default RequireAuth;

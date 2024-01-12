@@ -79,7 +79,6 @@ const NavbarProfile = () => {
 
     try {
       await logout();
-      toast.success("Successfully logged out");
       navigate("/", { replace: true });
     } catch (error) {
       toast.error("Unable to log out at the moment. Please try again later!");

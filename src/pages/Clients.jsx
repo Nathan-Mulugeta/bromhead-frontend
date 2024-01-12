@@ -2,15 +2,13 @@ import { Box, Button, Typography } from "@mui/material";
 import useTitle from "../hooks/useTitle";
 import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
 import AddIcon from "@mui/icons-material/Add";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setLoading } from "../slices/loading/loadingSlice";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import useAuth from "../hooks/useAuth";
+import { ROLES } from "../../config/roles";
 
 const columns = [
   { field: "name", headerName: "Client Name", minWidth: 150 },
@@ -46,7 +44,10 @@ const Clients = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  let content;
+  const { id: userId, roles } = useAuth();
+
+  const isAdminOrManager =
+    roles.includes(ROLES.Manager) || roles.includes(ROLES.Admin);
 
   const navigate = useNavigate();
 
@@ -86,15 +87,17 @@ const Clients = () => {
         <Typography color="primary.contrastText" variant="h6">
           Clients list
         </Typography>
-        <Button
-          to="/dash/clients/add"
-          size="medium"
-          color="secondary"
-          variant="contained"
-          startIcon={<AddIcon />}
-        >
-          Add Client
-        </Button>
+        {isAdminOrManager && (
+          <Button
+            to="/dash/clients/add"
+            size="medium"
+            color="secondary"
+            variant="contained"
+            startIcon={<AddIcon />}
+          >
+            Add Client
+          </Button>
+        )}
       </div>
       <Box
         sx={{
