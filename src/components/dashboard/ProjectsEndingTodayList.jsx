@@ -13,7 +13,7 @@ import { useGetProjectsQuery } from "../../slices/projects/projectsApiSlice";
 import dayjs from "dayjs";
 import WorkIcon from "@mui/icons-material/Work";
 
-const ProjectsStartingTodayList = () => {
+const ProjectsEndingTodayList = () => {
   const {
     data: projects,
     isLoading,
@@ -26,25 +26,25 @@ const ProjectsStartingTodayList = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  let projectsStartingToday;
+  let projectsEndingToday;
 
   if (projects) {
     // Filter projects that start today
     const todayProjectId = projects.ids.filter((id) => {
       const today = dayjs().startOf("day");
-      const projectStartDate = dayjs(projects.entities[id].startDate).startOf(
+      const projectEndDate = dayjs(projects.entities[id].deadline).startOf(
         "day",
       );
-      return today.isSame(projectStartDate, "day");
+      return today.isSame(projectEndDate, "day");
     });
 
-    projectsStartingToday = todayProjectId.map((id) => projects.entities[id]);
+    projectsEndingToday = todayProjectId.map((id) => projects.entities[id]);
   }
 
   return (
     <div className="rounded-lg bg-backgroundLight p-4">
       <Typography mb={1} color="primary.contrastText" variant="h6">
-        Projects Starting Today
+        Projects Ending Today
       </Typography>
       {projects ? (
         <List
@@ -66,7 +66,7 @@ const ProjectsStartingTodayList = () => {
             },
           }}
         >
-          {projectsStartingToday.map((project) => (
+          {projectsEndingToday.map((project) => (
             <ListItem disablePadding key={project._id} alignItems="flex-start">
               <ListItemButton to={`/dash/projects/${project._id}`}>
                 <ListItemIcon>
@@ -89,4 +89,4 @@ const ProjectsStartingTodayList = () => {
   );
 };
 
-export default ProjectsStartingTodayList;
+export default ProjectsEndingTodayList;

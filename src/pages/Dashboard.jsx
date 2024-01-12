@@ -12,6 +12,7 @@ import ProjectsStartingThisWeek from "../components/dashboard/ProjectsStartingTh
 import ProjectsStartingToday from "../components/dashboard/ProjectsStartingToday";
 import AvailableEmployees from "../components/dashboard/AvailableEmployees";
 import ProjectsStartingTodayList from "../components/dashboard/ProjectsStartingTodayList";
+import ProjectsEndingTodayList from "../components/dashboard/ProjectsEndingTodayList";
 
 const Dashboard = () => {
   useTitle("Dashboard");
@@ -82,7 +83,14 @@ const Dashboard = () => {
         </Grid>
       </Grid>
 
-      <ProjectsStartingTodayList />
+      <Grid container mb={4} spacing={2}>
+        <Grid item xs={12} md={6}>
+          <ProjectsStartingTodayList />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <ProjectsEndingTodayList />
+        </Grid>
+      </Grid>
     </>
   );
 };
