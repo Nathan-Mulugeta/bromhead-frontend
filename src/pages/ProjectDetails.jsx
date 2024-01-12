@@ -75,6 +75,7 @@ const ProjectDetails = () => {
     completed: false,
     completedAt: null,
     startDate: null,
+    confirmed: false,
   });
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -169,6 +170,7 @@ const ProjectDetails = () => {
           status: project?.teamLeader.status,
         },
         completed: project?.completed,
+        confirmed: false,
       });
     }
   }, [project]);
@@ -235,6 +237,7 @@ const ProjectDetails = () => {
           serviceType: null,
           teamLeader: null,
           completed: false,
+          confirmed: false,
         });
 
         navigate("/dash/projects");
@@ -323,6 +326,7 @@ const ProjectDetails = () => {
             status: project.teamLeader.status,
           },
           completed: project.completed,
+          confirmed: false,
         });
       }
       setIsEditing(false);
@@ -360,10 +364,10 @@ const ProjectDetails = () => {
     setShowDeleteModal(true);
   };
 
-  const handleDeleteConfirmed = async (confirmed) => {
+  const handleDeleteConfirmed = async (deleteConfirmed) => {
     setShowDeleteModal(false);
 
-    if (confirmed) {
+    if (deleteConfirmed) {
       await deleteProject({ id: project._id });
     }
   };
@@ -433,26 +437,9 @@ const ProjectDetails = () => {
     currencyDisplay: "code",
   }).format(estimatedBudget);
 
-  // // Remove team leader if it is removed from assigned users list
-  // useEffect(() => {
-  //   if (!formData.teamLeader) {
-  //     const teamLeaderInAssignedUsers = formData.assignedUsers?.find(
-  //       (user) => user.id === formData.teamLeader?.id,
-  //     );
-
-  //     if (!teamLeaderInAssignedUsers) {
-  //       if (project)
-  //         setFormData((prevFormData) => ({
-  //           ...prevFormData,
-  //           teamLeader: null,
-  //         }));
-  //     }
-  //   }
-  // }, [formData.assignedUsers, project]);
-
-  // console.log(
-  //   formData.assignedUsers?.find((user) => user.id === formData.teamLeader?.id),
-  // );
+  const projectStartsToday =
+    new Date(project?.startDate).setHours(0, 0, 0, 0) ===
+    new Date().setHours(0, 0, 0, 0);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -791,6 +778,32 @@ const ProjectDetails = () => {
             label="Project Completed"
           />
         </FormGroup>
+
+        {projectStartsToday && (
+          <FormGroup>
+            <FormControlLabel
+              disabled={!isEditing}
+              sx={{
+                color: "#fff",
+              }}
+              control={
+                <Checkbox
+                  id="confirmed"
+                  name="confirmed"
+                  checked={formData.confirmed}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmed: e.target.checked,
+                    })
+                  }
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              }
+              label="Confirm Project Starts Today"
+            />
+          </FormGroup>
+        )}
 
         <div className="flex items-center gap-2">
           <Typography
