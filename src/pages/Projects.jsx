@@ -104,6 +104,10 @@ const Projects = () => {
 
         if (status.label.includes("Completed")) {
           daysText = getRelativeDateText(project.deadline);
+        } else if (status.label.includes("Awaiting Confirmation")) {
+          daysText = `Starting date was ${getRelativeDateText(
+            project.startDate,
+          )}`;
         } else if (status.label.includes("Ongoing")) {
           daysText = `Deadline ${getRelativeDateText(project.deadline)}`;
         } else if (status.label.includes("Upcoming")) {
