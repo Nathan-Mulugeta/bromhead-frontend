@@ -12,14 +12,14 @@ const Card = ({ title, value, Icon, to, tooltip }) => {
   return (
     <Tooltip title={`Click to go to ${tooltip} page`} arrow>
       <div
-        className="text-text-darkLight flex cursor-pointer items-center justify-between rounded-lg bg-backgroundLight p-4 transition-all hover:bg-secondary  hover:text-text-light"
+        className="flex cursor-pointer items-center justify-between rounded-lg bg-backgroundLight p-4 text-text-darkLight transition-all hover:bg-secondary  hover:text-text-light"
         onClick={handleClick}
       >
         <div>
           <Typography variant="body1" fontSize={14} color="inherit">
             {title}
           </Typography>
-          {value ? (
+          {value !== undefined && value !== null ? (
             <Typography
               variant="body2"
               fontWeight={700}

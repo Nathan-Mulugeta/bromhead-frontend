@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 
 import { useGetProjectsQuery } from "../../slices/projects/projectsApiSlice";
 import Card from "./Card";
+import useAuth from "../../hooks/useAuth";
+import { ROLES } from "../../../config/roles";
 
 const ActiveProjects = () => {
   const {
@@ -17,13 +19,31 @@ const ActiveProjects = () => {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
+  const { id: userId, roles } = useAuth();
 
-  const activeProjectsNumber = projects?.ids.filter((id) => {
-    const currentDate = dayjs();
-    const startDate = projects.entities[id].startDate;
-    const deadline = projects.entities[id].deadline;
-    return currentDate.isBetween(startDate, deadline);
-  }).length;
+  let activeProjectsNumber;
+
+  if (roles.includes(ROLES.Admin) || roles.includes(ROLES.Manager)) {
+    activeProjectsNumber = projects?.ids.filter((projectId) => {
+      const currentDate = dayjs();
+      const startDate = projects.entities[projectId].startDate;
+      const deadline = projects.entities[projectId].deadline;
+      return currentDate.isBetween(startDate, deadline);
+    }).length;
+  } else {
+    const filteredProjects = projects?.ids.filter((projectId) => {
+      const project = projects?.entities[projectId];
+      return project?.assignedUsers.some((user) => user._id === userId);
+    });
+
+    activeProjectsNumber = filteredProjects?.filter((projectId) => {
+      const project = projects?.entities[projectId];
+      const currentDate = dayjs();
+      const startDate = project.startDate;
+      const deadline = project.deadline;
+      return currentDate.isBetween(startDate, deadline);
+    }).length;
+  }
 
   return (
     <Card
