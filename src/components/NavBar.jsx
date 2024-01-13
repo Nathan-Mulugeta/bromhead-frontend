@@ -56,7 +56,7 @@ const NavBar = () => {
       const currentDate = dayjs();
       const startDate = project.startDate;
       const deadline = project.deadline;
-      return currentDate.isBetween(startDate, deadline);
+      return currentDate.isBetween(startDate, deadline) || !project.completed;
     }).length;
   }
 
