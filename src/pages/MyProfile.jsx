@@ -29,6 +29,8 @@ import ExcelJS from "exceljs";
 import useFormARow from "../hooks/useFormARow";
 import dayjs from "dayjs";
 import { STATUSLIST } from "../../config/status";
+import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
+import { ROLES } from "../../config/roles";
 
 const statusList = [...Object.values(STATUSLIST)];
 
@@ -312,6 +314,23 @@ const MyProfile = () => {
     document.body.removeChild(link);
   };
 
+  const {
+    data: projects,
+    isLoading: isProjectsLoading,
+    isSuccess: isProjectsSuccess,
+    isError: isProjectsError,
+    error: isprojectsError,
+  } = useGetProjectsQuery("projectsList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+
+  const isTeamLeader = projects?.ids.some((projectId) => {
+    const project = projects.entities[projectId];
+    return project?.teamLeader?._id === userId;
+  });
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between">
@@ -531,6 +550,7 @@ const MyProfile = () => {
             formData.roles.map((role) => (
               <Chip key={role} label={role} color="secondary" />
             ))}
+          {isTeamLeader && <Chip label={ROLES.TeamLeader} color="secondary" />}
         </div>
       </div>
 
