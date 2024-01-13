@@ -141,7 +141,7 @@ const NavbarProfile = () => {
           }}
           onClick={() => {
             setAnchorEl(null);
-            navigate(`/dash/profile/${userId}`);
+            navigate("/dash/profile");
           }}
         >
           Profile

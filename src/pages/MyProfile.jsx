@@ -31,8 +31,7 @@ import dayjs from "dayjs";
 import { STATUSLIST } from "../../config/status";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
 import { ROLES } from "../../config/roles";
-
-const statusList = [...Object.values(STATUSLIST)];
+import useAuth from "../hooks/useAuth";
 
 const MyProfile = () => {
   useTitle("My Profile");
@@ -47,7 +46,7 @@ const MyProfile = () => {
     lastName: "",
     email: "",
     address: "",
-    status: "At Work",
+    status: "Casual Leave",
     chargeOutRate: 0,
   });
 
@@ -76,10 +75,6 @@ const MyProfile = () => {
     }
   }, [isEditError, editError]);
 
-  const isFormComplete = Object.entries(formData).every(([key, value]) => {
-    return key === "password" || key === "chargeOutRate" || value !== "";
-  });
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -93,7 +88,10 @@ const MyProfile = () => {
     setIsEditing(!isEditing);
   };
 
-  const { userId } = useParams();
+  const { id: userId, roles } = useAuth();
+
+  const isAdminOrManager =
+    roles.includes(ROLES.Admin) || roles.includes(ROLES.Manager);
 
   const { user } = useGetUsersQuery("usersList", {
     selectFromResult: ({ data }) => ({
@@ -331,6 +329,35 @@ const MyProfile = () => {
     return project?.teamLeader?._id === userId;
   });
 
+  const statusList = isAdminOrManager
+    ? [...Object.values(STATUSLIST)]
+    : [...Object.values(STATUSLIST)].filter((status) => status !== "At Work");
+
+  let activeProjectsNumber;
+
+  if (!isAdminOrManager) {
+    const filteredProjects = projects?.ids.filter((projectId) => {
+      const project = projects?.entities[projectId];
+      return project?.assignedUsers.some((user) => user._id === userId);
+    });
+
+    activeProjectsNumber = filteredProjects?.filter((projectId) => {
+      const project = projects?.entities[projectId];
+      const currentDate = dayjs();
+      const startDate = project.startDate;
+      const deadline = project.deadline;
+      return currentDate.isBetween(startDate, deadline);
+    }).length;
+  }
+
+  const isFormComplete = Object.entries(formData).every(([key, value]) => {
+    return (
+      key === "password" ||
+      key === "chargeOutRate" ||
+      (value !== "" && value !== null)
+    );
+  });
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between">
@@ -515,33 +542,36 @@ const MyProfile = () => {
               color: "#fff",
             }}
           />
-
-          <Autocomplete
-            disablePortal
-            onDoubleClick={toggleEdit}
-            readOnly={!isEditing}
-            value={formData.status}
-            onChange={(event, newValue) => {
-              setFormData({
-                ...formData,
-                status: newValue,
-              });
-            }}
-            id="status"
-            name="status"
-            options={statusList}
-            PaperComponent={({ children }) => (
-              <Paper
-                style={{
-                  background: "#124056",
-                }}
-              >
-                {children}
-              </Paper>
-            )}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Status" />}
-          />
+          {activeProjectsNumber === 0 || isAdminOrManager ? (
+            <Autocomplete
+              disablePortal
+              onDoubleClick={toggleEdit}
+              readOnly={!isEditing}
+              value={formData.status}
+              onChange={(event, newValue) => {
+                setFormData({
+                  ...formData,
+                  status: newValue,
+                });
+              }}
+              id="status"
+              name="status"
+              options={statusList}
+              PaperComponent={({ children }) => (
+                <Paper
+                  style={{
+                    background: "#124056",
+                  }}
+                >
+                  {children}
+                </Paper>
+              )}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Status" />}
+            />
+          ) : (
+            <Chip label="At work" color="info" size="large" />
+          )}
         </div>
 
         <div className="flex items-center gap-4 text-text-light">

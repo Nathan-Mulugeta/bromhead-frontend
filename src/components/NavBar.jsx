@@ -1,16 +1,8 @@
 import NavbarProfile from "./NavbarProfile";
-import Logo from "../assets/bromhead-logo.svg";
 import { MdOutlineMenu } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "./DashLayout";
-import {
-  Autocomplete,
-  Button,
-  Chip,
-  Paper,
-  Skeleton,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Button, Chip, Paper, TextField } from "@mui/material";
 import {
   useGetUsersQuery,
   useUpdateUserMutation,
