@@ -17,6 +17,7 @@ import { setLoading } from "../slices/loading/loadingSlice";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { ROLES } from "../../config/roles";
+import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
 
 const columns = [
   { field: "firstName", headerName: "First Name", minWidth: 140 },
@@ -48,7 +49,17 @@ const Users = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  let content;
+  const {
+    data: projects,
+    isLoading: isProjectsLoading,
+    isSuccess: isProjectsSuccess,
+    isError: isProjectsError,
+    error: isprojectsError,
+  } = useGetProjectsQuery("projectsList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
   const dispatch = useDispatch();
 
@@ -57,17 +68,32 @@ const Users = () => {
   }, [dispatch, isLoading]);
 
   const rows = [];
-
   if (isSuccess) {
     const { ids, entities } = employees;
 
-    ids.map((id) => {
+    ids.forEach((id) => {
+      const user = entities[id];
+
+      // Check if the user is a team leader of at least one project
+      const isTeamLeader = projects?.ids.some((projectId) => {
+        const project = projects.entities[projectId];
+        return project?.teamLeader?._id === user._id;
+      });
+
+      let newRoles;
+      // If the user is a team leader, add "Team Leader" to their roles
+      if (isTeamLeader) {
+        newRoles = [...new Set([...user.roles, ROLES.TeamLeader])];
+      } else {
+        newRoles = user.roles;
+      }
+
       rows.push({
         id,
-        firstName: entities[id].firstName,
-        lastName: entities[id].lastName,
-        status: entities[id].status,
-        roles: entities[id].roles,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        status: user.status,
+        roles: newRoles,
       });
     });
   }

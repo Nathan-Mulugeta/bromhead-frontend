@@ -219,6 +219,11 @@ const EmployeeDetails = () => {
       });
   }
 
+  const isTeamLeader = projects?.ids.some((projectId) => {
+    const project = projects.entities[projectId];
+    return project?.teamLeader?._id === userId;
+  });
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center">
@@ -461,6 +466,7 @@ const EmployeeDetails = () => {
             user?.roles.map((role) => (
               <Chip key={role} label={role} color="secondary" />
             ))}
+          {isTeamLeader && <Chip label={ROLES.TeamLeader} color="secondary" />}
         </div>
         {isAdminOrManagerOrOfficeAdmin && (
           <Button
