@@ -12,8 +12,12 @@ import FolderOffOutlinedIcon from "@mui/icons-material/FolderOffOutlined";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import EmailIcon from "@mui/icons-material/Email";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Button,
   Chip,
   Dialog,
@@ -235,16 +239,35 @@ const EmployeeDetails = () => {
         </Typography>
       </div>
 
-      <div className="mt-4 rounded-lg bg-backgroundLight p-4">
-        <div className="flex gap-1 align-middle">
-          <Typography mb={1} color="text.darkLight" variant="h6">
-            Employee's active and upcoming projects
-          </Typography>
-          <Typography variant="caption" fontSize={20} color="text.primary">
-            ({userActiveProjects?.length})
-          </Typography>
-        </div>
-        {projects ? (
+      <Accordion
+        sx={{
+          mt: 2,
+          borderRadius: 2,
+        }}
+      >
+        <AccordionSummary
+          sx={{
+            color: "white",
+          }}
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          <div className="flex gap-1 align-middle">
+            <Typography color="text.darkLight" variant="h6">
+              Employee's active and upcoming projects
+            </Typography>
+            <Typography
+              variant="caption"
+              fontSize={20}
+              alignSelf={"center"}
+              color="text.primary"
+            >
+              ({userActiveProjects?.length})
+            </Typography>
+          </div>
+        </AccordionSummary>
+        <AccordionDetails>
           <List
             sx={{
               width: "100%",
@@ -301,10 +324,8 @@ const EmployeeDetails = () => {
               </div>
             )}
           </List>
-        ) : (
-          <Skeleton height={80} variant="text" />
-        )}
-      </div>
+        </AccordionDetails>
+      </Accordion>
 
       <div className="mt-2 rounded-md bg-backgroundLight p-4 pt-6">
         {isAdminOrManagerOrOfficeAdmin && (

@@ -1,4 +1,13 @@
-import { Box, Button, Chip, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Chip,
+  Typography,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useTitle from "../hooks/useTitle";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
 import AddIcon from "@mui/icons-material/Add";
@@ -21,6 +30,8 @@ import countWeekdays from "../utils/countWeekdays";
 
 import useAuth from "../hooks/useAuth";
 import { ROLES } from "../../config/roles";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(relativeTime);
 
@@ -38,8 +49,6 @@ const Projects = () => {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
-
-  let content;
 
   const dispatch = useDispatch();
 
@@ -95,110 +104,237 @@ const Projects = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   const { id: userId, roles } = useAuth();
+
+  const handleRowClick = (params) => {
+    navigate(`/dash/projects/${params.id}`);
+  };
 
   const isAdminOrManager =
     roles.includes(ROLES.Manager) || roles.includes(ROLES.Admin);
 
+  let content;
+
   if (isSuccess) {
     const { ids, entities } = projects;
 
-    // Filter projects based on user's role and assignments
     const filteredProjects = ids
       .map((projectId) => entities[projectId])
       .filter((project) => {
-        // If user is Admin or Manager, show all projects
         if (roles.includes(ROLES.Admin) || roles.includes(ROLES.Manager)) {
           return true;
         }
 
         const assignedUserIds = project.assignedUsers.map((user) => user._id);
 
-        // If user is assigned to the project or is team leader, show the project
         return (
           assignedUserIds.includes(userId) || userId === project.teamLeader?._id
         );
       });
 
-    content =
-      filteredProjects.length &&
-      filteredProjects.map((project) => {
-        const status = getProjectStatus(project);
+    const groupedProjects = {};
 
-        let daysText = "";
+    filteredProjects.forEach((project) => {
+      const status = getProjectStatus(project);
 
-        if (status.label.includes("Completed")) {
-          daysText = getRelativeDateText(project.deadline);
-        } else if (status.label.includes("Awaiting Confirmation")) {
-          daysText = `Starting date was ${getRelativeDateText(
-            project.startDate,
-          )}`;
-        } else if (status.label.includes("Ongoing")) {
-          daysText = `Deadline ${getRelativeDateText(project.deadline)}`;
-        } else if (status.label.includes("Upcoming")) {
-          daysText = getRelativeDateText(project.startDate);
-        } else if (status.label.includes("Overdue")) {
-          daysText = getRelativeDateText(project.deadline);
-        }
+      if (!groupedProjects[status.label]) {
+        groupedProjects[status.label] = [];
+      }
 
-        let weekdaysCountText = "";
-        if (status.label.includes("Ongoing")) {
-          weekdaysCountText = `Working days: ${countWeekdays(
-            project.startDate,
-            dayjs(),
-          )}`;
-        } else if (status.label.includes("Overdue")) {
-          weekdaysCountText = `Overdue Working days: ${countWeekdays(
-            project.deadline,
-            dayjs(),
-          )}`;
-        } else if (status.label.includes("Completed")) {
-          weekdaysCountText = `Working days: ${countWeekdays(
-            project.startDate,
-            dayjs(project.completedAt),
-          )}`;
-        }
+      groupedProjects[status.label].push(project);
+    });
 
-        return (
-          <List key={project._id}>
-            <ListItem disablePadding>
-              <ListItemButton to={`/dash/projects/${project._id}`}>
-                <ListItemText
-                  primary={project.name}
-                  secondary={
-                    <span className="flex flex-col">
-                      <span>{`Assigned employees: ${project.assignedUsers.length}`}</span>
-                      <span
-                        className={
-                          status.label.includes("Overdue") ? "text-red-400" : ""
-                        }
-                      >
-                        {weekdaysCountText}
-                      </span>
-                    </span>
-                  }
+    const orderedStatusLabels = [
+      "Awaiting Confirmation",
+      "Ongoing",
+      "Upcoming",
+      "Overdue",
+      "Completed",
+    ];
+
+    content = orderedStatusLabels.map((statusLabel) => {
+      const projectsInStatus = groupedProjects[statusLabel];
+      if (projectsInStatus && projectsInStatus.length > 0) {
+        if (["Ongoing", "Upcoming", "Completed"].includes(statusLabel)) {
+          const columns = [
+            { field: "name", headerName: "Project Name", width: 180 },
+            {
+              field: "assignedEmployees",
+              headerName: "Assigned Employees",
+              width: 210,
+            },
+            {
+              field: "timeInformation",
+              headerName: "Time Information",
+              width: 200,
+              renderCell: (params) => params.row.timeInformation,
+            },
+          ];
+
+          const rows = projectsInStatus.map((project) => {
+            const status = getProjectStatus(project);
+            let timeInformation;
+
+            if (status.label.includes("Completed")) {
+              timeInformation = `Completed ${getRelativeDateText(
+                project.completedAt,
+              )}`;
+            } else if (status.label.includes("Upcoming")) {
+              timeInformation = `Deadline ${getRelativeDateText(
+                project.deadline,
+              )}`;
+            } else if (status.label.includes("Ongoing")) {
+              timeInformation = `Deadline ${getRelativeDateText(
+                project.deadline,
+              )}`;
+            } else if (status.label.includes("Awaiting Confirmation")) {
+              timeInformation = `Starting date ${getRelativeDateText(
+                project.startDate,
+              )}`;
+            } else if (status.label.includes("Overdue")) {
+              timeInformation = `Deadline ${getRelativeDateText(
+                project.deadline,
+              )}`;
+            }
+
+            const assignedEmployees = project.assignedUsers.length;
+
+            return {
+              id: project._id,
+              name: project.name,
+              assignedEmployees,
+              timeInformation: (
+                <Chip
+                  variant="outlined"
+                  size="small"
+                  color={status.color}
+                  label={timeInformation}
+                  icon={status.icon}
                 />
-                <div className="flex flex-col items-center">
-                  <Chip
-                    variant="outlined"
-                    size="small"
-                    color={status.color}
-                    label={status.label}
-                    icon={status.icon}
-                  />
-                  <Typography variant="caption" color="#B2B2B2">
-                    {daysText}
-                  </Typography>
-                </div>
-              </ListItemButton>
-            </ListItem>
-          </List>
-        );
-      });
+              ),
+            };
+          });
+
+          return (
+            <Accordion key={statusLabel}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`${statusLabel}-content`}
+                id={`${statusLabel}-header`}
+              >
+                <Typography variant="h6" color="primary.contrastText">
+                  {statusLabel}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <DataGrid
+                  sx={{
+                    border: "none",
+                    p: 1,
+                  }}
+                  onRowClick={handleRowClick}
+                  columns={columns}
+                  rows={rows}
+                  slots={{ toolbar: GridToolbar }}
+                  slotProps={{
+                    toolbar: {
+                      showQuickFilter: true,
+                    },
+                  }}
+                  initialState={{
+                    pagination: { paginationModel: { pageSize: 5 } },
+                  }}
+                  pageSizeOptions={[5, 10, 25]}
+                  disableRowSelectionOnClick
+                />
+              </AccordionDetails>
+            </Accordion>
+          );
+        } else {
+          return (
+            <Accordion key={statusLabel}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`${statusLabel}-content`}
+                id={`${statusLabel}-header`}
+              >
+                <Typography variant="h6" color="primary.contrastText">
+                  {statusLabel}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <List>
+                  {projectsInStatus.map((project) => {
+                    const status = getProjectStatus(project);
+                    const daysText = getRelativeDateText(
+                      status.label.includes("Completed")
+                        ? project.completedAt
+                        : status.label.includes("Upcoming")
+                          ? project.startDate
+                          : project.deadline,
+                    );
+
+                    const weekdaysCountText =
+                      status.label.includes("Ongoing") ||
+                      status.label.includes("Overdue")
+                        ? `Working days: ${countWeekdays(
+                            status.label.includes("Overdue")
+                              ? project.deadline
+                              : project.startDate,
+                            status.label.includes("Completed")
+                              ? dayjs(project.completedAt)
+                              : dayjs(),
+                          )}`
+                        : "";
+
+                    return (
+                      <ListItem disablePadding key={project._id}>
+                        <ListItemButton to={`/dash/projects/${project._id}`}>
+                          <ListItemText
+                            primary={project.name}
+                            secondary={
+                              <span className="flex flex-col">
+                                <span>{`Assigned employees: ${project.assignedUsers.length}`}</span>
+                                <span
+                                  className={
+                                    status.label.includes("Overdue")
+                                      ? "text-red-400"
+                                      : ""
+                                  }
+                                >
+                                  {weekdaysCountText}
+                                </span>
+                              </span>
+                            }
+                          />
+                          <div className="flex flex-col items-center">
+                            <Chip
+                              variant="outlined"
+                              size="small"
+                              color={status.color}
+                              label={daysText}
+                              icon={status.icon}
+                            />
+                          </div>
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              </AccordionDetails>
+            </Accordion>
+          );
+        }
+      }
+
+      return null;
+    });
   }
 
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between">
         <Typography color="primary.contrastText" variant="h6">
           Projects list
@@ -218,13 +354,12 @@ const Projects = () => {
       <Box
         sx={{
           width: "100%",
-          bgcolor: "background.light",
           borderRadius: 2,
           mt: 3,
           color: "primary.contrastText",
         }}
       >
-        {content ? (
+        {content?.filter(Boolean).length > 0 ? (
           content
         ) : (
           <div className="flex items-center justify-center p-4">
@@ -243,7 +378,7 @@ const Projects = () => {
           </div>
         )}
       </Box>
-    </div>
+    </>
   );
 };
 

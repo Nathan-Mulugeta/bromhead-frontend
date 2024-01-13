@@ -41,6 +41,14 @@ const theme = createTheme({
       },
     },
 
+    MuiAccordionSummary: {
+      styleOverrides: {
+        expandIconWrapper: {
+          color: "#fff",
+        },
+      },
+    },
+
     MuiDateCalendar: {
       styleOverrides: {
         root: {
