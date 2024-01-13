@@ -26,6 +26,11 @@ const columns = [
     headerName: "Status",
     width: 150,
   },
+  {
+    field: "roles",
+    headerName: "Roles",
+    width: 150,
+  },
 ];
 
 const Users = () => {
@@ -62,6 +67,7 @@ const Users = () => {
         firstName: entities[id].firstName,
         lastName: entities[id].lastName,
         status: entities[id].status,
+        roles: entities[id].roles,
       });
     });
   }

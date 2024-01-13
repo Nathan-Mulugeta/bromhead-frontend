@@ -175,9 +175,9 @@ const ProjectDetails = () => {
         },
         serviceType: project?.serviceType,
         teamLeader: {
-          id: project?.teamLeader._id,
-          title: `${project?.teamLeader.firstName} ${project?.teamLeader.lastName}`,
-          status: project?.teamLeader.status,
+          id: project?.teamLeader?._id,
+          title: `${project?.teamLeader?.firstName} ${project?.teamLeader?.lastName}`,
+          status: project?.teamLeader?.status,
         },
         completed: project?.completed,
         confirmed: project?.confirmed,

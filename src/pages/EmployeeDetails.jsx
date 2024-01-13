@@ -236,7 +236,7 @@ const EmployeeDetails = () => {
             Employee's active and upcoming projects
           </Typography>
           <Typography variant="caption" fontSize={20} color="text.primary">
-            ({userActiveProjects.length})
+            ({userActiveProjects?.length})
           </Typography>
         </div>
         {projects ? (
@@ -297,7 +297,7 @@ const EmployeeDetails = () => {
             )}
           </List>
         ) : (
-          <Skeleton variant="text" />
+          <Skeleton height={80} variant="text" />
         )}
       </div>
 

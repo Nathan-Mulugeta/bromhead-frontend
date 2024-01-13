@@ -54,6 +54,7 @@ const AddProject = () => {
     serviceType: null,
     teamLeader: null,
     startDate: null,
+    completed: false,
   });
 
   const [addNewProject, { isLoading, isSuccess, isError, error }] =
@@ -220,7 +221,10 @@ const AddProject = () => {
       }
 
       let newStatus;
-      if (user.status === STATUSLIST.Available && upcomingProjects.length > 0) {
+      if (
+        user?.status === STATUSLIST.Available &&
+        upcomingProjects?.length > 0
+      ) {
         newStatus = "Has Upcoming Project";
       } else {
         newStatus = user.status;
