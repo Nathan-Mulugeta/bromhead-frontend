@@ -12,6 +12,7 @@ import useAuth from "../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 import { STATUSLIST } from "../../config/status";
+import { MdMenuOpen } from "react-icons/md";
 import { ROLES } from "../../config/roles";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
 import dayjs from "dayjs";
@@ -113,7 +114,11 @@ const NavBar = () => {
     <div className="sticky left-0 right-0 top-0 z-20 flex bg-backgroundLight">
       <nav className="container mx-auto flex items-center justify-between p-1 ">
         <Button onClick={sidebarToggle}>
-          <MdOutlineMenu color="#fff" fontSize={25} />
+          {expanded ? (
+            <MdMenuOpen color="#fff" fontSize={25} />
+          ) : (
+            <MdOutlineMenu color="#fff" fontSize={25} />
+          )}
         </Button>
 
         <div className="flex items-center gap-1">

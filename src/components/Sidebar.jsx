@@ -60,7 +60,7 @@ const Sidebar = () => {
       >
         <span
           className={`mx-auto h-16  px-1 py-4 transition-all ${
-            expanded ? "w-24" : "w-16"
+            expanded ? "w-52" : "w-16"
           }`}
         >
           <Link
@@ -72,10 +72,10 @@ const Sidebar = () => {
             <img src={Logo} />
           </Link>
         </span>
-        <button className="absolute right-5 top-5" onClick={sidebarToggle}>
-          {expanded && <MdMenuOpen color="#fff" fontSize={25} />}
-        </button>
-        <ul className="flex-1 px-2">
+        {/* <button className="absolute right-5 top-5" onClick={sidebarToggle}>
+          {expanded && <MdMenuOpen color="#fff" fontSize={20} />}
+        </button> */}
+        <ul className="mt-14 flex-1 px-2">
           {SidebarMenuItems.map((item) => (
             <SidebarItem
               key={item.title}
