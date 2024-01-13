@@ -45,6 +45,7 @@ import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
 import countWeekdays from "../utils/countWeekdays";
 import useAuth from "../hooks/useAuth";
 import { ROLES } from "../../config/roles";
+import { STATUSLIST } from "../../config/status";
 
 function stringAvatar(name) {
   return {
@@ -168,6 +169,7 @@ const ProjectDetails = () => {
           title: `${employee?.firstName} ${employee?.lastName}`,
           status: employee?.status,
           chargeOutRate: employee.chargeOutRate,
+          roles: employee.roles,
         })),
         client: {
           id: project?.client._id,
@@ -268,6 +270,18 @@ const ProjectDetails = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  const {
+    data: projects,
+    isLoading: isProjectsLoading,
+    isSuccess: isProjectsSuccess,
+    isError: isProjectsError,
+    error: isprojectsError,
+  } = useGetProjectsQuery("projectsList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+
   let employeeList = [];
 
   if (isUsersSuccess) {
@@ -275,16 +289,50 @@ const ProjectDetails = () => {
 
     ids.map((id) => {
       const user = entities[id];
+
+      let upcomingProjects;
+
+      if (projects) {
+        const { ids, entities } = projects;
+
+        const currentDate = new Date();
+
+        upcomingProjects = ids
+          .map((projectId) => entities[projectId])
+          .filter((project) => {
+            const assignedUserIds = project.assignedUsers.map(
+              (user) => user._id,
+            );
+
+            return (
+              (assignedUserIds.includes(user._id) ||
+                user._id === project.teamLeader?._id) &&
+              new Date(project.startDate).setHours(0, 0, 0, 0) >
+                currentDate.setHours(0, 0, 0, 0)
+            );
+          });
+      }
+
+      let newStatus;
+      if (
+        user?.status === STATUSLIST.Available &&
+        upcomingProjects?.length > 0
+      ) {
+        newStatus = "Has Upcoming Project";
+      } else {
+        newStatus = user.status;
+      }
+
       const employee = {
         id: user._id,
         title: `${user.firstName} ${user.lastName}`,
-        status: user.status,
+        status: newStatus,
         chargeOutRate: user.chargeOutRate,
+        roles: user.roles,
       };
       employeeList.push(employee);
     });
   }
-
   const {
     data: clients,
     isLoading: isClientsLoading,
@@ -325,6 +373,7 @@ const ProjectDetails = () => {
             title: `${employee.firstName} ${employee.lastName}`,
             status: employee.status,
             chargeOutRate: employee.chargeOutRate,
+            roles: employee.roles,
           })),
           client: {
             id: project.client._id,
@@ -447,10 +496,19 @@ const ProjectDetails = () => {
 
   const workingDays = countWeekdays(formData.startDate, formData.deadline);
   let totalChargeOutRates = 0;
-
   if (formData.assignedUsers) {
-    formData.assignedUsers.forEach((user) => {
-      totalChargeOutRates += user.chargeOutRate || 0;
+    // Filter out users with roles of admin or manager, ensuring correct comparison:
+    const filteredUsers = formData?.assignedUsers?.filter(
+      (user) =>
+        !user.roles.includes(ROLES.Admin) &&
+        !user.roles.includes(ROLES.Manager),
+    );
+
+    // Calculate total charge out rates for the remaining users, addressing potential undefined values:
+    filteredUsers.forEach((user) => {
+      totalChargeOutRates += user.chargeOutRate
+        ? Number(user.chargeOutRate)
+        : 0; // Handle potential non-numeric values
     });
   }
 
@@ -835,16 +893,21 @@ const ProjectDetails = () => {
           )}
 
         {isAdminOrManager && (
-          <div className="flex items-center gap-2">
-            <Typography
-              variant="subtitle1"
-              fontSize={13}
-              color="primary.contrastText"
-            >
-              Est. Budget
-            </Typography>
-            <Typography variant="body1" color="primary.main">
-              {formattedBudget}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <Typography
+                variant="subtitle1"
+                fontSize={13}
+                color="primary.contrastText"
+              >
+                Est. Budget
+              </Typography>
+              <Typography variant="body1" color="primary.main">
+                {formattedBudget}
+              </Typography>
+            </div>
+            <Typography variant="caption" color="text.darkLight">
+              Estimated budget does not include Managers and Admins{" "}
             </Typography>
           </div>
         )}

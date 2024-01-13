@@ -29,6 +29,7 @@ import dayjs from "dayjs";
 import { useGetClientsQuery } from "../slices/clients/clientsApiSlice";
 import countWeekdays from "../utils/countWeekdays";
 import { STATUSLIST } from "../../config/status";
+import { ROLES } from "../../config/roles";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
@@ -235,6 +236,7 @@ const AddProject = () => {
         title: `${user.firstName} ${user.lastName}`,
         status: newStatus,
         chargeOutRate: user.chargeOutRate,
+        roles: user.roles,
       };
       employeeList.push(employee);
     });
@@ -268,11 +270,21 @@ const AddProject = () => {
   }
 
   const workingDays = countWeekdays(formData.startDate, formData.deadline);
-  let totalChargeOutRates = 0;
 
+  let totalChargeOutRates = 0;
   if (formData.assignedUsers) {
-    formData.assignedUsers.forEach((user) => {
-      totalChargeOutRates += user.chargeOutRate || 0;
+    // Filter out users with roles of admin or manager, ensuring correct comparison:
+    const filteredUsers = formData.assignedUsers.filter(
+      (user) =>
+        !user.roles.includes(ROLES.Admin) &&
+        !user.roles.includes(ROLES.Manager),
+    );
+
+    // Calculate total charge out rates for the remaining users, addressing potential undefined values:
+    filteredUsers.forEach((user) => {
+      totalChargeOutRates += user.chargeOutRate
+        ? Number(user.chargeOutRate)
+        : 0; // Handle potential non-numeric values
     });
   }
 
@@ -557,16 +569,21 @@ const AddProject = () => {
           minDate={dayjs(formData.startDate)}
         />
 
-        <div className="flex items-center gap-2">
-          <Typography
-            variant="subtitle1"
-            fontSize={13}
-            color="primary.contrastText"
-          >
-            Est. Budget
-          </Typography>
-          <Typography variant="body1" color="primary.main">
-            {formattedBudget}
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2">
+            <Typography
+              variant="subtitle1"
+              fontSize={13}
+              color="primary.contrastText"
+            >
+              Est. Budget
+            </Typography>
+            <Typography variant="body1" color="primary.main">
+              {formattedBudget}
+            </Typography>
+          </div>
+          <Typography variant="caption" color="text.darkLight">
+            Estimated budget does not include Managers and Admins{" "}
           </Typography>
         </div>
       </div>
