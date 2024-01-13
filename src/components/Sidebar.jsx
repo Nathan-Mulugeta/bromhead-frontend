@@ -9,7 +9,6 @@ import { useContext, useState } from "react";
 import { SidebarContext } from "./DashLayout";
 import Logo from "../assets/bromhead-logo.svg";
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
-
 import { Link } from "react-router-dom";
 
 const SidebarMenuItems = [

@@ -15,6 +15,7 @@ import ProjectsStartingTodayList from "../components/dashboard/ProjectsStartingT
 import ProjectsEndingTodayList from "../components/dashboard/ProjectsEndingTodayList";
 import useAuth from "../hooks/useAuth";
 import { ROLES } from "../../config/roles";
+import OverdueProjects from "../components/dashboard/OverdueProjects";
 
 const Dashboard = () => {
   useTitle("Dashboard");
@@ -104,6 +105,9 @@ const Dashboard = () => {
             <Grid item xs={12} md={6}>
               <ProjectsEndingTodayList />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <OverdueProjects />
+            </Grid>
           </Grid>
         </>
       ) : (
@@ -116,6 +120,9 @@ const Dashboard = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <ProjectsEndingTodayList />
+                </Grid>
+                <Grid item xs={12}>
+                  <OverdueProjects />
                 </Grid>
               </Grid>
             </Grid>
@@ -132,13 +139,6 @@ const Dashboard = () => {
                 <Grid item xs={12}>
                   <TotalProjects />
                 </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <ActiveProjects />
                 </Grid>
@@ -147,11 +147,18 @@ const Dashboard = () => {
                 </Grid>
               </Grid>
             </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <ProjectsStartingThisWeek />
                 </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <ProjectsStartingToday />
                 </Grid>
