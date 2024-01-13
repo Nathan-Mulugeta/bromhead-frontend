@@ -3,7 +3,14 @@ import Logo from "../assets/bromhead-logo.svg";
 import { MdOutlineMenu } from "react-icons/md";
 import { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "./DashLayout";
-import { Autocomplete, Button, Paper, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Chip,
+  Paper,
+  Skeleton,
+  TextField,
+} from "@mui/material";
 import {
   useGetUsersQuery,
   useUpdateUserMutation,
@@ -13,8 +20,9 @@ import useAuth from "../hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../slices/loading/loadingSlice";
 import { STATUSLIST } from "../../config/status";
-
-const statusList = [...Object.values(STATUSLIST)];
+import { ROLES } from "../../config/roles";
+import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
+import dayjs from "dayjs";
 
 const NavBar = () => {
   const { expanded, setExpanded } = useContext(SidebarContext);
@@ -22,6 +30,43 @@ const NavBar = () => {
     e.stopPropagation(); // Prevents event propagation to ClickAwayListener
     setExpanded(!expanded);
   };
+
+  const { id: userId, roles } = useAuth();
+  const isAdminOrManager =
+    roles.includes(ROLES.Admin) || roles.includes(ROLES.Manager);
+
+  const statusList = isAdminOrManager
+    ? [...Object.values(STATUSLIST)]
+    : [...Object.values(STATUSLIST)].filter((status) => status !== "At Work");
+
+  const {
+    data: projects,
+    isLoading: isProjectsLoading,
+    isSuccess: isProjectsSuccess,
+    isError: isProjectsError,
+    error: isprojectsError,
+  } = useGetProjectsQuery("projectsList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+
+  let activeProjectsNumber;
+
+  if (!isAdminOrManager) {
+    const filteredProjects = projects?.ids.filter((projectId) => {
+      const project = projects?.entities[projectId];
+      return project?.assignedUsers.some((user) => user._id === userId);
+    });
+
+    activeProjectsNumber = filteredProjects?.filter((projectId) => {
+      const project = projects?.entities[projectId];
+      const currentDate = dayjs();
+      const startDate = project.startDate;
+      const deadline = project.deadline;
+      return currentDate.isBetween(startDate, deadline);
+    }).length;
+  }
 
   const [
     updateUser,
@@ -40,8 +85,6 @@ const NavBar = () => {
       toast.error(editError?.data.message);
     }
   }, [isEditError, editError]);
-
-  const { id: userId } = useAuth();
 
   const { user } = useGetUsersQuery("usersList", {
     selectFromResult: ({ data }) => ({
@@ -80,34 +123,39 @@ const NavBar = () => {
         <Button onClick={sidebarToggle}>
           <MdOutlineMenu color="#fff" fontSize={25} />
         </Button>
-        {/* <img className="h-14 w-14 sm:opacity-0" src={Logo} /> */}
+
         <div className="flex items-center gap-1">
-          <Autocomplete
-            disablePortal
-            disableClearable
-            size="small"
-            value={status}
-            onChange={(event, newValue) => {
-              setStatus(newValue);
-              handleUpdate(newValue);
-            }}
-            id="navStatus"
-            name="status"
-            options={statusList}
-            PaperComponent={({ children }) => (
-              <Paper
-                style={{
-                  background: "#124056",
-                }}
-              >
-                {children}
-              </Paper>
-            )}
-            sx={{ width: 150 }}
-            renderInput={(params) => (
-              <TextField variant="standard" {...params} />
-            )}
-          />
+          {activeProjectsNumber === 0 || isAdminOrManager ? (
+            <Autocomplete
+              disablePortal
+              disableClearable
+              size="small"
+              value={status}
+              onChange={(event, newValue) => {
+                setStatus(newValue);
+                handleUpdate(newValue);
+              }}
+              id="navStatus"
+              name="status"
+              options={statusList}
+              PaperComponent={({ children }) => (
+                <Paper
+                  style={{
+                    background: "#124056",
+                  }}
+                >
+                  {children}
+                </Paper>
+              )}
+              sx={{ width: 150 }}
+              renderInput={(params) => (
+                <TextField variant="standard" {...params} />
+              )}
+            />
+          ) : (
+            <Chip label="At work" color="info" size="large" />
+          )}
+
           <NavbarProfile />
         </div>
       </nav>

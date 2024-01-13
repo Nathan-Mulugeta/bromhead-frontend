@@ -128,7 +128,7 @@ const ProjectsStartingTodayList = () => {
           )}
         </List>
       ) : (
-        <Skeleton variant="text" />
+        <Skeleton height={80} variant="text" />
       )}
     </div>
   );
