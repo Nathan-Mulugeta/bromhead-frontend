@@ -84,7 +84,6 @@ const NavBar = () => {
       user: data?.entities[userId],
     }),
   });
-  if (user) console.log(user.status);
 
   const [status, setStatus] = useState("Casual Leave");
 
