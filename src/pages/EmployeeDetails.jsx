@@ -287,7 +287,7 @@ const EmployeeDetails = () => {
               },
             }}
           >
-            {userActiveProjects.length > 0 ? (
+            {userActiveProjects?.length > 0 ? (
               <>
                 {userActiveProjects.map((project) => (
                   <ListItem

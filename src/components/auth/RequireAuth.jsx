@@ -9,8 +9,7 @@ const RequireAuth = ({ allowedRoles }) => {
 
   useEffect(() => {
     if (!roles.some((role) => allowedRoles.includes(role))) {
-      toast.error("Unauthorized!");
-      navigate("/dash/dashboard");
+      navigate("/login");
     }
   }, [roles, allowedRoles, navigate]);
 

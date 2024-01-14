@@ -57,7 +57,7 @@ const NavBar = () => {
       const currentDate = dayjs();
       const startDate = project.startDate;
       const deadline = project.deadline;
-      return currentDate.isBetween(startDate, deadline) || !project.completed;
+      return currentDate.isBetween(startDate, deadline) && !project.completed;
     }).length;
   }
 
@@ -84,8 +84,9 @@ const NavBar = () => {
       user: data?.entities[userId],
     }),
   });
+  if (user) console.log(user.status);
 
-  const [status, setStatus] = useState("At Work");
+  const [status, setStatus] = useState("Casual Leave");
 
   useEffect(() => {
     if (user) {
