@@ -369,15 +369,6 @@ const MyProfile = () => {
             Profile details
           </Typography>
         </div>
-        <Chip
-          label={new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "ETB",
-            currencyDisplay: "code",
-          }).format(user?.chargeOutRate)}
-          variant="filled"
-          color="success"
-        />
       </div>
 
       <div className="flex justify-start p-2  sm:justify-end">
