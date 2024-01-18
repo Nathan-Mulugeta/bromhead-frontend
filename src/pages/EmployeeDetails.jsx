@@ -18,6 +18,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Autocomplete,
   Button,
   Chip,
   Dialog,
@@ -25,12 +26,17 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
   InputAdornment,
+  InputLabel,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  MenuItem,
+  Paper,
+  Select,
   Skeleton,
   TextField,
   Typography,
@@ -44,12 +50,17 @@ import { toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
 import { ROLES } from "../../config/roles";
 import { useGetProjectsQuery } from "../slices/projects/projectsApiSlice";
+import { STATUSLIST } from "../../config/status";
+
+const statusList = [...Object.values(STATUSLIST)];
 
 const EmployeeDetails = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [chargeOutRate, setChargeOutRate] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [status, setStatus] = useState("Casual Leave");
+  const [active, setActive] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
   const { userId } = useParams();
@@ -83,6 +94,8 @@ const EmployeeDetails = () => {
     if (user) {
       setFirstName(user.firstName);
       setLastName(user.lastName);
+      setStatus(user.status);
+      setActive(user.active);
       setChargeOutRate(user.chargeOutRate);
     }
   }, [user]);
@@ -96,6 +109,8 @@ const EmployeeDetails = () => {
         firstName,
         lastName,
         chargeOutRate,
+        status,
+        active,
       });
 
       if (!res.error) {
@@ -171,6 +186,8 @@ const EmployeeDetails = () => {
       if (user) {
         setFirstName(user.firstName);
         setLastName(user.lastName);
+        setStatus(user.status);
+        setActive(user.active);
         setChargeOutRate(user.chargeOutRate);
       }
       setIsEditing(false);
@@ -183,6 +200,9 @@ const EmployeeDetails = () => {
     roles.includes(ROLES.Manager) ||
     roles.includes(ROLES.Admin) ||
     roles.includes(ROLES.OfficeAdmin);
+
+  const isAdminOrManager =
+    roles.includes(ROLES.Manager) || roles.includes(ROLES.Admin);
 
   const toggleEdit = () => {
     if (isAdminOrManagerOrOfficeAdmin) setIsEditing(!isEditing);
@@ -348,58 +368,63 @@ const EmployeeDetails = () => {
             icon={<DriveFileRenameOutlineIcon />}
           />
 
-          <TextField
-            id="firstName"
-            label="First Name"
-            onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
-            value={firstName}
-            name="firstName"
-            autoComplete="off"
-            onDoubleClick={toggleEdit}
-            required
-            type="text"
-            InputProps={{
-              readOnly: !isEditing,
-              startAdornment: (
-                <InputAdornment position="start">
-                  <DriveFileRenameOutlineIcon
-                    sx={{
-                      color: "#fff",
-                    }}
-                  />
-                </InputAdornment>
-              ),
-            }}
-            variant="outlined"
-          />
-          <TextField
-            id="lastName"
-            required
-            onDoubleClick={toggleEdit}
-            label="Last Name"
-            onChange={(e) => {
-              setLastName(e.target.value);
-            }}
-            value={lastName}
-            name="lastName"
-            autoComplete="off"
-            type="text"
-            InputProps={{
-              readOnly: !isEditing,
-              startAdornment: (
-                <InputAdornment position="start">
-                  <DriveFileRenameOutlineIcon
-                    sx={{
-                      color: "#fff",
-                    }}
-                  />
-                </InputAdornment>
-              ),
-            }}
-            variant="outlined"
-          />
+          {isAdminOrManagerOrOfficeAdmin && (
+            <TextField
+              id="firstName"
+              label="First Name"
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+              value={firstName}
+              name="firstName"
+              autoComplete="off"
+              onDoubleClick={toggleEdit}
+              required
+              type="text"
+              InputProps={{
+                readOnly: !isEditing,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <DriveFileRenameOutlineIcon
+                      sx={{
+                        color: "#fff",
+                      }}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+            />
+          )}
+
+          {isAdminOrManagerOrOfficeAdmin && (
+            <TextField
+              id="lastName"
+              required
+              onDoubleClick={toggleEdit}
+              label="Last Name"
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+              value={lastName}
+              name="lastName"
+              autoComplete="off"
+              type="text"
+              InputProps={{
+                readOnly: !isEditing,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <DriveFileRenameOutlineIcon
+                      sx={{
+                        color: "#fff",
+                      }}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+            />
+          )}
 
           <DataDisplayItem
             label="Email"
@@ -413,17 +438,59 @@ const EmployeeDetails = () => {
             icon={<LocationOnIcon />}
           />
 
-          <DataDisplayItem
-            label="Status"
-            value={user?.status}
-            icon={<WorkHistoryIcon />}
-          />
+          {isAdminOrManager ? (
+            <Autocomplete
+              disablePortal
+              onDoubleClick={toggleEdit}
+              readOnly={!isEditing}
+              value={status}
+              onChange={(event, newValue) => {
+                setStatus(newValue);
+              }}
+              id="status"
+              name="status"
+              options={statusList}
+              PaperComponent={({ children }) => (
+                <Paper
+                  style={{
+                    background: "#124056",
+                  }}
+                >
+                  {children}
+                </Paper>
+              )}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Status" />}
+            />
+          ) : (
+            <DataDisplayItem
+              label="Status"
+              value={user?.status}
+              icon={<WorkHistoryIcon />}
+            />
+          )}
 
-          <DataDisplayItem
-            label="Employment status"
-            value={user?.active ? "Active" : "InActive"}
-            icon={user?.active ? <PersonIcon /> : <PersonOffIcon />}
-          />
+          {isAdminOrManagerOrOfficeAdmin ? (
+            <FormControl fullWidth>
+              <InputLabel id="active">Employment Status</InputLabel>
+              <Select
+                labelId="active"
+                id="active"
+                value={active}
+                label="Employment Status"
+                onChange={(e) => setActive(e.target.value)}
+              >
+                <MenuItem value={true}>Active</MenuItem>
+                <MenuItem value={false}>Inactive</MenuItem>
+              </Select>
+            </FormControl>
+          ) : (
+            <DataDisplayItem
+              label="Employment status"
+              value={user?.active ? "Active" : "InActive"}
+              icon={user?.active ? <PersonIcon /> : <PersonOffIcon />}
+            />
+          )}
         </div>
 
         {isAdminOrManagerOrOfficeAdmin && (
